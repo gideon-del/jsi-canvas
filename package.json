@@ -37,5 +37,19 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "codegenConfig": {
+    "name": "RNCanvasMVPSpec",
+    "type": "all",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.canvasmvp.generated"
+    },
+    "ios": {
+      "componentProvider": {
+        "ColorBox": "ColorBox",
+        "CanvasView": "CanvasView"
+      }
+    }
   }
 }

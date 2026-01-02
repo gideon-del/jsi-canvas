@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-CanvasMVP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-CanvasMVP.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		2CFD94FCF28A72FD74162A88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */; };
+		5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5238C6A72F07A1350014AD85 /* CanvasView.mm */; };
+		52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5251CDB12F02DC7A008A3681 /* ColorBox.mm */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -19,6 +23,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CanvasMVP/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = CanvasMVP/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-CanvasMVP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CanvasMVP.debug.xcconfig"; path = "Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP.debug.xcconfig"; sourceTree = "<group>"; };
+		5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ColorBoxRegistry.m; sourceTree = "<group>"; };
+		5238C6A62F079FBA0014AD85 /* CanvasView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
+		5238C6A72F07A1350014AD85 /* CanvasView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasView.mm; sourceTree = "<group>"; };
+		5251CDB02F02DC12008A3681 /* ColorBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ColorBox.h; sourceTree = "<group>"; };
+		5251CDB12F02DC7A008A3681 /* ColorBox.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ColorBox.mm; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CanvasMVP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CanvasMVP.release.xcconfig"; path = "Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-CanvasMVP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CanvasMVP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = CanvasMVP/AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +68,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5238C6A52F079F990014AD85 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5238C6A62F079FBA0014AD85 /* CanvasView.h */,
+				5238C6A72F07A1350014AD85 /* CanvasView.mm */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5251CDAF2F02DBEE008A3681 /* Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				5238C6A52F079F990014AD85 /* Views */,
+				5251CDB02F02DC12008A3681 /* ColorBox.h */,
+				5251CDB12F02DC7A008A3681 /* ColorBox.mm */,
+				5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */,
+			);
+			path = Canvas;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +98,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				5251CDAF2F02DBEE008A3681 /* Canvas */,
 				13B07FAE1A68108700A75B9A /* CanvasMVP */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -159,6 +189,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2CFD94FCF28A72FD74162A88 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,9 +220,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -228,9 +263,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -244,6 +283,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */,
+				52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */,
+				5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,6 +408,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -374,7 +417,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -431,6 +477,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -439,7 +486,9 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
