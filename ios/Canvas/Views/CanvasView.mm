@@ -4,6 +4,9 @@
 #import <react/renderer/components/RNCanvasMVPSpec/ComponentDescriptors.h>
 #import <react/renderer/components/RNCanvasMVPSpec/Props.h>
 #import <react/renderer/components/RNCanvasMVPSpec/RCTComponentViewHelpers.h>
+#import "camera-state/CameraState.h"
+#import "CoreGraphics/CoreGraphics.h"
+#import "CanvasDrawingView.h"
 using namespace facebook::react;
 
 
@@ -12,7 +15,8 @@ using namespace facebook::react;
 @end
 @implementation CanvasView
 {
-  UIView *_contentView;
+  CanvasDrawingView *_canvasLayer;
+  CanvasMVP::CameraState _camera;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -23,22 +27,21 @@ using namespace facebook::react;
   return self;
 }
 - (void)setupView {
-  _contentView = [[UIView alloc] initWithFrame:self.bounds];
+  _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera];
   
-  _contentView.backgroundColor = UIColor.redColor;
-  
-  _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+  _canvasLayer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   
   
-  [self addSubview:_contentView];
+  [self addSubview:_canvasLayer];
   
-  NSLog(@"✅ [CanvasView] iOS view initialized");
+  NSLog(@"✅ [CanvasView] Camera initialized - offset:(%.2f, %.2f) zoom:%.2f",
+           _camera.offsetX, _camera.offsetY, _camera.zoom);
 }
 
 -(void)layoutSubviews {
   [super layoutSubviews];
   
-  _contentView.frame = self.bounds;
+  _canvasLayer.frame = self.bounds;
 }
 + (facebook::react::ComponentDescriptorProvider)componentDescriptorProvider {
   NSLog(@"Component descriptor is called");
@@ -48,6 +51,9 @@ using namespace facebook::react;
 Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
   return CanvasView.class;
 }
+
+
+
 
 @end
 

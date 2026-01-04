@@ -13,9 +13,9 @@ class CanvasViewPackage: BaseReactPackage() {
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
         return listOf(ReactCanvasViewManager(reactContext))
     }
-    override fun getModule(s: String, reactApplicationContext: ReactApplicationContext): NativeModule? {
-        when (s) {
-            ReactCanvasViewManager.NAME -> ReactCanvasViewManager(reactApplicationContext)
+    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
+        when (name) {
+            ReactCanvasViewManager.NAME -> ReactCanvasViewManager(reactContext)
         }
         return null
     }

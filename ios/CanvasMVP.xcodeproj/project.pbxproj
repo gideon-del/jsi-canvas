@@ -12,6 +12,7 @@
 		2CFD94FCF28A72FD74162A88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */; };
 		5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5238C6A72F07A1350014AD85 /* CanvasView.mm */; };
+		52B9D2A42F0AA59E00C9248D /* CanvasDrawingView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */; };
 		52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5251CDB12F02DC7A008A3681 /* ColorBox.mm */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -28,6 +29,8 @@
 		5238C6A72F07A1350014AD85 /* CanvasView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasView.mm; sourceTree = "<group>"; };
 		5251CDB02F02DC12008A3681 /* ColorBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ColorBox.h; sourceTree = "<group>"; };
 		5251CDB12F02DC7A008A3681 /* ColorBox.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ColorBox.mm; sourceTree = "<group>"; };
+		52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasDrawingView.mm; sourceTree = "<group>"; };
+		52B9D2A52F0AB33B00C9248D /* CanvasDrawingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CanvasDrawingView.h; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CanvasMVP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CanvasMVP.release.xcconfig"; path = "Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-CanvasMVP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CanvasMVP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = CanvasMVP/AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +76,8 @@
 			children = (
 				5238C6A62F079FBA0014AD85 /* CanvasView.h */,
 				5238C6A72F07A1350014AD85 /* CanvasView.mm */,
+				52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */,
+				52B9D2A52F0AB33B00C9248D /* CanvasDrawingView.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,6 +291,7 @@
 				5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */,
 				52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */,
 				5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */,
+				52B9D2A42F0AA59E00C9248D /* CanvasDrawingView.mm in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,6 +307,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../cpp/**",
+				);
 				INFOPLIST_FILE = CanvasMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,6 +338,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../cpp/**",
+				);
 				INFOPLIST_FILE = CanvasMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
