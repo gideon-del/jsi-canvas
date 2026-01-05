@@ -38,8 +38,6 @@
   [[UIColor whiteColor] setFill];
   CGContextFillRect(ctx, rect);
   
-  CGContextTranslateCTM(ctx, _camera->offsetX, _camera->offsetY);
-  CGContextScaleCTM(ctx, _camera->zoom, _camera->zoom);
   
   // Draw grid lines
   [self drawGridInContext:ctx];

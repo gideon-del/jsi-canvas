@@ -6,6 +6,8 @@ import android.view.View
 import android.graphics.Paint
 import android.graphics.Color
 import android.util.Log
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import com.canvasmvp.state.CameraState
 import kotlin.math.floor
 import androidx.core.graphics.withClip
@@ -35,20 +37,46 @@ class CanvasView(context: Context): View(context) {
         strokeWidth = 3f
         isAntiAlias = true
     }
+  private var lastTouchX = 0f
+    private var lastTouchY = 0f;
+    private var isPanning = false;
 
+    private  val scaleGestureDetector= ScaleGestureDetector(context, ScaleListener())
     init {
         setWillNotDraw(false)
 
-        Log.d(TAG, "✅ Camera initialized - offset:(${camera.offsetX}, ${camera.offsetY}) zoom:${camera.zoom}")
     }
+
+  private  inner class  ScaleListener: ScaleGestureDetector.SimpleOnScaleGestureListener() {
+      override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+          Log.d(TAG,"Pinch began - zoom ${camera.zoom}")
+          return  true
+      }
+
+      override fun onScale(detector: ScaleGestureDetector): Boolean {
+          val newZoom = camera.zoom * detector.scaleFactor
+          camera.zoomAt(
+              newZoom,
+              detector.focusX,
+              detector.focusY,
+              width.toFloat(),
+              height.toFloat())
+          invalidate()
+          return true
+      }
+
+      override fun onScaleEnd(detector: ScaleGestureDetector) {
+          Log.d(TAG,"Pinch ended - zoom ${camera.zoom}")
+      }
+  }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.withClip(0f, 0f, width.toFloat(), height.toFloat()) {
             drawColor(Color.WHITE)
 
-            translate(camera.offsetX, camera.offsetY)
-            scale(camera.zoom, camera.zoom)
+
 
 
             drawGrid(this)
@@ -57,6 +85,49 @@ class CanvasView(context: Context): View(context) {
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        scaleGestureDetector.onTouchEvent(event)
+
+        if(scaleGestureDetector.isInProgress){
+            return  true
+        }
+        when(event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastTouchX = event.x
+                lastTouchY = event.y
+                isPanning = true
+                Log.d(TAG,"Pan began at (${lastTouchX}, $lastTouchY)")
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+              if(isPanning){
+                  val dx = event.x - lastTouchX;
+                  val dy = event.y - lastTouchY;
+
+                  camera.pan(dx, dy)
+
+                  lastTouchY = event.y
+                  lastTouchX = event.x
+
+                  invalidate()
+              }
+
+              return  true
+            }
+
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                if(isPanning){
+                    Log.d(TAG,"Pan ended - camera:(${camera.offsetX}, ${camera.offsetY}")
+                    isPanning = false
+                }
+
+
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
     private fun drawGrid(canvas: Canvas) {
         val gridSpacing = 100f
         val minorSpacing = 20f
@@ -140,8 +211,6 @@ class CanvasView(context: Context): View(context) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        Log.d("CanvasView", "Size changed to: $w x $h")
-
 
         invalidate()
     }

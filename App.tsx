@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, StatusBar, Alert, Button } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
 import {
   SafeAreaProvider,
@@ -15,6 +15,27 @@ function App() {
 }
 function AppContent(): React.JSX.Element {
   const { top, bottom } = useSafeAreaInsets();
+  const [freezing, setFreezing] = useState(false);
+  const freezeJS = () => {
+    setFreezing(true);
+    Alert.alert(
+      'JS thread test',
+      'About to freeze JS for 5 seconds. Try panning the canvas',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            const start = Date.now();
+
+            while (Date.now() - start < 5000) {}
+
+            setFreezing(false);
+            Alert.alert('Done', 'JS thread unfreeze.');
+          },
+        },
+      ],
+    );
+  };
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -25,16 +46,19 @@ function AppContent(): React.JSX.Element {
         ]}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Canvas MVP - Sprint 1, Day 1</Text>
-          <Text style={styles.subtitle}>iOS Native View Test</Text>
+          <Text style={styles.title}>Canvas MVP - Sprint 1, Day 4</Text>
+          <Text style={styles.subtitle}>Pan Gesture test</Text>
         </View>
 
         <CanvasView style={styles.canvas} />
 
         <View style={styles.footer}>
-          <Text style={styles.instruction}>
-            ✅ If you see a red rectangle above, the native view is working!
-          </Text>
+          <Button
+            title={freezing ? 'JS Freezes' : 'Test: Freeze JS Thread'}
+            onPress={freezeJS}
+            disabled={freezing}
+          />
+          <Text style={styles.instruction}>Testing</Text>
         </View>
       </View>
     </>

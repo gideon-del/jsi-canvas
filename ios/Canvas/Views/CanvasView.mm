@@ -10,18 +10,22 @@
 using namespace facebook::react;
 
 
-@interface CanvasView() <RCTCanvasViewViewProtocol>
+@interface CanvasView() <RCTCanvasViewViewProtocol, UIGestureRecognizerDelegate>
 
 @end
 @implementation CanvasView
 {
   CanvasDrawingView *_canvasLayer;
   CanvasMVP::CameraState _camera;
+  UIPanGestureRecognizer *_panGesture;
+  UIPinchGestureRecognizer *_pinchGesture;
+  CGPoint _lastPanTranslation;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
   if(self = [super initWithFrame:frame]){
     [self setupView];
+    [self setupGestures];
   }
   
   return self;
@@ -37,7 +41,78 @@ using namespace facebook::react;
   NSLog(@"✅ [CanvasView] Camera initialized - offset:(%.2f, %.2f) zoom:%.2f",
            _camera.offsetX, _camera.offsetY, _camera.zoom);
 }
+-(void)setupGestures {
+  _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+  _pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+  
+  _panGesture.minimumNumberOfTouches =1;
+  _panGesture.maximumNumberOfTouches = 1;
+  
+  [self addGestureRecognizer:_panGesture];
+  
+  [self addGestureRecognizer:_pinchGesture];
+  
+  _panGesture.delegate = self;
+  _pinchGesture.delegate= self;
+  
+  _lastPanTranslation = CGPointZero;
+}
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+
+-(void)handlePinch:(UIPinchGestureRecognizer *)gesture {
+  CGPoint pinchPoint = [gesture locationInView:self];
+  switch (gesture.state) {
+    case UIGestureRecognizerStateBegan:
+      NSLog(@"[Canvas view] Pin begin");
+      break;
+    case  UIGestureRecognizerStateChanged:{
+      float newZoom = _camera.zoom * gesture.scale;
+      _camera.zoomAt(newZoom, CanvasMVP::Point(pinchPoint.x, pinchPoint.y), CanvasMVP::Size(self.frame.size.width, self.frame.size.height));
+      gesture.scale = 1.0;
+      [_canvasLayer setNeedsDisplay];
+      
+      
+      break;
+    }
+      
+    case UIGestureRecognizerStateEnded:
+    case UIGestureRecognizerStateCancelled:
+        NSLog(@"🎯 [CanvasView] Pinch ended - zoom:%.2f", _camera.zoom);
+      break;
+    default:
+      break;
+  }
+}
+-(void)handlePan:(UIPanGestureRecognizer *)gesture {
+  CGPoint currentTranslation = [gesture translationInView:self];
+  
+  switch (gesture.state) {
+    case UIGestureRecognizerStateBegan:
+      _lastPanTranslation = CGPointZero;
+      NSLog(@"[CanvasView] Pan began");
+      break;
+    case  UIGestureRecognizerStateChanged:{
+      float dx = currentTranslation.x - _lastPanTranslation.x;
+      float dy = currentTranslation.y - _lastPanTranslation.y;
+      _camera.pan(dx, dy);
+      
+      [_canvasLayer setNeedsDisplay];
+      break;
+    }
+   
+    case  UIGestureRecognizerStateEnded:
+    case UIGestureRecognizerStateCancelled:
+      NSLog(@"[CanvasView] Pan ended - camera(%.2f,%.2f)", _camera.offsetX, _camera.offsetY);
+      _lastPanTranslation = CGPointZero;
+    default:
+      break;
+  }
+}
 -(void)layoutSubviews {
   [super layoutSubviews];
   
