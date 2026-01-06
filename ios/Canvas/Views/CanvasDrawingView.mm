@@ -166,8 +166,8 @@
   return CanvasMVP::Size((float)size.width, (float)size.height);
 }
 
-- (CanvasMVP::Rect)toCppRect:(CGRect)rect {
-    return CanvasMVP::Rect{
+- (CanvasMVP::RectF)toCppRect:(CGRect)rect {
+    return CanvasMVP::RectF{
         (float)rect.origin.x,
         (float)rect.origin.y,
         (float)rect.size.width,
@@ -190,7 +190,7 @@
     return CGSizeMake(size.width, size.height);
 }
 
-- (CGRect)fromCppRect:(CanvasMVP::Rect)rect {
+- (CGRect)fromCppRect:(CanvasMVP::RectF)rect {
     return CGRectMake(rect.x, rect.y, rect.width, rect.height);
 }
 

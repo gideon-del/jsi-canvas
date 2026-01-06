@@ -10,6 +10,7 @@ include(${REACT_ANDROID_DIR}/cmake-utils/ReactNative-application.cmake)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         OnLoad.cpp
         CameraJNI.cpp
+        SceneGraphJNI.cpp
         ${SHARED_CPP}
 
 )

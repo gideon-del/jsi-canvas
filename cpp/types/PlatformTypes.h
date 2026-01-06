@@ -10,6 +10,9 @@ namespace CanvasMVP
     {
         float x = 0.0f;
         float y = 0.0f;
+
+        Point() : x(0), y(0) {}
+        Point(float x, float y) : x(x), y(y) {}
     };
 
     // Platform-agnostic size
@@ -22,20 +25,22 @@ namespace CanvasMVP
 
     // Platform-agnostic rectangle
 
-    struct Rect
+    struct RectF
     {
         float x = 0.0f;
         float y = 0.0f;
         float width = 0.0f;
         float height = 0.0f;
 
+        RectF() : x(0), y(0), width(0), height(0) {};
+        RectF(float x, float y, float width, float height) : x(x), y(y), width(width), height(height) {};
         bool contains(const Point &point) const
         {
             return point.x >= x && point.x <= (x + width) &&
                    point.y >= y && point.y <= (y + height);
         }
 
-        bool intersects(const Rect &other) const
+        bool intersects(const RectF &other) const
         {
             return !(other.x > x + width ||
                      other.x + other.width < x ||
@@ -55,7 +60,9 @@ namespace CanvasMVP
         float g = 0.0f;
         float b = 0.0f;
         float a = 1.0f;
-
+        Color() : r(0), g(0), b(0), a(1) {}
+        Color(float r, float g, float b, float a = 1.0f)
+            : r(r), g(g), b(b), a(a) {}
         uint32_t toUInt32() const
         {
             return ((uint32_t)(r * 255) << 24) |
@@ -69,6 +76,10 @@ namespace CanvasMVP
         static Color red() { return Color{1.0f, 0.0f, 0.0f, 1.0f}; }
         static Color green() { return Color{0.0f, 1.0f, 0.0f, 1.0f}; }
         static Color blue() { return Color{0.0f, 0.0f, 1.0f, 1.0f}; }
+        static Color gray(float brightness)
+        {
+            return Color(brightness, brightness, brightness, 1.0);
+        }
     };
 
 } // namespace CanvasMVP

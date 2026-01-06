@@ -5,6 +5,7 @@
 #import <react/renderer/components/RNCanvasMVPSpec/Props.h>
 #import <react/renderer/components/RNCanvasMVPSpec/RCTComponentViewHelpers.h>
 #import "camera-state/CameraState.h"
+#import "scene-graph/SceneGraph.h"
 #import "CoreGraphics/CoreGraphics.h"
 #import "CanvasDrawingView.h"
 using namespace facebook::react;
@@ -17,11 +18,19 @@ using namespace facebook::react;
 {
   CanvasDrawingView *_canvasLayer;
   CanvasMVP::CameraState _camera;
+  CanvasMVP::SceneGraph _sceneGraph;
   UIPanGestureRecognizer *_panGesture;
   UIPinchGestureRecognizer *_pinchGesture;
   CGPoint _lastPanTranslation;
 }
 
+- (CanvasMVP::CameraState*)camera {
+    return &_camera;
+}
+
+- (CanvasMVP::SceneGraph*)sceneGraph {
+    return &_sceneGraph;
+}
 - (instancetype)initWithFrame:(CGRect)frame {
   if(self = [super initWithFrame:frame]){
     [self setupView];
@@ -82,7 +91,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
       
     case UIGestureRecognizerStateEnded:
     case UIGestureRecognizerStateCancelled:
-        NSLog(@"🎯 [CanvasView] Pinch ended - zoom:%.2f", _camera.zoom);
+        NSLog(@"[CanvasView] Pinch ended - zoom:%.2f", _camera.zoom);
       break;
     default:
       break;
@@ -100,7 +109,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
       float dx = currentTranslation.x - _lastPanTranslation.x;
       float dy = currentTranslation.y - _lastPanTranslation.y;
       _camera.pan(dx, dy);
-      
+      _lastPanTranslation = currentTranslation;
       [_canvasLayer setNeedsDisplay];
       break;
     }
@@ -129,6 +138,33 @@ Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
 
 
 
+
+- (void)createTestScene:(int)nodeCount {
+  _sceneGraph.clear();
+      
+      int cols = (int)std::ceil(std::sqrt(nodeCount));
+      float spacing = 250;
+      
+      for (int i = 0; i < nodeCount; ++i) {
+          int row = i / cols;
+          int col = i % cols;
+          
+          auto node = std::make_unique<CanvasMVP::Node>(
+              "node_" + std::to_string(i),
+              CanvasMVP::NodeType::RECTANGLE,
+              col * spacing, row * spacing,
+              100, 100
+          );
+          
+          node->fillColor = (i % 2 == 0) ?
+              CanvasMVP::Color::red() :
+              CanvasMVP::Color::blue();
+          
+          _sceneGraph.addNode(std::move(node));
+      }
+      
+      [self setNeedsDisplay];
+}
 
 @end
 

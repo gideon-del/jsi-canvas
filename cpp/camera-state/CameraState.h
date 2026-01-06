@@ -31,26 +31,26 @@ namespace CanvasMVP
                 (screenPoint.y / zoom) - offsetY};
         }
 
-        Rect worldToScreen(const Rect &worldRect, const Size &viewSize) const
+        RectF worldToScreen(const RectF &worldRect, const Size &viewSize) const
         {
             Point topLeft = worldToScreen(
                 Point{worldRect.x, worldRect.y},
                 viewSize);
 
-            return Rect{
+            return RectF{
                 topLeft.x,
                 topLeft.y,
                 worldRect.width * zoom,
                 worldRect.height * zoom};
         }
 
-        Rect screenToWorld(const Rect &screenRect, const Size &viewSize) const
+        RectF screenToWorld(const RectF &screenRect, const Size &viewSize) const
         {
             Point topLeft = screenToWorld(
                 Point{screenRect.x, screenRect.y},
                 viewSize);
 
-            return Rect{
+            return RectF{
                 topLeft.x,
                 topLeft.y,
                 screenRect.width / zoom,
