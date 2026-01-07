@@ -33,9 +33,9 @@ namespace CanvasMVP
             size_t cellCount() const;
             size_t totalEntries() const;
         };
+        SpatialGrid spatialIndex_;
 
     public:
-        SpatialGrid spatialIndex_;
         SceneGraph();
         ~SceneGraph();
 

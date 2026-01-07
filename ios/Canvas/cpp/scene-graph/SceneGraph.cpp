@@ -1,4 +1,4 @@
-
+#include "../types/Node.h"
 #include "SceneGraph.h"
 #include <unordered_map>
 #include <unordered_set>

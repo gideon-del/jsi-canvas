@@ -12,6 +12,7 @@
 		2CFD94FCF28A72FD74162A88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */; };
 		5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5238C6A72F07A1350014AD85 /* CanvasView.mm */; };
+		52A0902F2F0E6AA000CCA2D8 /* SceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */; };
 		52B9D2A42F0AA59E00C9248D /* CanvasDrawingView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */; };
 		52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5251CDB12F02DC7A008A3681 /* ColorBox.mm */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
@@ -29,6 +30,8 @@
 		5238C6A72F07A1350014AD85 /* CanvasView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasView.mm; sourceTree = "<group>"; };
 		5251CDB02F02DC12008A3681 /* ColorBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ColorBox.h; sourceTree = "<group>"; };
 		5251CDB12F02DC7A008A3681 /* ColorBox.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ColorBox.mm; sourceTree = "<group>"; };
+		52A0902C2F0E6A8000CCA2D8 /* SceneGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraph.h; sourceTree = "<group>"; };
+		52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraph.cpp; sourceTree = "<group>"; };
 		52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasDrawingView.mm; sourceTree = "<group>"; };
 		52B9D2A52F0AB33B00C9248D /* CanvasDrawingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CanvasDrawingView.h; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CanvasMVP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CanvasMVP.release.xcconfig"; path = "Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +96,16 @@
 			path = Canvas;
 			sourceTree = "<group>";
 		};
+		52A0902E2F0E6A8000CCA2D8 /* scene-graph */ = {
+			isa = PBXGroup;
+			children = (
+				52A0902C2F0E6A8000CCA2D8 /* SceneGraph.h */,
+				52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */,
+			);
+			name = "scene-graph";
+			path = "../cpp/scene-graph";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +116,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				52A0902E2F0E6A8000CCA2D8 /* scene-graph */,
 				5251CDAF2F02DBEE008A3681 /* Canvas */,
 				13B07FAE1A68108700A75B9A /* CanvasMVP */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -288,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52A0902F2F0E6AA000CCA2D8 /* SceneGraph.cpp in Sources */,
 				5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */,
 				52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */,
 				5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */,
@@ -310,7 +325,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../cpp/**",
+					"$(PROJECT_DIR)/../cpp",
 				);
 				INFOPLIST_FILE = CanvasMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -344,6 +359,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/../cpp/**",
 				);
+				"HEADER_SEARCH_PATHS[arch=*]" = "$(inherited)";
 				INFOPLIST_FILE = CanvasMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
