@@ -89,6 +89,7 @@ class CanvasView(context: Context): View(context) {
         scaleGestureDetector.onTouchEvent(event)
 
         if(scaleGestureDetector.isInProgress){
+            isPanning = false
             return  true
         }
         when(event.action) {

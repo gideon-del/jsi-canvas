@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CanvasDrawingView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame camera:(void *)camera;
+- (instancetype)initWithFrame:(CGRect)frame camera:(void *)camera sceneGraph:(void *)sceneGraph;
 
 @end
 

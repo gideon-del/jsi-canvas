@@ -1,107 +1,56 @@
-#include "../types/Node.h"
+
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include "../types/Node.h"
 
 namespace CanvasMVP
 {
+    struct Node; // forward declaration
+
     class SceneGraph
     {
     private:
         std::unordered_map<std::string, std::unique_ptr<Node>> nodes_;
-
         std::vector<Node *> sortedNodes_;
         bool needsSort_ = false;
 
+        class SpatialGrid
+        {
+        private:
+            static constexpr float CELL_SIZE = 200.0f;
+            std::unordered_map<int64_t, std::vector<Node *>> cells_;
+
+            int64_t cellKey(float x, float y) const;
+
+        public:
+            void add(Node *node);
+            void remove(Node *node);
+            std::vector<Node *> query(const Rect &area) const;
+            void clear();
+            size_t cellCount() const;
+            size_t totalEntries() const;
+        };
+        SpatialGrid spatialIndex_;
+
     public:
-        SceneGraph(/* args */);
+        SceneGraph();
         ~SceneGraph();
 
         SceneGraph(const SceneGraph &) = delete;
         SceneGraph &operator=(const SceneGraph &) = delete;
 
-        // Core methods
-        bool addNode(std::unique_ptr<Node> node)
-        {
-            if (node == nullptr)
-            {
-                return false;
-            }
+        bool addNode(std::unique_ptr<Node> node);
+        Node *getNode(const std::string &id);
+        bool removeNode(const std::string &id);
 
-            auto it = nodes_.find(node->id);
-
-            if (it != nodes_.end())
-            {
-                return false;
-            }
-            auto raw = node.get();
-
-            nodes_.emplace(node->id, std::move(node));
-            sortedNodes_.push_back(raw);
-
-            needsSort_ = true;
-            return true;
-        };
-
-        Node *getNode(const std::string &id)
-        {
-            auto it = nodes_.find(id);
-
-            if (it != nodes_.end())
-            {
-                return it->second.get();
-            }
-            return nullptr;
-        }
-
-        bool removeNode(const std::string &id)
-        {
-            auto it = nodes_.find(id);
-
-            if (it == nodes_.end())
-            {
-                return false;
-            }
-            auto raw = it->second.get();
-
-            sortedNodes_.erase(std::remove(sortedNodes_.begin(), sortedNodes_.end(), raw), sortedNodes_.end());
-            nodes_.erase(it);
-            return true;
-        }
-
-        const std::vector<Node *> &getSortedNodes()
-        {
-            if (needsSort_)
-            {
-                std::sort(sortedNodes_.begin(),
-                          sortedNodes_.end(), [](Node *a, Node *b)
-                          { return a->zIndex < b->zIndex; });
-
-                needsSort_ = false;
-            }
-            return sortedNodes_;
-        }
-
-        void clear()
-        {
-            nodes_.clear();
-            sortedNodes_.clear();
-            needsSort_ = false;
-        }
-
-        size_t nodeCount() const
-        {
-            return nodes_.size();
-        }
+        std::vector<Node *> queryVisible(const Rect &viewport) const;
+        const std::vector<Node *> &getSortedNodes();
+        Node *hitTest(float x, float y) const;
+        void updateIndex(Node *node);
+        void clear();
+        size_t nodeCount() const;
     };
-
-    SceneGraph::SceneGraph(/* args */)
-    {
-    }
-
-    SceneGraph::~SceneGraph()
-    {
-    }
-
 }

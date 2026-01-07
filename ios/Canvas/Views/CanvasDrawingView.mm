@@ -1,16 +1,14 @@
-//
-//  CanvasDrawingView.m
-//  CanvasMVP
-//
-//  Created by macbook pro on 04/01/2026.
-//
+
+
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "camera-state/CameraState.h"
+#import "scene-graph/SceneGraph.h"
 #import "CanvasDrawingView.h"
 @interface CanvasDrawingView() {
   CanvasMVP::CameraState *_camera;
+  CanvasMVP::SceneGraph *_sceneGraph;
 }
 
 @end
@@ -18,9 +16,10 @@
 
 @implementation CanvasDrawingView
 
--(instancetype)initWithFrame:(CGRect)frame camera:(void *)camera {
+-(instancetype)initWithFrame:(CGRect)frame camera:(void *)camera sceneGraph:(void *)sceneGraph {
   if(self = [super initWithFrame:frame]) {
     _camera = static_cast<CanvasMVP::CameraState *>(camera);
+    _sceneGraph = static_cast<CanvasMVP::SceneGraph *>(sceneGraph);
     self.backgroundColor = [UIColor whiteColor];
     self.opaque = YES;
   };
@@ -43,6 +42,50 @@
   [self drawGridInContext:ctx];
   
   [self drawOriginInContext:ctx];
+  //This is to convert the screen to world co-ordinates
+  //So that we can query with the world co-ordinates
+  CanvasMVP::RectF worldViewPort = [self calculateViewPort];
+  
+  auto visibleNodes = _sceneGraph->queryVisible(CanvasMVP::Rect(worldViewPort.x, worldViewPort.y, worldViewPort.width, worldViewPort.height));
+  
+  // Sort by z Index
+  std::sort(visibleNodes.begin(),visibleNodes.end(),
+            [](const CanvasMVP::Node* a, const CanvasMVP::Node* b){
+    return  a->zIndex < b->zIndex;
+  }
+            );
+  
+  for(const auto* node: visibleNodes) {
+      [self drawNode:node context:ctx];
+  }
+  
+}
+
+-(void)drawNode:(const CanvasMVP::Node *)node context:(CGContextRef)ctx {
+  if(!node || !node->visible) return;
+  
+  CanvasMVP::RectF screenBounds = _camera->worldToScreen(node->bounds.toRectF());
+  UIColor* nodeFillColor = [self fromCppColor:node->fillColor];
+  UIColor* nodeStrokeColor = [self fromCppColor:node->strokeColor];
+  
+
+
+  
+  CGContextSetFillColorWithColor(ctx, nodeFillColor.CGColor);
+  CGContextFillRect(ctx,[self fromCppRect:screenBounds]);
+  if(node->strokeWidth > 0) {
+    CGFloat nodeLineWidth = node->strokeWidth;
+    CGContextSetStrokeColorWithColor(ctx, nodeStrokeColor.CGColor);
+    CGContextSetLineWidth(ctx, nodeLineWidth);
+    CGContextStrokeRect(ctx, [self fromCppRect:screenBounds]);
+  }
+  if(node->selected) {
+    CGContextSetStrokeColorWithColor(ctx, [[UIColor blueColor] CGColor]);
+    CGContextSetLineWidth(ctx, 3.0f);
+    CGRect selectionBound = CGRectInset([self fromCppRect:screenBounds], -4, -4);
+    CGContextStrokeRect(ctx, selectionBound);
+  }
+  CGContextStrokePath(ctx);
 }
 
 - (void)drawGridInContext:(CGContextRef)ctx {
@@ -56,10 +99,11 @@
   // Basically the world view is the infinite canvas which exceeds the screen view
   CanvasMVP::Point startPoint = [self toCppPoint:CGPointZero];
   CanvasMVP::Point endPoint = [self toCppPoint:CGPointMake(viewSize.width, viewSize.height)];
-  CanvasMVP::Size viewSizeCpp = [self toCppSize:viewSize];
+
   
-  CanvasMVP::Point topLeftCpp = _camera->screenToWorld(startPoint, viewSizeCpp);
-  CanvasMVP::Point bottomRightCpp = _camera->screenToWorld(endPoint, viewSizeCpp);
+  CanvasMVP::Point topLeftCpp = _camera->screenToWorld(startPoint);
+  CanvasMVP::Point bottomRightCpp = _camera->screenToWorld(endPoint);
+  
   
   
   float startX =
@@ -83,8 +127,8 @@
     CanvasMVP::Point worldTop(x, topLeftCpp.y);
     CanvasMVP::Point worldBottom(x, bottomRightCpp.y);
   
-    CanvasMVP::Point screenTop = _camera->worldToScreen(worldTop, viewSizeCpp);
-    CanvasMVP::Point screenBottom = _camera->worldToScreen(worldBottom, viewSizeCpp);
+    CanvasMVP::Point screenTop = _camera->worldToScreen(worldTop);
+    CanvasMVP::Point screenBottom = _camera->worldToScreen(worldBottom);
     
     float lineWidth =
         (isMajorLine ? 1.5f : 0.75f) / _camera->zoom;
@@ -109,8 +153,8 @@
     CanvasMVP::Point worldLeft(topLeftCpp.x, y);
     CanvasMVP::Point worldRight(bottomRightCpp.x, y);
   
-    CanvasMVP::Point screenLeft = _camera->worldToScreen(worldLeft, viewSizeCpp);
-    CanvasMVP::Point screenRight = _camera->worldToScreen(worldRight, viewSizeCpp);
+    CanvasMVP::Point screenLeft = _camera->worldToScreen(worldLeft);
+    CanvasMVP::Point screenRight = _camera->worldToScreen(worldRight);
     
     float lineWidth =
         (isMajorLine ? 1.5f : 0.75f) / _camera->zoom;
@@ -135,7 +179,7 @@
   CanvasMVP::Size viewSizeCpp = [self toCppSize:self.bounds.size];
     
     // Convert world origin (0,0) to screen space
-  CanvasMVP::Point screenOrigin = _camera->worldToScreen([self toCppPoint:CGPointZero], viewSizeCpp);
+  CanvasMVP::Point screenOrigin = _camera->worldToScreen([self toCppPoint:CGPointZero]);
     
     // Draw red cross
     CGContextSetStrokeColorWithColor(ctx, [[UIColor redColor] CGColor]);
@@ -197,5 +241,11 @@
 - (UIColor *)fromCppColor:(CanvasMVP::Color)color {
   return [UIColor colorWithRed:color.r green:color.g blue:color.b alpha:color.a];
   
+}
+
+- (CanvasMVP::RectF)calculateViewPort {
+  CanvasMVP::RectF viewSize =[self toCppRect:self.bounds];
+  CanvasMVP::RectF worldSize = _camera->screenToWorld(viewSize);
+  return worldSize;
 }
 @end

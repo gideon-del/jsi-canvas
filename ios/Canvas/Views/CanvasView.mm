@@ -19,9 +19,13 @@ using namespace facebook::react;
   CanvasDrawingView *_canvasLayer;
   CanvasMVP::CameraState _camera;
   CanvasMVP::SceneGraph _sceneGraph;
+  
+  
   UIPanGestureRecognizer *_panGesture;
   UIPinchGestureRecognizer *_pinchGesture;
   CGPoint _lastPanTranslation;
+  
+  
 }
 
 - (CanvasMVP::CameraState*)camera {
@@ -40,15 +44,13 @@ using namespace facebook::react;
   return self;
 }
 - (void)setupView {
-  _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera];
+  _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera sceneGraph:&_sceneGraph];
   
   _canvasLayer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   
   
   [self addSubview:_canvasLayer];
   
-  NSLog(@"✅ [CanvasView] Camera initialized - offset:(%.2f, %.2f) zoom:%.2f",
-           _camera.offsetX, _camera.offsetY, _camera.zoom);
 }
 -(void)setupGestures {
   _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -81,7 +83,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
       break;
     case  UIGestureRecognizerStateChanged:{
       float newZoom = _camera.zoom * gesture.scale;
-      _camera.zoomAt(newZoom, CanvasMVP::Point(pinchPoint.x, pinchPoint.y), CanvasMVP::Size(self.frame.size.width, self.frame.size.height));
+      _camera.zoomAt(newZoom, CanvasMVP::Point(pinchPoint.x, pinchPoint.y));
       gesture.scale = 1.0;
       [_canvasLayer setNeedsDisplay];
       
@@ -103,7 +105,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
   switch (gesture.state) {
     case UIGestureRecognizerStateBegan:
       _lastPanTranslation = CGPointZero;
-      NSLog(@"[CanvasView] Pan began");
+     
       break;
     case  UIGestureRecognizerStateChanged:{
       float dx = currentTranslation.x - _lastPanTranslation.x;
@@ -116,7 +118,6 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
    
     case  UIGestureRecognizerStateEnded:
     case UIGestureRecognizerStateCancelled:
-      NSLog(@"[CanvasView] Pan ended - camera(%.2f,%.2f)", _camera.offsetX, _camera.offsetY);
       _lastPanTranslation = CGPointZero;
     default:
       break;
@@ -128,19 +129,23 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
   _canvasLayer.frame = self.bounds;
 }
 + (facebook::react::ComponentDescriptorProvider)componentDescriptorProvider {
-  NSLog(@"Component descriptor is called");
   return concreteComponentDescriptorProvider<CanvasViewComponentDescriptor>();
 }
 
 Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
   return CanvasView.class;
 }
-
+-(void)handleCommand:(const NSString *)commandName args:(const NSArray *)args{
+  NSLog(@"[CanvasView] Command called: %@, args: %@",
+         commandName,
+         args);
+  RCTCanvasViewHandleCommand(self, commandName, args);
+}
 
 
 
 - (void)createTestScene:(int)nodeCount {
-  _sceneGraph.clear();
+    _sceneGraph.clear();
       
       int cols = (int)std::ceil(std::sqrt(nodeCount));
       float spacing = 250;
@@ -159,11 +164,13 @@ Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
           node->fillColor = (i % 2 == 0) ?
               CanvasMVP::Color::red() :
               CanvasMVP::Color::blue();
+        
+        node->zIndex = i;
           
           _sceneGraph.addNode(std::move(node));
       }
-      
-      [self setNeedsDisplay];
+      NSLog(@"Created %d nodes", nodeCount);
+      [_canvasLayer setNeedsDisplay];
 }
 
 @end

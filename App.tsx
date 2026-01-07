@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, Alert, Button } from 'react-native';
+import React, { useRef } from 'react';
+import { StyleSheet, View, StatusBar, Button } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { Commands } from './src/specs/CanvasViewNativeComponent';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
   return (
@@ -14,51 +12,21 @@ function App() {
   );
 }
 function AppContent(): React.JSX.Element {
-  const { top, bottom } = useSafeAreaInsets();
-  const [freezing, setFreezing] = useState(false);
-  const freezeJS = () => {
-    setFreezing(true);
-    Alert.alert(
-      'JS thread test',
-      'About to freeze JS for 5 seconds. Try panning the canvas',
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            const start = Date.now();
-
-            while (Date.now() - start < 5000) {}
-
-            setFreezing(false);
-            Alert.alert('Done', 'JS thread unfreeze.');
-          },
-        },
-      ],
-    );
+  const canvasRef = useRef<React.ElementRef<typeof View> | null>(null);
+  const createScene = (count: number) => {
+    if (!canvasRef.current) return;
+    Commands.createTestScene(canvasRef.current, count);
   };
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <View
-        style={[
-          styles.container,
-          { paddingTop: top + 20, paddingBottom: bottom + 20 },
-        ]}
-      >
-        <View style={styles.header}>
-          <Text style={styles.title}>Canvas MVP - Sprint 1, Day 4</Text>
-          <Text style={styles.subtitle}>Pan Gesture test</Text>
-        </View>
+      <View style={[styles.container]}>
+        <CanvasView ref={canvasRef} style={styles.canvas} />
 
-        <CanvasView style={styles.canvas} />
-
-        <View style={styles.footer}>
-          <Button
-            title={freezing ? 'JS Freezes' : 'Test: Freeze JS Thread'}
-            onPress={freezeJS}
-            disabled={freezing}
-          />
-          <Text style={styles.instruction}>Testing</Text>
+        <View style={styles.controls}>
+          <Button title="100 Nodes" onPress={() => createScene(100)} />
+          <Button title="500 Nodes" onPress={() => createScene(500)} />
+          <Button title="1000 Nodes" onPress={() => createScene(1000)} />
         </View>
       </View>
     </>
@@ -70,25 +38,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  header: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
+
   canvas: {
     flex: 1,
-    margin: 16,
+
     backgroundColor: '#fff',
     borderRadius: 8,
     shadowColor: '#000',
@@ -97,16 +50,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  footer: {
+
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f0f0',
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-  },
-  instruction: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    borderTopColor: '#ddd',
   },
 });
 
