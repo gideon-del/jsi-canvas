@@ -228,6 +228,7 @@ namespace CanvasMVP
     {
         nodes_.clear();
         sortedNodes_.clear();
+        spatialIndex_.clear();
         needsSort_ = false;
     }
 

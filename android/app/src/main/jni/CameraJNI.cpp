@@ -34,8 +34,8 @@ Java_com_canvasmvp_state_CameraState_nativeZoomAt(
     auto* camera = reinterpret_cast<CameraState*>(handle);
     camera->zoomAt(
             newZoom,
-            Point{centerX, centerY},
-            Size{viewWidth, viewHeight}
+            Point{centerX, centerY}
+
     );
 }
 
@@ -47,8 +47,8 @@ Java_com_canvasmvp_state_CameraState_nativeWorldToScreen(
 ) {
     auto* camera = reinterpret_cast<CameraState*>(handle);
     Point screen = camera->worldToScreen(
-            Point{worldX, worldY},
-            Size{viewWidth, viewHeight}
+            Point{worldX, worldY}
+
     );
 
     jfloatArray result = env->NewFloatArray(2);
@@ -64,8 +64,8 @@ Java_com_canvasmvp_state_CameraState_nativeScreenToWorld(
 ) {
     auto* camera = reinterpret_cast<CameraState*>(handle);
     Point screen = camera->screenToWorld(
-            Point{worldX, worldY},
-            Size{viewWidth, viewHeight}
+            Point{worldX, worldY}
+
     );
 
     jfloatArray result = env->NewFloatArray(2);
@@ -74,6 +74,41 @@ Java_com_canvasmvp_state_CameraState_nativeScreenToWorld(
     return result;
 }
 
+JNIEXPORT jfloatArray JNICALL
+Java_com_canvasmvp_state_CameraState_nativeScreenToWorldRect(
+        JNIEnv* env, jobject obj, jlong handle,
+        jfloat x, jfloat y,
+        jfloat width, jfloat height
+) {
+    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto screen = camera->screenToWorld(
+            RectF(x, y, width, height)
+
+    );
+
+    jfloatArray result = env->NewFloatArray(4);
+    float coords[] = {screen.x, screen.y, screen.width, screen.height};
+    env->SetFloatArrayRegion(result, 0, 4, coords);
+    return result;
+}
+
+JNIEXPORT jfloatArray JNICALL
+Java_com_canvasmvp_state_CameraState_nativeWorldToScreenRect(
+        JNIEnv* env, jobject obj, jlong handle,
+        jfloat x, jfloat y,
+        jfloat width, jfloat height
+) {
+    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto screen = camera->worldToScreen(
+            RectF(x, y, width, height)
+
+    );
+
+    jfloatArray result = env->NewFloatArray(4);
+    float coords[] = {screen.x, screen.y, screen.width, screen.height};
+    env->SetFloatArrayRegion(result, 0, 4, coords);
+    return result;
+}
 JNIEXPORT jfloat JNICALL
 Java_com_canvasmvp_state_CameraState_nativeGetZoom(JNIEnv* env, jobject obj, jlong handle) {
     auto* camera = reinterpret_cast<CameraState*>(handle);

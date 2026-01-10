@@ -11,12 +11,27 @@ import android.view.ScaleGestureDetector
 import com.canvasmvp.state.CameraState
 import kotlin.math.floor
 import androidx.core.graphics.withClip
+import com.canvasmvp.graph.NodeWrapper
+import com.canvasmvp.graph.SceneGraphWrapper
+import com.canvasmvp.types.CanvasTypes
+import com.canvasmvp.types.toArgb
+import com.canvasmvp.types.toRectF
+import kotlin.math.ceil
+import kotlin.math.sqrt
 
 class CanvasView(context: Context): View(context) {
 
     private val camera = CameraState()
+    private val sceneGraph = SceneGraphWrapper()
 
 
+    private val fillPaint = Paint().apply {
+        style = Paint.Style.FILL
+    }
+
+    private val strokePaint = Paint().apply {
+        style = Paint.Style.STROKE
+    }
     private val lightGridPaint = Paint().apply {
         color = Color.LTGRAY
         style = Paint.Style.STROKE
@@ -47,6 +62,38 @@ class CanvasView(context: Context): View(context) {
 
     }
 
+
+    fun createTestScene(nodeCount: Int) {
+        sceneGraph.clear()
+        val cols = ceil(sqrt(nodeCount.toDouble())).toInt()
+        val spacing = 200f
+
+        for(i in 0 until nodeCount){
+           val row = i / cols
+           val col = i % cols
+
+           val x = col * spacing
+           val y = row * spacing
+
+
+           val fillColor = if( i % 2 == 0) CanvasTypes.Color(1f, 0f,0f,1f)
+                            else  CanvasTypes.Color(0f, 0f,1f,1f)
+           val strokeColor = CanvasTypes.Color(0f, 0f,0f,1f)
+
+            sceneGraph.addNode(
+                id="node_$i",
+                bounds = CanvasTypes.Rect(x,y,100f,100f),
+                fillColor = fillColor,
+                strokeColor = strokeColor,
+                strokeWidth = 2f,
+                zIndx = i
+            )
+        }
+
+        invalidate()
+        Log.d(TAG,"Created $nodeCount nodes")
+
+    }
   private  inner class  ScaleListener: ScaleGestureDetector.SimpleOnScaleGestureListener() {
       override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
           Log.d(TAG,"Pinch began - zoom ${camera.zoom}")
@@ -73,15 +120,45 @@ class CanvasView(context: Context): View(context) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val screenRect = CanvasTypes.Rect(0f, 0f, width.toFloat(), height.toFloat())
         canvas.withClip(0f, 0f, width.toFloat(), height.toFloat()) {
             drawColor(Color.WHITE)
-
-
 
 
             drawGrid(this)
 
             drawOrigin(this)
+
+            val viewport = camera.screenToWorldRect(screenRect)
+
+            // Query nodes
+
+            val visibleNodes = sceneGraph.queryVisible(viewport).sortedBy { it.zIndex }
+            Log.d(TAG,"Visible nodes ${visibleNodes.size}")
+            for(node in visibleNodes){
+
+                drawNode(this, node)
+            }
+
+        }
+    }
+
+
+    private fun drawNode(canvas: Canvas, node: NodeWrapper){
+
+
+        val nodeScreenBound = camera.worldToScreenRect(node.bounds)
+
+
+        val fillColor = node.fillColor.toArgb()
+        fillPaint.color = fillColor
+        canvas.drawRect(nodeScreenBound.toRectF(), fillPaint)
+
+        if(node.strokeWidth > 0){
+            strokePaint.color = node.strokeColor.toArgb()
+            strokePaint.strokeWidth = node.strokeWidth
+
+            canvas.drawRect(nodeScreenBound.toRectF(), strokePaint)
         }
     }
 
@@ -216,6 +293,10 @@ class CanvasView(context: Context): View(context) {
         invalidate()
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        sceneGraph.release()
+    }
 
     companion object {
         const val TAG = "CanvasView"

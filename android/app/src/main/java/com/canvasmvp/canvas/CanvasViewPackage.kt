@@ -9,6 +9,7 @@ import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.uimanager.ViewManager
 
 
+
 class CanvasViewPackage: BaseReactPackage() {
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
         return listOf(ReactCanvasViewManager(reactContext))
@@ -19,6 +20,7 @@ class CanvasViewPackage: BaseReactPackage() {
         }
         return null
     }
+
 
     override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
         mapOf(ReactCanvasViewManager.NAME to ReactModuleInfo(

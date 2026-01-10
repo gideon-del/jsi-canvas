@@ -1,5 +1,7 @@
 package com.canvasmvp.state
 
+import com.canvasmvp.types.CanvasTypes
+
 class CameraState {
     private var nativeHandle: Long = 0
 
@@ -32,6 +34,36 @@ class CameraState {
         return nativeScreenToWorld(nativeHandle, worldX, worldY, viewWidth, viewHeight)
     }
 
+    fun worldToScreenRect(rect: CanvasTypes.Rect): CanvasTypes.Rect {
+        val screenRect =  nativeWorldToScreenRect(nativeHandle,
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height
+            )
+        return CanvasTypes.Rect(
+            x = screenRect[0],
+            y=screenRect[1],
+            width = screenRect[2],
+            height = screenRect[3]
+        )
+
+    }
+    fun screenToWorldRect(rect: CanvasTypes.Rect): CanvasTypes.Rect {
+        val worldRect =  nativeScreenToWorldRect(nativeHandle,
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height
+        )
+        return CanvasTypes.Rect(
+            x = worldRect[0],
+            y=worldRect[1],
+            width = worldRect[2],
+            height = worldRect[3]
+        )
+
+    }
     val zoom: Float
         get() = nativeGetZoom(nativeHandle)
 
@@ -54,9 +86,14 @@ class CameraState {
     private external fun nativeScreenToWorld(handle: Long,
                                              worldX: Float, worldY: Float,
                                              viewWidth: Float, viewHeight: Float): FloatArray
+
+    private  external fun nativeScreenToWorldRect(handle: Long, x: Float, y: Float, width: Float, height: Float): FloatArray
+    private  external fun nativeWorldToScreenRect(handle: Long, x: Float, y: Float, width: Float, height: Float): FloatArray
     private external fun nativeGetZoom(handle: Long): Float
     private external fun nativeGetOffsetX(handle: Long): Float
     private external fun nativeGetOffsetY(handle: Long): Float
+
+
 
 
 }
