@@ -35,6 +35,7 @@
 #include <react/renderer/componentregistry/ComponentDescriptorProviderRegistry.h>
 #include <android/log.h>
 #include "jsi/SceneGraphModule.h"
+#include "jsi/CameraStateModule.h"
 #include "RNCanvasMVPSpecJSI.h"
 #ifdef REACT_NATIVE_APP_CODEGEN_HEADER
 #include REACT_NATIVE_APP_CODEGEN_HEADER
@@ -74,6 +75,11 @@ std::shared_ptr<TurboModule> cxxModuleProvider(
        LOGD("Creating SceneGraphModule instance!");
      return std::make_shared<SceneGraphModule>(jsInvoker);
    }
+
+    if (name == CameraStateModule::kModuleName) {
+        LOGD("Creating CameraModule instance!");
+        return std::make_shared<CameraStateModule>(jsInvoker);
+    }
 
   // And we fallback to the CXX module providers autolinked
   return autolinking_cxxModuleProvider(name, jsInvoker);

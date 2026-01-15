@@ -40,5 +40,9 @@ class ReactCanvasViewManager(
       view?.createTestScene(count)
     }
 
+    override fun redrawNative(view: CanvasView?) {
+        view?.invalidate()
+    }
+
 
 }

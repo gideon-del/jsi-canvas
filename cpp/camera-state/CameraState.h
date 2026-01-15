@@ -1,5 +1,4 @@
-#ifndef CanvasMVP_CameraState_h
-#define CanvasMVP_CameraState_h
+#pragma once
 
 #include "../types/PlatformTypes.h"
 
@@ -86,4 +85,3 @@ namespace CanvasMVP
     };
 
 }
-#endif

@@ -1,37 +1,39 @@
 #include <jni.h>
 #include "camera-state/CameraState.h"
+#include "jsi/CameraStateRegistry.h"
 
 using namespace CanvasMVP;
 
 extern "C" {
 
-JNIEXPORT jlong JNICALL
-Java_com_canvasmvp_state_CameraState_nativeCreate(JNIEnv* env, jobject obj) {
-    auto* camera = new CameraState();
-    return reinterpret_cast<jlong>(camera);
-}
 
 JNIEXPORT void JNICALL
 Java_com_canvasmvp_state_CameraState_nativeDestroy(JNIEnv* env, jobject obj, jlong handle) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
-    delete camera;
+
 }
 
 JNIEXPORT void JNICALL
 Java_com_canvasmvp_state_CameraState_nativePan(
-        JNIEnv* env, jobject obj, jlong handle, jfloat dx, jfloat dy
+        JNIEnv* env, jobject obj,  jfloat dx, jfloat dy
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera = CanvasMVP::getCurrentCameraState();
+    if(camera == nullptr){
+        return;
+    }
     camera->pan(dx, dy);
 }
 
 JNIEXPORT void JNICALL
 Java_com_canvasmvp_state_CameraState_nativeZoomAt(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jfloat newZoom, jfloat centerX, jfloat centerY,
         jfloat viewWidth, jfloat viewHeight
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera =CanvasMVP::getCurrentCameraState();
+
+    if(camera == nullptr){
+        return;
+    }
     camera->zoomAt(
             newZoom,
             Point{centerX, centerY}
@@ -41,11 +43,12 @@ Java_com_canvasmvp_state_CameraState_nativeZoomAt(
 
 JNIEXPORT jfloatArray JNICALL
 Java_com_canvasmvp_state_CameraState_nativeWorldToScreen(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jfloat worldX, jfloat worldY,
         jfloat viewWidth, jfloat viewHeight
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera = CanvasMVP::getCurrentCameraState();
+
     Point screen = camera->worldToScreen(
             Point{worldX, worldY}
 
@@ -58,11 +61,11 @@ Java_com_canvasmvp_state_CameraState_nativeWorldToScreen(
 }
 JNIEXPORT jfloatArray JNICALL
 Java_com_canvasmvp_state_CameraState_nativeScreenToWorld(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jfloat worldX, jfloat worldY,
         jfloat viewWidth, jfloat viewHeight
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera = CanvasMVP::getCurrentCameraState();
     Point screen = camera->screenToWorld(
             Point{worldX, worldY}
 
@@ -76,11 +79,11 @@ Java_com_canvasmvp_state_CameraState_nativeScreenToWorld(
 
 JNIEXPORT jfloatArray JNICALL
 Java_com_canvasmvp_state_CameraState_nativeScreenToWorldRect(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jfloat x, jfloat y,
         jfloat width, jfloat height
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera = CanvasMVP::getCurrentCameraState();
     auto screen = camera->screenToWorld(
             RectF(x, y, width, height)
 
@@ -94,11 +97,11 @@ Java_com_canvasmvp_state_CameraState_nativeScreenToWorldRect(
 
 JNIEXPORT jfloatArray JNICALL
 Java_com_canvasmvp_state_CameraState_nativeWorldToScreenRect(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jfloat x, jfloat y,
         jfloat width, jfloat height
 ) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+    auto* camera = CanvasMVP::getCurrentCameraState();
     auto screen = camera->worldToScreen(
             RectF(x, y, width, height)
 
@@ -110,20 +113,20 @@ Java_com_canvasmvp_state_CameraState_nativeWorldToScreenRect(
     return result;
 }
 JNIEXPORT jfloat JNICALL
-Java_com_canvasmvp_state_CameraState_nativeGetZoom(JNIEnv* env, jobject obj, jlong handle) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+Java_com_canvasmvp_state_CameraState_nativeGetZoom(JNIEnv* env, jobject obj) {
+    auto* camera = CanvasMVP::getCurrentCameraState();
     return camera->zoom;
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_canvasmvp_state_CameraState_nativeGetOffsetX(JNIEnv* env, jobject obj, jlong handle) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+Java_com_canvasmvp_state_CameraState_nativeGetOffsetX(JNIEnv* env, jobject obj) {
+    auto* camera = CanvasMVP::getCurrentCameraState();
     return camera->offsetX;
 }
 
 JNIEXPORT jfloat JNICALL
-Java_com_canvasmvp_state_CameraState_nativeGetOffsetY(JNIEnv* env, jobject obj, jlong handle) {
-    auto* camera = reinterpret_cast<CameraState*>(handle);
+Java_com_canvasmvp_state_CameraState_nativeGetOffsetY(JNIEnv* env, jobject obj) {
+    auto* camera = CanvasMVP::getCurrentCameraState();
     return camera->offsetY;
 }
 

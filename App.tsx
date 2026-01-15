@@ -4,7 +4,7 @@ import { CanvasView } from './src/components/CanvasView';
 import { Commands } from './src/specs/CanvasViewNativeComponent';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SceneGraphModule from './src/specs/NativeSceneGraphModule';
-import './src/types/scenegraph.types';
+import { useCanvasCamera } from './src/hooks/useCanvasCamera';
 function App() {
   useEffect(() => {
     SceneGraphModule.installSceneGraph();
@@ -17,9 +17,10 @@ function App() {
 }
 function AppContent(): React.JSX.Element {
   const canvasRef = useRef<React.ElementRef<typeof View> | null>(null);
-  const createScene = (count: number) => {
+  const canvasCamera = useCanvasCamera();
+  const redraw = () => {
     if (!canvasRef.current) return;
-    Commands.createTestScene(canvasRef.current, count);
+    Commands.redrawNative(canvasRef.current);
   };
 
   const handleAddNode = () => {
@@ -27,26 +28,30 @@ function AppContent(): React.JSX.Element {
       console.error('[App] sceneGraph not available');
       return;
     }
-
+    if (!canvasCamera) {
+      console.error('[App] canvasCamera not available');
+      return;
+    }
     try {
       // Generate random position
       const x = Math.random() * 500;
       const y = Math.random() * 500;
 
+      const worldPoint = canvasCamera.screenToWorld(x, y);
       // Call JSI function (synchronous!)
       const start = performance.now();
       const nodeId = global.sceneGraph.addNode({
-        x,
-        y,
+        x: worldPoint.x,
+        y: worldPoint.y,
         width: 100,
         height: 100,
-        fillColor: '#FF0000',
+        fillColor: '#0000FF',
         zIndex: 0,
       });
       const duration = performance.now() - start;
 
       console.log(`[App] Added node ${nodeId} in ${duration.toFixed(3)}ms`);
-      setNodeCount(count => count + 1);
+      redraw();
     } catch (error) {
       console.error('[App] Error adding node:', error);
     }
@@ -59,9 +64,7 @@ function AppContent(): React.JSX.Element {
         <CanvasView ref={canvasRef} style={styles.canvas} />
 
         <View style={styles.controls}>
-          <Button title="100 Nodes" onPress={() => createScene(100)} />
-          <Button title="500 Nodes" onPress={() => createScene(500)} />
-          <Button title="1000 Nodes" onPress={() => createScene(1000)} />
+          <Button title="Add random node" onPress={() => handleAddNode()} />
         </View>
       </View>
     </>

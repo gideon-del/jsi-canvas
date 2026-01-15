@@ -172,7 +172,7 @@ namespace CanvasMVP
         return obj;
     }
 
-    void installSceneGraph(jsi::Runtime &runtime)
+    bool installSceneGraph(jsi::Runtime &runtime)
     {
         auto sceneGraph = std::make_shared<SceneGraph>();
 
@@ -184,5 +184,7 @@ namespace CanvasMVP
             runtime,
             "sceneGraph",
             jsi::Object::createFromHostObject(runtime, hostObject));
+
+        return true;
     }
 }

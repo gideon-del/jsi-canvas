@@ -28,7 +28,7 @@ namespace CanvasMVP
         jsi::Value addNode(jsi::Runtime &runtime, const jsi::Object &nodeConfig);
     };
 
-    void installSceneGraph(jsi::Runtime &runtime);
+    bool installSceneGraph(jsi::Runtime &runtime);
 
 }
 

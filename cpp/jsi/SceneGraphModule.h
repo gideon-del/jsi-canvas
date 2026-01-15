@@ -9,6 +9,6 @@ namespace facebook::react
     public:
         SceneGraphModule(std::shared_ptr<CallInvoker> jsInvoker);
 
-        void installSceneGraph(jsi::Runtime &runtime);
+        bool installSceneGraph(jsi::Runtime &runtime);
     };
 }; // namespace facebook::react

@@ -3,20 +3,21 @@ import {
   codegenNativeComponent,
   HostComponent,
   ViewProps,
+  CodegenTypes,
 } from 'react-native';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypesNamespace';
 
 interface NativeProps extends ViewProps {}
 
 interface NativeCommand {
   createTestScene(
     viewRef: React.ElementRef<HostComponent<NativeProps>>,
-    count: Int32,
+    count: CodegenTypes.Int32,
   ): void;
+  redrawNative(viewRef: React.ElementRef<HostComponent<NativeProps>>): void;
 }
 
 export const Commands = codegenNativeCommands<NativeCommand>({
-  supportedCommands: ['createTestScene'],
+  supportedCommands: ['createTestScene', 'redrawNative'],
 });
 export default codegenNativeComponent<NativeProps>(
   'CanvasView',

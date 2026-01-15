@@ -3,39 +3,32 @@ package com.canvasmvp.state
 import com.canvasmvp.types.CanvasTypes
 
 class CameraState {
-    private var nativeHandle: Long = 0
 
-    init {
-        nativeHandle = nativeCreate()
-    }
 
-    fun destroy() {
-        if (nativeHandle != 0L) {
-            nativeDestroy(nativeHandle)
-            nativeHandle = 0
-        }
-    }
+
+
+
 
     fun pan(dx: Float, dy: Float) {
-        nativePan(nativeHandle, dx, dy)
+        nativePan( dx, dy)
     }
 
     fun zoomAt(newZoom: Float, centerX: Float, centerY: Float,
                viewWidth: Float, viewHeight: Float) {
-        nativeZoomAt(nativeHandle, newZoom, centerX, centerY, viewWidth, viewHeight)
+        nativeZoomAt( newZoom, centerX, centerY, viewWidth, viewHeight)
     }
 
     fun worldToScreen(screenX: Float, screenY: Float,
                       viewWidth: Float, viewHeight: Float): FloatArray {
-        return nativeWorldToScreen(nativeHandle, screenX, screenY, viewWidth, viewHeight)
+        return nativeWorldToScreen( screenX, screenY, viewWidth, viewHeight)
     }
     fun screenToWorldPoint(worldX: Float, worldY: Float,
                            viewWidth: Float, viewHeight: Float): FloatArray {
-        return nativeScreenToWorld(nativeHandle, worldX, worldY, viewWidth, viewHeight)
+        return nativeScreenToWorld( worldX, worldY, viewWidth, viewHeight)
     }
 
     fun worldToScreenRect(rect: CanvasTypes.Rect): CanvasTypes.Rect {
-        val screenRect =  nativeWorldToScreenRect(nativeHandle,
+        val screenRect =  nativeWorldToScreenRect(
             rect.x,
             rect.y,
             rect.width,
@@ -50,7 +43,7 @@ class CameraState {
 
     }
     fun screenToWorldRect(rect: CanvasTypes.Rect): CanvasTypes.Rect {
-        val worldRect =  nativeScreenToWorldRect(nativeHandle,
+        val worldRect =  nativeScreenToWorldRect(
             rect.x,
             rect.y,
             rect.width,
@@ -65,33 +58,32 @@ class CameraState {
 
     }
     val zoom: Float
-        get() = nativeGetZoom(nativeHandle)
+        get() = nativeGetZoom()
 
     val offsetX: Float
-        get() = nativeGetOffsetX(nativeHandle)
+        get() = nativeGetOffsetX()
 
     val offsetY: Float
-        get() = nativeGetOffsetY(nativeHandle)
+        get() = nativeGetOffsetY()
 
     // Native methods
-    private external fun nativeCreate(): Long
-    private external fun nativeDestroy(handle: Long)
-    private external fun nativePan(handle: Long, dx: Float, dy: Float)
-    private external fun nativeZoomAt(handle: Long, newZoom: Float,
+
+    private external fun nativePan( dx: Float, dy: Float)
+    private external fun nativeZoomAt( newZoom: Float,
                                       centerX: Float, centerY: Float,
                                       viewWidth: Float, viewHeight: Float)
-    private external fun nativeWorldToScreen(handle: Long,
+    private external fun nativeWorldToScreen(
                                              screenX: Float, screenY: Float,
                                              viewWidth: Float, viewHeight: Float): FloatArray
-    private external fun nativeScreenToWorld(handle: Long,
+    private external fun nativeScreenToWorld(
                                              worldX: Float, worldY: Float,
                                              viewWidth: Float, viewHeight: Float): FloatArray
 
-    private  external fun nativeScreenToWorldRect(handle: Long, x: Float, y: Float, width: Float, height: Float): FloatArray
-    private  external fun nativeWorldToScreenRect(handle: Long, x: Float, y: Float, width: Float, height: Float): FloatArray
-    private external fun nativeGetZoom(handle: Long): Float
-    private external fun nativeGetOffsetX(handle: Long): Float
-    private external fun nativeGetOffsetY(handle: Long): Float
+    private  external fun nativeScreenToWorldRect( x: Float, y: Float, width: Float, height: Float): FloatArray
+    private  external fun nativeWorldToScreenRect( x: Float, y: Float, width: Float, height: Float): FloatArray
+    private external fun nativeGetZoom(): Float
+    private external fun nativeGetOffsetX(): Float
+    private external fun nativeGetOffsetY(): Float
 
 
 
