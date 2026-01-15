@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/ios/Pods/Headers/Private/React-jsi",
+                "${workspaceFolder}/node_modules/react-native/ReactCommon",
+                "${workspaceFolder}/android/app/build/generated/source/codegen/jni"
+            ],
+            "defines": [],
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}

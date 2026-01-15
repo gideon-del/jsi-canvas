@@ -3,16 +3,10 @@ package com.canvasmvp.graph
 import com.canvasmvp.types.CanvasTypes
 
 class SceneGraphWrapper {
-    private var  nativeHandle: Long =0
-    init {
-nativeHandle = createNative()
-    }
+
 
     fun release() {
-        if(nativeHandle != 0L){
-            destroyNative(nativeHandle)
-            nativeHandle= 0
-        }
+
     }
 
     // Node operations
@@ -25,7 +19,6 @@ nativeHandle = createNative()
         zIndx: Int
                 ): Boolean {
      return addNodeNative(
-         nativeHandle, 
          id,
          bounds.x,
          bounds.y,
@@ -44,18 +37,18 @@ nativeHandle = createNative()
          )
     }
     fun  clear() {
-        clearNative(nativeHandle)
+        clearNative()
     }
 
     fun nodeCount(): Int {
-        return  nodeCountNative(nativeHandle);
+        return  nodeCountNative();
     }
 
 
 
     // Query operation
   fun queryVisible(viewPort: CanvasTypes.Rect): List<NodeWrapper> {
-      val nodePtrs = queryVisibleNative(nativeHandle,
+      val nodePtrs = queryVisibleNative(
           viewPort.x,
           viewPort.y,
           viewPort.width,
@@ -72,16 +65,16 @@ nativeHandle = createNative()
 
 
 
-    private  external fun createNative(): Long
+
     private external fun destroyNative(handle: Long)
-    private external fun addNodeNative(handle: Long,id: String,
+    private external fun addNodeNative(id: String,
                                        x: Float, y: Float, width: Float, height: Float,
                                        fillR: Float, fillG: Float, fillB: Float, fillA: Float,
                                        strokeR: Float, strokeG: Float, strokeB: Float, strokeA: Float,
                                        strokeWidth: Float, zIndex: Int
     ): Boolean
 
-    private external fun clearNative(handle: Long)
-    private external fun nodeCountNative(handle: Long): Int
-    private external fun queryVisibleNative(handle: Long, x: Float, y:Float, width:Float, height: Float): LongArray
+    private external fun clearNative()
+    private external fun nodeCountNative(): Int
+    private external fun queryVisibleNative( x: Float, y:Float, width:Float, height: Float): LongArray
 }

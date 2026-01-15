@@ -8,8 +8,15 @@
 #import "scene-graph/SceneGraph.h"
 #import "CoreGraphics/CoreGraphics.h"
 #import "CanvasDrawingView.h"
+#import "jsi/SceneGraphJSI.h"
+#import <React/RCTBridge+Private.h>
+#import <ReactCommon/RCTTurboModule.h>
+#import <jsi/jsi.h>
+
 using namespace facebook::react;
 
+
+static std::shared_ptr<CanvasMVP::SceneGraph> g_sceneGraph = nullptr;
 
 @interface CanvasView() <RCTCanvasViewViewProtocol, UIGestureRecognizerDelegate>
 
@@ -27,21 +34,69 @@ using namespace facebook::react;
   
   
 }
-
++ (void)load {
+  static dispatch_once_t onceToken;
+  
+  dispatch_once(&onceToken, ^{
+    g_sceneGraph =std::make_shared<CanvasMVP::SceneGraph>();
+    NSLog(@"[CanvasView] Scene graph created");
+  });
+}
 - (CanvasMVP::CameraState*)camera {
     return &_camera;
 }
-
 - (CanvasMVP::SceneGraph*)sceneGraph {
     return &_sceneGraph;
 }
 - (instancetype)initWithFrame:(CGRect)frame {
   if(self = [super initWithFrame:frame]){
     [self setupView];
+    [self installJSI];
     [self setupGestures];
   }
   
   return self;
+}
+
+- (void)installJSI {
+  RCTBridge *bridge = [RCTBridge currentBridge];
+      if (!bridge) {
+          NSLog(@"[CanvasView] WARNING: No bridge yet, will retry...");
+          // Retry after a delay
+          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)),
+                        dispatch_get_main_queue(), ^{
+              [self installJSI];
+          });
+          return;
+      }
+      
+      RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
+      if (!cxxBridge.runtime) {
+          NSLog(@"[CanvasView] ERROR: No JSI runtime available!");
+          return;
+      }
+      
+      jsi::Runtime *runtime = (jsi::Runtime *)cxxBridge.runtime;
+      
+      // Only install once
+      if (runtime->global().hasProperty(*runtime, "sceneGraph")) {
+          NSLog(@"[CanvasView] JSI already installed");
+          return;
+      }
+      
+      NSLog(@"[CanvasView] Installing JSI...");
+      
+      // Create JSI host object
+      auto jsiWrapper = std::make_shared<CanvasMVP::SceneGraphJSI>(g_sceneGraph);
+      
+      // Install as global.sceneGraph
+      runtime->global().setProperty(
+          *runtime,
+          "sceneGraph",
+          jsi::Object::createFromHostObject(*runtime, jsiWrapper)
+      );
+      
+      NSLog(@"[CanvasView] ✅ JSI installed! Available as global.sceneGraph");
 }
 - (void)setupView {
   _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera sceneGraph:&_sceneGraph];

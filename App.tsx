@@ -1,10 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, StatusBar, Button } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
 import { Commands } from './src/specs/CanvasViewNativeComponent';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import SceneGraphModule from './src/specs/NativeSceneGraphModule';
+import './src/types/scenegraph.types';
 function App() {
+  useEffect(() => {
+    SceneGraphModule.installSceneGraph();
+  }, []);
   return (
     <SafeAreaProvider>
       <AppContent />
@@ -17,6 +21,37 @@ function AppContent(): React.JSX.Element {
     if (!canvasRef.current) return;
     Commands.createTestScene(canvasRef.current, count);
   };
+
+  const handleAddNode = () => {
+    if (!global.sceneGraph) {
+      console.error('[App] sceneGraph not available');
+      return;
+    }
+
+    try {
+      // Generate random position
+      const x = Math.random() * 500;
+      const y = Math.random() * 500;
+
+      // Call JSI function (synchronous!)
+      const start = performance.now();
+      const nodeId = global.sceneGraph.addNode({
+        x,
+        y,
+        width: 100,
+        height: 100,
+        fillColor: '#FF0000',
+        zIndex: 0,
+      });
+      const duration = performance.now() - start;
+
+      console.log(`[App] Added node ${nodeId} in ${duration.toFixed(3)}ms`);
+      setNodeCount(count => count + 1);
+    } catch (error) {
+      console.error('[App] Error adding node:', error);
+    }
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />

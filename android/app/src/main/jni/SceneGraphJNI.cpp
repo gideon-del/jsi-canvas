@@ -1,37 +1,32 @@
+#include "jsi/SceneGraphJSI.h"
+#include "jsi/SceneGraphRegistry.h"
 #include <jni.h>
-#include "scene-graph/SceneGraph.h"
 #include <string>
 #include <memory>
+#include "jsi/jsi.h"
 
 using namespace CanvasMVP;
 extern "C" {
 
- // JNI Lifecycle
- JNIEXPORT jlong JNICALL
-Java_com_canvasmvp_graph_SceneGraphWrapper_createNative(JNIEnv* env, jobject obj) {
 
-auto* graph = new SceneGraph();
-return  reinterpret_cast<jlong>(graph);
-}
 
 
 JNIEXPORT void JNICALL
 Java_com_canvasmvp_graph_SceneGraphWrapper_destroyNative(JNIEnv* env, jobject obj, jlong handle) {
 
-    auto* graph = reinterpret_cast<SceneGraph*>(handle);
-    delete graph;
+
+
 }
 
 // Node operations
 JNIEXPORT jboolean JNICALL
 Java_com_canvasmvp_graph_SceneGraphWrapper_addNodeNative(
-        JNIEnv* env, jobject obj, jlong handle,
+        JNIEnv* env, jobject obj,
         jstring jid, jfloat x, jfloat y, jfloat width, jfloat height,
         jfloat fillR, jfloat fillG, jfloat fillB, jfloat fillA,
 jfloat strokeR, jfloat strokeG, jfloat strokeB, jfloat strokeA,
 jfloat strokeWidth, jint zIndex
         ) {
-auto* graph = reinterpret_cast<SceneGraph*>(handle);
 
 const char* idChars = env->GetStringUTFChars(jid, nullptr);
 std::string id(idChars);
@@ -43,19 +38,29 @@ env->ReleaseStringUTFChars(jid, idChars);
   node->strokeColor = Color(strokeR, strokeG, strokeB, strokeA);
   node->strokeWidth = strokeWidth;
   node->zIndex = zIndex;
+auto graph = CanvasMVP::getCurrentSceneGraph();
 
+   if(graph == nullptr){
+       return false;
+   }
   return graph->addNode(std::move(node));
  }
 
 
  JNIEXPORT void JNICALL
-Java_com_canvasmvp_graph_SceneGraphWrapper_clearNative(JNIEnv* env, jobject obj, jlong handle) {
-auto* graph = reinterpret_cast<SceneGraph*>(handle);
-graph->clear();
+Java_com_canvasmvp_graph_SceneGraphWrapper_clearNative(JNIEnv* env, jobject obj) {
+     auto graph = CanvasMVP::getCurrentSceneGraph();
+     if(graph == nullptr) {
+         return;
+     }
+     graph->clear();
  }
  JNIEXPORT jint JNICALL
- Java_com_canvasmvp_graph_SceneGraphWrapper_nodeCountNative(JNIEnv* env, jobject obj, jlong handle){
-     auto* graph = reinterpret_cast<SceneGraph*>(handle);
+ Java_com_canvasmvp_graph_SceneGraphWrapper_nodeCountNative(JNIEnv* env, jobject obj){
+     auto graph = CanvasMVP::getCurrentSceneGraph();
+     if(graph == nullptr){
+         return  0;
+     }
 
      return static_cast<jint>(graph->nodeCount());
  }
@@ -66,12 +71,13 @@ graph->clear();
 
  JNIEXPORT jlongArray JNICALL
  Java_com_canvasmvp_graph_SceneGraphWrapper_queryVisibleNative(
-         JNIEnv* env, jobject obj, jlong handle,
+         JNIEnv* env, jobject obj,
          jfloat x, jfloat y, jfloat w, jfloat h
          ){
-auto* graph = reinterpret_cast<SceneGraph*>(handle);
 Rect viewPort(x,y,w,h);
-auto visible = graph->queryVisible(viewPort);
+     auto graph = CanvasMVP::getCurrentSceneGraph();
+
+    auto visible = graph->queryVisible(viewPort);
 
 jlongArray  result = env->NewLongArray(visible.size());
      if(result == nullptr) return nullptr;

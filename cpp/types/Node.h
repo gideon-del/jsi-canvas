@@ -1,4 +1,5 @@
-
+#ifndef CanvasMVP_Node_h
+#define CanvasMVP_Node_h
 #include <string>
 #include "PlatformTypes.h"
 
@@ -63,6 +64,18 @@ namespace CanvasMVP
         bool selected;
         bool visible;
 
+        Node()
+            : id(""),
+              type(NodeType::RECTANGLE),
+              bounds(0, 0, 100, 100),
+              zIndex(0),
+              fillColor(Color::gray(0.8f)),
+              strokeColor(Color::gray(0.3f)),
+              strokeWidth(1.0f),
+              selected(false),
+              visible(true)
+        {
+        }
         Node(const std::string &nodeId, NodeType nodeType,
              float x, float y, float w, float h) : id(nodeId),
                                                    type(nodeType),
@@ -88,3 +101,5 @@ namespace CanvasMVP
     };
 
 }
+
+#endif
