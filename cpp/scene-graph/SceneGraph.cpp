@@ -236,4 +236,16 @@ namespace CanvasMVP
     {
         return nodes_.size();
     }
+    std::vector<Node *> SceneGraph::getAllNodes()
+    {
+        std::vector<Node *> nodes;
+
+        nodes.reserve(nodes_.size());
+        for (const auto &[id, node] : nodes_)
+        {
+            nodes.push_back(node.get());
+        }
+
+        return nodes;
+    }
 }

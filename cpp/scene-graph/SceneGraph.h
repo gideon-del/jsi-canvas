@@ -46,7 +46,7 @@ namespace CanvasMVP
         bool addNode(std::unique_ptr<Node> node);
         Node *getNode(const std::string &id);
         bool removeNode(const std::string &id);
-
+        std::vector<Node *> getAllNodes();
         std::vector<Node *> queryVisible(const Rect &viewport) const;
         const std::vector<Node *> &getSortedNodes();
         Node *hitTest(float x, float y) const;

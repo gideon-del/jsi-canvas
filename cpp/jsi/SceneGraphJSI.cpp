@@ -32,6 +32,121 @@ namespace CanvasMVP
                 });
         }
 
+        if (propName == "getNode")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                1,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    if (count < 1)
+                    {
+                        throw jsi::JSError(rt, "getNode requires 1 argument");
+                    }
+
+                    if (!args[0].isString())
+                    {
+                        throw jsi::JSError(rt, "getNode argument must be a string");
+                    }
+                    auto id = args[0].asString(rt).utf8(rt);
+
+                    return getNode(rt, id);
+                });
+        }
+        if (propName == "removeNode")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                1,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    if (count < 1)
+                    {
+                        throw jsi::JSError(rt, "removeNode requires 1 argument");
+                    }
+
+                    if (!args[0].isString())
+                    {
+                        throw jsi::JSError(rt, "removeNode argument must be a string");
+                    }
+                    auto id = args[0].asString(rt).utf8(rt);
+
+                    return removeNode(id);
+                });
+        }
+
+        if (propName == "getAllNodes")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                0,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    return getAllNodes(rt);
+                });
+        }
+
+        if (propName == "clear")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                0,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    return clear();
+                });
+        }
+
+        if (propName == "getNodeCount")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                0,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    return getNodeCount();
+                });
+        }
+
+        if (propName == "updateNode")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                2,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    if (count < 2)
+                    {
+                        throw jsi::JSError(rt, "updateNode requires two argument");
+                    }
+                    if (!args[0].isString())
+                    {
+                        throw jsi::JSError(rt, "updateNode first argument must be a string");
+                    }
+
+                    if (!args[1].isObject())
+                    {
+                        throw jsi::JSError(rt, "updateNode seconde argument must be an object");
+                    }
+
+                    auto id = args[0].asString(rt).utf8(rt);
+                    auto nodeConfig = args[1].asObject(rt);
+                    return updateNode(rt, id, nodeConfig);
+                });
+        }
+
         return jsi::Value::undefined();
     }
 
@@ -40,6 +155,7 @@ namespace CanvasMVP
         throw jsi::JSError(runtime, "SceneGraph properties are readonly");
     }
 
+    // Helpers
     jsi::Value SceneGraphJSI::addNode(jsi::Runtime &runtime, const jsi::Object &nodeConfig)
     {
         std::cout << "[SceneGraphJSI] addNode called" << std::endl;
@@ -61,9 +177,154 @@ namespace CanvasMVP
         }
     };
 
+    jsi::Value SceneGraphJSI::getNode(jsi::Runtime &runtime, std::string nodeId)
+    {
+        auto node = sceneGraph_->getNode(nodeId);
+
+        if (node == nullptr)
+        {
+            return jsi::Value::null();
+        }
+
+        return nodeToJSObject(runtime, node);
+    }
+
+    jsi::Value SceneGraphJSI::getNodeCount()
+    {
+        int count = sceneGraph_->nodeCount();
+        return jsi::Value(count);
+    }
+    jsi::Value SceneGraphJSI::getAllNodes(jsi::Runtime &runtime)
+    {
+        auto allNodes = sceneGraph_->getAllNodes();
+        auto jsArray = jsi::Array(runtime, allNodes.size());
+
+        for (size_t i = 0; i < allNodes.size(); ++i)
+        {
+            jsArray.setValueAtIndex(runtime, i, nodeToJSObject(runtime, allNodes[i]));
+        }
+
+        return jsArray;
+    }
+
+    jsi::Value SceneGraphJSI::removeNode(std::string nodeId)
+    {
+        return jsi::Value(sceneGraph_->removeNode(nodeId));
+    }
+
+    jsi::Value SceneGraphJSI::clear()
+    {
+
+        sceneGraph_->clear();
+
+        return jsi::Value::undefined();
+    }
+
+    jsi::Value SceneGraphJSI::updateNode(jsi::Runtime &runtime, std::string nodeId, const jsi::Object &nodeConfig)
+    {
+        auto node = sceneGraph_->getNode(nodeId);
+        auto boundsChanged = false;
+        if (node == nullptr)
+        {
+            return jsi::Value(false);
+        }
+
+        if (nodeConfig.hasProperty(runtime, "x"))
+        {
+            auto xValue = nodeConfig.getProperty(runtime, "x");
+
+            if (xValue.isNumber())
+            {
+                node->bounds.x = static_cast<float>(xValue.asNumber());
+                boundsChanged = true;
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "y"))
+        {
+            auto yValue = nodeConfig.getProperty(runtime, "y");
+
+            if (yValue.isNumber())
+            {
+                node->bounds.y = static_cast<float>(yValue.asNumber());
+                boundsChanged = true;
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "width"))
+        {
+            auto widthValue = nodeConfig.getProperty(runtime, "width");
+
+            if (widthValue.isNumber())
+            {
+                node->bounds.width = static_cast<float>(widthValue.asNumber());
+                boundsChanged = true;
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "height"))
+        {
+            auto heightValue = nodeConfig.getProperty(runtime, "height");
+
+            if (heightValue.isNumber())
+            {
+                node->bounds.height = static_cast<float>(heightValue.asNumber());
+                boundsChanged = true;
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "fillColor"))
+        {
+            auto colorValue = nodeConfig.getProperty(runtime, "fillColor");
+
+            if (colorValue.isString())
+            {
+                std::string colorStr = colorValue.asString(runtime).utf8(runtime);
+                node->fillColor = parseHexColor(colorStr);
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "strokeColor"))
+        {
+            auto colorValue = nodeConfig.getProperty(runtime, "strokeColor");
+
+            if (colorValue.isString())
+            {
+                std::string colorStr = colorValue.asString(runtime).utf8(runtime);
+                node->strokeColor = parseHexColor(colorStr);
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "strokeWidth"))
+        {
+            auto strokeWidthValue = nodeConfig.getProperty(runtime, "strokeWidth");
+
+            if (strokeWidthValue.isNumber())
+            {
+                node->strokeWidth = static_cast<float>(strokeWidthValue.asNumber());
+            }
+        }
+
+        if (nodeConfig.hasProperty(runtime, "zIndex"))
+        {
+            auto zIndexValue = nodeConfig.getProperty(runtime, "zIndex");
+
+            if (zIndexValue.isNumber())
+            {
+                node->zIndex = static_cast<int>(zIndexValue.asNumber());
+            }
+        }
+
+        if (boundsChanged)
+        {
+            sceneGraph_->updateIndex(node);
+        }
+        return jsi::Value(true);
+    }
     // Type conversion function
     std::unique_ptr<Node> SceneGraphJSI::jsObjectToNode(jsi::Runtime &runtime, const jsi::Object &obj)
     {
+
         auto node = std::make_unique<Node>();
 
         static int nodeCounter = 0;
@@ -120,13 +381,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                if (colorStr[0] == '#' && colorStr.length() == 7)
-                {
-                    unsigned int r, g, b;
-
-                    sscanf(colorStr.c_str(), "#%02x%02x%02x", &r, &g, &b);
-                    node->fillColor = Color{r / 255.0f, g / 255.0f, b / 255.0f, 1.0f};
-                }
+                node->fillColor = parseHexColor(colorStr);
             }
         }
         else
@@ -186,5 +441,31 @@ namespace CanvasMVP
             jsi::Object::createFromHostObject(runtime, hostObject));
 
         return true;
+    }
+
+    Color parseHexColor(std::string colorStr)
+    {
+        if (colorStr.size() != 7 || colorStr[0] != '#')
+        {
+            return Color::black();
+        }
+
+        unsigned int r = 0, g = 0, b = 0;
+
+        int parsed = std::sscanf(
+            colorStr.c_str(),
+            "#%02x%02x%02x",
+            &r, &g, &b);
+
+        if (parsed != 3)
+        {
+            return Color::black();
+        }
+
+        return Color{
+            r / 255.0f,
+            g / 255.0f,
+            b / 255.0f,
+            1.0f};
     }
 }

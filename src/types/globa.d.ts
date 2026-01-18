@@ -1,12 +1,36 @@
+export interface NodeConfig {
+  id?: string;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  fillColor?: string;
+  strokeColor?: string;
+  strokeWidth?: number;
+  zIndex?: number;
+}
+
+export interface Node {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  fillColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  zIndex: number;
+}
+
+export type NodeUpdate = Partial<Omit<Node, 'id'>>;
 export interface SceneGraphAPI {
-  addNode(config: {
-    x: number;
-    y: number;
-    width?: number;
-    height?: number;
-    fillColor?: string;
-    zIndex?: number;
-  }): string;
+  addNode(config: NodeConfig): string;
+  getNode(id: string): Node | null;
+  getAllNodes(): Node[];
+  getNodeCount(): number;
+  updateNode(id: string, update: NodeUpdate): boolean;
+  removeNode(id: string): boolean;
+  clear(): void;
 }
 
 export interface CameraAPI {
