@@ -66,6 +66,7 @@ This mirrors how editors, engines, and high-performance native systems are typic
 - ✅ Viewport-based visibility queries
 - ✅ Android native rendering prototype
 - ✅ Cross-layer state consistency (JS ↔ C++ ↔ Native)
+- ✅ Full CRUD operations
 
 ---
 
@@ -90,7 +91,6 @@ graph.addNode({
 
 ## Roadmap
 
-- [ ] Full CRUD operations
 - [ ] Command system (undo / redo)
 - [ ] Event system (selection, updates)
 - [ ] iOS renderer parity

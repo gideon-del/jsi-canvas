@@ -1,33 +1,31 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, StatusBar, Button } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
 import { Commands } from './src/specs/CanvasViewNativeComponent';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import SceneGraphModule from './src/specs/NativeSceneGraphModule';
 import { useCanvasCamera } from './src/hooks/useCanvasCamera';
+import { installSceneGraph, useSceneGraph } from './src/hooks/useSceneGraph';
 function App() {
+  const [sceneGraphReady, setSceneGraphReady] = useState(false);
   useEffect(() => {
-    SceneGraphModule.installSceneGraph();
+    installSceneGraph();
+    setSceneGraphReady(true);
   }, []);
   return (
-    <SafeAreaProvider>
-      <AppContent />
-    </SafeAreaProvider>
+    <SafeAreaProvider>{sceneGraphReady && <AppContent />}</SafeAreaProvider>
   );
 }
 function AppContent(): React.JSX.Element {
   const canvasRef = useRef<React.ElementRef<typeof View> | null>(null);
   const canvasCamera = useCanvasCamera();
+  const sceneGraph = useSceneGraph();
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const redraw = () => {
     if (!canvasRef.current) return;
     Commands.redrawNative(canvasRef.current);
   };
 
   const handleAddNode = () => {
-    if (!global.sceneGraph) {
-      console.error('[App] sceneGraph not available');
-      return;
-    }
     if (!canvasCamera) {
       console.error('[App] canvasCamera not available');
       return;
@@ -40,7 +38,7 @@ function AppContent(): React.JSX.Element {
       const worldPoint = canvasCamera.screenToWorld(x, y);
       // Call JSI function (synchronous!)
       const start = performance.now();
-      const nodeId = global.sceneGraph.addNode({
+      const nodeId = sceneGraph.addNode({
         x: worldPoint.x,
         y: worldPoint.y,
         width: 100,
@@ -56,7 +54,43 @@ function AppContent(): React.JSX.Element {
       console.error('[App] Error adding node:', error);
     }
   };
+  const handleListNode = () => {
+    const nodes = sceneGraph.getAllNodes();
+    for (let node of nodes) {
+      console.log(`[App] Node ${node.id} - ${JSON.stringify(node)}`);
+    }
+    if (nodes.length > 0) {
+      setSelectedNodeId(nodes[0].id);
+      console.log(`[App] Selected node with id - ${nodes[0].id} `);
+    }
+  };
 
+  const handleGetNode = () => {
+    if (!selectedNodeId) return;
+    const node = sceneGraph.getNode(selectedNodeId);
+    if (node) {
+      console.log(`[App] Node ${node.id} - ${JSON.stringify(node)}`);
+    } else {
+      console.log(`[App] Could not find Node with id -${selectedNodeId}`);
+    }
+  };
+  const handleRemoveNode = () => {
+    if (!selectedNodeId) return;
+    const nodeRemoved = sceneGraph.removeNode(selectedNodeId);
+    setSelectedNodeId(null);
+    if (nodeRemoved) {
+      console.log(`[App] Removed node with id ${selectedNodeId} `);
+      redraw();
+    } else {
+      console.log(`[App] Failed to remove node with id ${selectedNodeId} `);
+    }
+  };
+  const handleClearGraph = () => {
+    sceneGraph.clear();
+    console.log(`[App] Scene graph cleared `);
+    setSelectedNodeId(null);
+    redraw();
+  };
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -64,7 +98,18 @@ function AppContent(): React.JSX.Element {
         <CanvasView ref={canvasRef} style={styles.canvas} />
 
         <View style={styles.controls}>
-          <Button title="Add random node" onPress={() => handleAddNode()} />
+          {selectedNodeId ? (
+            <>
+              <Button title="Get node" onPress={handleGetNode} />
+              <Button title="Remove node" onPress={handleRemoveNode} />
+            </>
+          ) : (
+            <>
+              <Button title="Add random node" onPress={handleAddNode} />
+              <Button title="List nodes" onPress={handleListNode} />
+            </>
+          )}
+          <Button title="Clear Graph" onPress={handleClearGraph} />
         </View>
       </View>
     </>
