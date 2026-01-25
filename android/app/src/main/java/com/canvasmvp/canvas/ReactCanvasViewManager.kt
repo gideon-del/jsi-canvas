@@ -30,9 +30,15 @@ class ReactCanvasViewManager(
 
 
     override fun createViewInstance(context: ThemedReactContext): CanvasView {
-       return CanvasView(context)
+        val view = CanvasView(context)
+        view.setUpListeners()
+       return view
     }
 
+    override fun onDropViewInstance(view: CanvasView) {
+        super.onDropViewInstance(view)
+        view.removeListeners()
+    }
 
 
     override fun createTestScene(view: CanvasView?, count: Int) {

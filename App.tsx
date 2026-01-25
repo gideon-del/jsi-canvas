@@ -49,7 +49,6 @@ function AppContent(): React.JSX.Element {
       const duration = performance.now() - start;
 
       console.log(`[App] Added node ${nodeId} in ${duration.toFixed(3)}ms`);
-      redraw();
     } catch (error) {
       console.error('[App] Error adding node:', error);
     }
@@ -80,7 +79,6 @@ function AppContent(): React.JSX.Element {
     setSelectedNodeId(null);
     if (nodeRemoved) {
       console.log(`[App] Removed node with id ${selectedNodeId} `);
-      redraw();
     } else {
       console.log(`[App] Failed to remove node with id ${selectedNodeId} `);
     }
@@ -89,7 +87,6 @@ function AppContent(): React.JSX.Element {
     sceneGraph.clear();
     console.log(`[App] Scene graph cleared `);
     setSelectedNodeId(null);
-    redraw();
   };
   return (
     <>

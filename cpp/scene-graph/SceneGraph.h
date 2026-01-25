@@ -6,7 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include "../types/Node.h"
-
+#include "../event-emitter/EventEmitter.h"
 namespace CanvasMVP
 {
     struct Node; // forward declaration
@@ -17,7 +17,6 @@ namespace CanvasMVP
         std::unordered_map<std::string, std::unique_ptr<Node>> nodes_;
         std::vector<Node *> sortedNodes_;
         bool needsSort_ = false;
-
         class SpatialGrid
         {
         private:
@@ -53,5 +52,7 @@ namespace CanvasMVP
         void updateIndex(Node *node);
         void clear();
         size_t nodeCount() const;
+        ListenerId addEventListener(EventType eventType, std::function<void()> callback);
+        void removeEventListener(EventType eventType, ListenerId id);
     };
 }

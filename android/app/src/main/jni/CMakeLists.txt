@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18.1)
 project(appmodules)
 # ---- Include shared headers ----
 file(GLOB_RECURSE SHARED_CPP
-        ${CMAKE_SOURCE_DIR}/../../../../../cpp/*.cpp
+        ${CMAKE_SOURCE_DIR}/../../../../../cpp/**/*.cpp
 )
 list(FILTER SHARED_CPP EXCLUDE REGEX ".*/tests/.*")
 include_directories(${CMAKE_SOURCE_DIR}/../../../../../cpp)

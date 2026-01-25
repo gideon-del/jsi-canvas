@@ -123,7 +123,9 @@ std::shared_ptr<TurboModule> javaModuleProvider(
 
 } // namespace facebook::react
 
+ JavaVM* g_jvm = nullptr;
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+    g_jvm = vm;
   return facebook::jni::initialize(vm, [] {
     facebook::react::DefaultTurboModuleManagerDelegate::cxxModuleProvider =
         &facebook::react::cxxModuleProvider;

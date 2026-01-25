@@ -7,8 +7,8 @@
 
 using namespace CanvasMVP;
 extern "C" {
-
-
+extern JavaVM* g_jvm;
+static std::unordered_map<int, jobject> g_javaCallbacks;
 
 
 JNIEXPORT void JNICALL
@@ -18,6 +18,67 @@ Java_com_canvasmvp_graph_SceneGraphWrapper_destroyNative(JNIEnv* env, jobject ob
 
 }
 
+
+JNIEXPORT jint JNICALL
+Java_com_canvasmvp_graph_SceneGraphWrapper_nativeAddEventListener(
+        JNIEnv* env,
+        jobject obj,
+        jstring eventTypeStr,
+        jobject eventCallback
+        ) {
+   auto graph = CanvasMVP::getCurrentSceneGraph();
+   if(graph == nullptr) {
+       return -1;
+   }
+
+   const char* eventTypeChars = env->GetStringUTFChars(eventTypeStr, nullptr);
+
+   std::string eventType(eventTypeChars);
+   env->ReleaseStringUTFChars(eventTypeStr, eventTypeChars);
+  jobject globalCallback = env->NewGlobalRef(eventCallback);
+  int listenerId = graph->addEventListener(eventType, [globalCallback]() {
+      if(!g_jvm)return;
+      JNIEnv* env;
+      bool attached = false;
+
+      if(g_jvm->GetEnv((void** )&env, JNI_VERSION_1_6) != JNI_OK){
+          g_jvm->AttachCurrentThread(&env, nullptr);
+          attached=true;
+      }
+      jclass callbackClass = env->GetObjectClass(globalCallback);
+      jmethodID invokeMethod = env->GetMethodID(callbackClass,"invoke","()Ljava/lang/Object;");
+      if(invokeMethod){
+          env->CallObjectMethod(globalCallback, invokeMethod);
+      }
+      env->DeleteLocalRef(callbackClass);
+      if (env->ExceptionCheck()) {
+          env->ExceptionDescribe();
+          env->ExceptionClear();
+      }
+      if(attached){
+          g_jvm->DetachCurrentThread();
+      }
+  });
+
+  return listenerId;
+}
+
+JNIEXPORT void JNICALL
+Java_com_canvasmvp_graph_SceneGraphWrapper_nativeRemoveEventListener(
+        JNIEnv* env,
+        jobject obj,
+        jint listenerId,
+        jstring eventTypeStr
+        ) {
+    auto graph = CanvasMVP::getCurrentSceneGraph();
+    if(!graph) return;
+    const char* eventTypeChars = env->GetStringUTFChars(eventTypeStr, nullptr);
+
+    std::string eventType(eventTypeChars);
+    env->ReleaseStringUTFChars(eventTypeStr, eventTypeChars);
+
+    graph->removeEventListener(eventType, listenerId);
+}
 // Node operations
 JNIEXPORT jboolean JNICALL
 Java_com_canvasmvp_graph_SceneGraphWrapper_addNodeNative(

@@ -1,14 +1,26 @@
 package com.canvasmvp.graph
 
+import android.util.Log
 import com.canvasmvp.types.CanvasTypes
 
 class SceneGraphWrapper {
 
-
+    private val _listeners: MutableMap<String, Int> = mutableMapOf();
     fun release() {
 
     }
 
+    fun addListener(eventType: String, callback: () -> Unit){
+        val listenerId = nativeAddEventListener(eventType, callback)
+        _listeners[eventType] = listenerId
+        Log.d("CanvasView","Added Listener $eventType -> $listenerId")
+    }
+
+    fun removeAllListeners(){
+        _listeners.forEach { (eventType, listenerId) ->
+            nativeRemoveEventListener(listenerId,eventType)
+        }
+    }
     // Node operations
     fun addNode(
         id: String,
@@ -77,4 +89,6 @@ class SceneGraphWrapper {
     private external fun clearNative()
     private external fun nodeCountNative(): Int
     private external fun queryVisibleNative( x: Float, y:Float, width:Float, height: Float): LongArray
+    private external fun nativeAddEventListener(eventType: String, callback: () -> Unit): Int
+    private  external fun  nativeRemoveEventListener(listenerId: Int, eventType: String)
 }

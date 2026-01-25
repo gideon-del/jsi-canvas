@@ -145,6 +145,7 @@ namespace CanvasMVP
         needsSort_ = true;
 
         spatialIndex_.add(nodePtr);
+        EventEmitter::emit("nodeAdded");
         return true;
     }
 
@@ -170,6 +171,7 @@ namespace CanvasMVP
         spatialIndex_.remove(nodePtr);
         sortedNodes_.erase(std::remove(sortedNodes_.begin(), sortedNodes_.end(), nodePtr), sortedNodes_.end());
         nodes_.erase(it);
+        EventEmitter::emit("nodeRemoved");
         return true;
     }
 
@@ -209,6 +211,7 @@ namespace CanvasMVP
         {
             if (node->containsPoint(x, y))
             {
+                EventEmitter::emit("selectionChanged");
                 return node;
             }
         }
@@ -222,6 +225,7 @@ namespace CanvasMVP
             return;
         spatialIndex_.remove(node);
         spatialIndex_.add(node);
+        EventEmitter::emit("nodeUpdated");
     }
 
     void SceneGraph::clear()
@@ -230,6 +234,7 @@ namespace CanvasMVP
         sortedNodes_.clear();
         spatialIndex_.clear();
         needsSort_ = false;
+        EventEmitter::emit("cleared");
     }
 
     size_t SceneGraph::nodeCount() const
@@ -247,5 +252,14 @@ namespace CanvasMVP
         }
 
         return nodes;
+    }
+    ListenerId SceneGraph::addEventListener(EventType eventType, std::function<void()> callback)
+    {
+        return EventEmitter::on(eventType, callback);
+    }
+
+    void SceneGraph::removeEventListener(EventType eventType, ListenerId id)
+    {
+        return EventEmitter::off(eventType, id);
     }
 }

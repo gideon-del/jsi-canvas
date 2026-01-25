@@ -143,7 +143,31 @@ class CanvasView(context: Context): View(context) {
         }
     }
 
-
+     fun setUpListeners() {
+        sceneGraph.addListener("nodeAdded") {
+            Log.d(TAG,"Node added")
+            invalidate()
+        }
+        sceneGraph.addListener("nodeRemoved") {
+            Log.d(TAG,"Node removed")
+            invalidate()
+        }
+        sceneGraph.addListener("nodeUpdated") {
+            Log.d(TAG,"Node updated")
+            invalidate()
+        }
+        sceneGraph.addListener("cleared") {
+            Log.d(TAG,"Graph cleared")
+            invalidate()
+        }
+        sceneGraph.addListener("selectionChanged") {
+            Log.d(TAG,"Node selected")
+            invalidate()
+        }
+    }
+    fun removeListeners(){
+        sceneGraph.removeAllListeners()
+    }
     private fun drawNode(canvas: Canvas, node: NodeWrapper){
 
 
