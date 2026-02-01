@@ -32,10 +32,13 @@ namespace CanvasMVP
         jsi::Value updateNode(jsi::Runtime &runtime, std::string nodeId, const jsi::Object &nodeConfig);
         jsi::Value removeNode(std::string nodeId);
         jsi::Value clear();
+        jsi::Value on(EventType eventType, jsi::Function callback);
+        jsi::Value off(EventType eventType, ListenerId id);
     };
 
     bool installSceneGraph(jsi::Runtime &runtime);
     CanvasMVP::Color parseHexColor(std::string color);
+
 }
 
 #endif

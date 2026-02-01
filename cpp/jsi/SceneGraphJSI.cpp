@@ -1,6 +1,7 @@
 #include "SceneGraphJSI.h"
 #include "SceneGraphRegistry.h"
 #include <iostream>
+#include "JSInvokerRegistery.h"
 namespace CanvasMVP
 {
 
@@ -146,6 +147,58 @@ namespace CanvasMVP
                     return updateNode(rt, id, nodeConfig);
                 });
         }
+        if (propName == "on")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                2,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    if (count < 2)
+                    {
+                        throw jsi::JSError(rt, "on requires two argument");
+                    }
+                    if (!args[0].isString())
+                    {
+                        throw jsi::JSError(rt, "on first argument must be a string");
+                    }
+
+                    if (!(args[1].isObject() && args[1].asObject(rt).isFunction(rt)))
+                    {
+                        throw jsi::JSError(rt, "on seconde argument must be a function");
+                    }
+
+                    return on(args[0].asString(rt).utf8(rt), args[1].asObject(rt).asFunction(rt));
+                });
+        }
+        if (propName == "off")
+        {
+
+            return jsi::Function::createFromHostFunction(
+                runtime,
+                name,
+                2,
+                [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value
+                {
+                    if (count < 2)
+                    {
+                        throw jsi::JSError(rt, "off requires two argument");
+                    }
+                    if (!args[0].isString())
+                    {
+                        throw jsi::JSError(rt, "off first argument must be a string");
+                    }
+
+                    if (!(args[1].isNumber()))
+                    {
+                        throw jsi::JSError(rt, "off seconde argument must be a number");
+                    }
+
+                    return off(args[0].asString(rt).utf8(rt), static_cast<ListenerId>(args[1].asNumber()));
+                });
+        }
 
         return jsi::Value::undefined();
     }
@@ -280,7 +333,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->fillColor = parseHexColor(colorStr);
+                node->fillColor = Color::parseHexColor(colorStr);
             }
         }
 
@@ -291,7 +344,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->strokeColor = parseHexColor(colorStr);
+                node->strokeColor = Color::parseHexColor(colorStr);
             }
         }
 
@@ -381,7 +434,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->fillColor = parseHexColor(colorStr);
+                node->fillColor = Color::parseHexColor(colorStr);
             }
         }
         else
@@ -403,6 +456,29 @@ namespace CanvasMVP
 
         return node;
     }
+    jsi::Value SceneGraphJSI::on(EventType eventType, jsi::Function fn)
+    {
+        auto fnPtr = std::make_shared<jsi::Function>(std::move(fn));
+        auto callInvoker = CanvasMVP::getJSCallInvoker();
+        if (callInvoker == nullptr)
+        {
+            return -1;
+        }
+        std::function<void(EventData event)> callback = [callInvoker, fnPtr](EventData event) -> void
+        {
+            auto eventPtr = std::make_shared<EventData>(std::move(event));
+            callInvoker->invokeAsync([fnPtr, eventPtr](jsi::Runtime &runtime)
+                                     { fnPtr->call(runtime, eventPtr->toJSI(runtime)); });
+        };
+
+        auto listenerId = sceneGraph_->addEventListener(eventType, callback);
+        return jsi::Value(static_cast<double>(listenerId));
+    }
+    jsi::Value SceneGraphJSI::off(EventType eventType, ListenerId id)
+    {
+        sceneGraph_->removeEventListener(eventType, id);
+        return jsi::Value::undefined();
+    }
 
     jsi::Object SceneGraphJSI::nodeToJSObject(jsi::Runtime &runtime, const Node *node)
     {
@@ -414,15 +490,7 @@ namespace CanvasMVP
         obj.setProperty(runtime, "height", jsi::Value(node->bounds.height));
         obj.setProperty(runtime, "zIndex", jsi::Value(node->zIndex));
 
-        char fillColorHex[8];
-        snprintf(fillColorHex, sizeof(fillColorHex), "#%02x%02x%02x",
-                 (int)(node->fillColor.r * 255),
-                 (int)(node->fillColor.g * 255),
-                 (int)(node->fillColor.b * 255)
-
-        );
-
-        obj.setProperty(runtime, "fillColor", jsi::String::createFromUtf8(runtime, fillColorHex));
+        obj.setProperty(runtime, "fillColor", jsi::String::createFromUtf8(runtime, node->fillColor.toHexColor()));
 
         return obj;
     }
@@ -443,29 +511,4 @@ namespace CanvasMVP
         return true;
     }
 
-    Color parseHexColor(std::string colorStr)
-    {
-        if (colorStr.size() != 7 || colorStr[0] != '#')
-        {
-            return Color::black();
-        }
-
-        unsigned int r = 0, g = 0, b = 0;
-
-        int parsed = std::sscanf(
-            colorStr.c_str(),
-            "#%02x%02x%02x",
-            &r, &g, &b);
-
-        if (parsed != 3)
-        {
-            return Color::black();
-        }
-
-        return Color{
-            r / 255.0f,
-            g / 255.0f,
-            b / 255.0f,
-            1.0f};
-    }
 }

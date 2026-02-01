@@ -36,7 +36,7 @@ Java_com_canvasmvp_graph_SceneGraphWrapper_nativeAddEventListener(
    std::string eventType(eventTypeChars);
    env->ReleaseStringUTFChars(eventTypeStr, eventTypeChars);
   jobject globalCallback = env->NewGlobalRef(eventCallback);
-  int listenerId = graph->addEventListener(eventType, [globalCallback]() {
+  int listenerId = graph->addEventListener(eventType, [globalCallback](EventData event) {
       if(!g_jvm)return;
       JNIEnv* env;
       bool attached = false;

@@ -52,7 +52,7 @@ namespace CanvasMVP
         void updateIndex(Node *node);
         void clear();
         size_t nodeCount() const;
-        ListenerId addEventListener(EventType eventType, std::function<void()> callback);
+        ListenerId addEventListener(EventType eventType, std::function<void(EventData event)> callback);
         void removeEventListener(EventType eventType, ListenerId id);
     };
 }

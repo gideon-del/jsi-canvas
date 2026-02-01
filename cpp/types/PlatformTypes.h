@@ -1,6 +1,5 @@
-#ifndef CanvasMVP_PlatformTypes_h
-#define CanvasMVP_PlatformTypes_h
-
+#pragma once
+#include <iostream>
 typedef __UINT32_TYPE__ uint32_t;
 
 namespace CanvasMVP
@@ -80,8 +79,43 @@ namespace CanvasMVP
         {
             return Color(brightness, brightness, brightness, 1.0);
         }
+        static Color parseHexColor(std::string colorStr)
+        {
+            if (colorStr.size() != 7 || colorStr[0] != '#')
+            {
+                return Color::black();
+            }
+
+            unsigned int r = 0, g = 0, b = 0;
+
+            int parsed = std::sscanf(
+                colorStr.c_str(),
+                "#%02x%02x%02x",
+                &r, &g, &b);
+
+            if (parsed != 3)
+            {
+                return Color::black();
+            }
+
+            return Color{
+                r / 255.0f,
+                g / 255.0f,
+                b / 255.0f,
+                1.0f};
+        }
+        std::string toHexColor() const
+        {
+            char fillColorHex[8];
+            snprintf(fillColorHex, sizeof(fillColorHex), "#%02x%02x%02x",
+                     (int)(r * 255),
+                     (int)(g * 255),
+                     (int)(b * 255)
+
+            );
+
+            return std::string(fillColorHex);
+        };
     };
 
 } // namespace CanvasMVP
-
-#endif

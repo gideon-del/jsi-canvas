@@ -1,8 +1,7 @@
-#ifndef CanvasMVP_Node_h
-#define CanvasMVP_Node_h
+#pragma once
 #include <string>
 #include "PlatformTypes.h"
-
+#include "../event-emitter/EventEmitter.h"
 namespace CanvasMVP
 {
 
@@ -98,8 +97,21 @@ namespace CanvasMVP
         {
             return visible && bounds.intersects(rect);
         }
+
+        EventData toEventData()
+        {
+            auto event = EventData{};
+            event.setString("id", id);
+            event.setFloat("x", bounds.x);
+            event.setFloat("y", bounds.y);
+            event.setFloat("width", bounds.width);
+            event.setFloat("height", bounds.width);
+            event.setString("fillColor", fillColor.toHexColor());
+            event.setString("strokeColor", strokeColor.toHexColor());
+            event.setFloat("strokeWidth", strokeWidth);
+            event.setInt("zIndex", zIndex);
+            return event;
+        };
     };
 
 }
-
-#endif

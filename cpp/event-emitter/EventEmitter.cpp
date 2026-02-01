@@ -5,7 +5,7 @@ namespace CanvasMVP
 
     std::atomic<ListenerId> EventEmitter::nextListenerId{0};
     std::unordered_map<EventType, std::vector<EventListener>> EventEmitter::listeners_;
-    ListenerId EventEmitter::on(EventType eventType, std::function<void()> callback)
+    ListenerId EventEmitter::on(EventType eventType, std::function<void(EventData event)> callback)
     {
         auto &listeners = listeners_[eventType];
         auto listenerId = nextListenerId.fetch_add(1);
@@ -29,9 +29,9 @@ namespace CanvasMVP
                            { return e.id == id; }),
             listeners.end());
     }
-    void EventEmitter::emit(EventType eventType)
+    void EventEmitter::emit(EventData event)
     {
-        auto entry = listeners_.find(eventType);
+        auto entry = listeners_.find(event.type);
 
         if (entry == listeners_.end())
         {
@@ -40,9 +40,9 @@ namespace CanvasMVP
 
         auto &listeners = entry->second;
 
-        for (EventListener listener : listeners)
+        for (auto &listener : listeners)
         {
-            listener.callback();
+            listener.callback(event);
         };
     }
 }

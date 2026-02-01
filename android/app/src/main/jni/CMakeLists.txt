@@ -5,6 +5,7 @@ project(appmodules)
 file(GLOB_RECURSE SHARED_CPP
         ${CMAKE_SOURCE_DIR}/../../../../../cpp/**/*.cpp
 )
+
 list(FILTER SHARED_CPP EXCLUDE REGEX ".*/tests/.*")
 include_directories(${CMAKE_SOURCE_DIR}/../../../../../cpp)
 include(${REACT_ANDROID_DIR}/cmake-utils/ReactNative-application.cmake)

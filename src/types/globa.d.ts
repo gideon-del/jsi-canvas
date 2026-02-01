@@ -1,3 +1,4 @@
+// Entities
 export interface NodeConfig {
   id?: string;
   x: number;
@@ -21,8 +22,30 @@ export interface Node {
   strokeWidth: number;
   zIndex: number;
 }
-
 export type NodeUpdate = Partial<Omit<Node, 'id'>>;
+//Events
+export interface SceneGraphEvent {
+  type: string;
+}
+export interface AddNodeEvent extends SceneGraphEvent {
+  node: Node;
+}
+export interface RemoveNodeEvent extends SceneGraphEvent {
+  node: Node;
+}
+export interface SelectionChangeEvent extends SceneGraphEvent {
+  node: Node;
+}
+export interface ClearedGraphEvent extends SceneGraphEvent {}
+export interface SceneGraphEventMap {
+  nodeAdded: AddNodeEvent;
+  nodeRemoved: RemoveNodeEvent;
+  selectionChanged: SelectionChangeEvent;
+  cleared: ClearedGraphEvent;
+}
+
+// SceneGraph
+
 export interface SceneGraphAPI {
   addNode(config: NodeConfig): string;
   getNode(id: string): Node | null;
@@ -31,7 +54,14 @@ export interface SceneGraphAPI {
   updateNode(id: string, update: NodeUpdate): boolean;
   removeNode(id: string): boolean;
   clear(): void;
+  on: <K extends keyof SceneGraphEventMap>(
+    eventType: K,
+    fn: (event: SceneGraphEventMap[K]) => void,
+  ) => number;
+  off: <K extends keyof SceneGraphEventMap>(eventType: K, id: number) => void;
 }
+
+// Camera
 
 export interface CameraAPI {
   screenToWorld(x: number, y: number): { x: number; y: number };

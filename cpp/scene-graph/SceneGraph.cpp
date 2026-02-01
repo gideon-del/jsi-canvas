@@ -143,9 +143,12 @@ namespace CanvasMVP
         sortedNodes_.push_back(nodePtr);
 
         needsSort_ = true;
-
+        auto event = EventData{};
+        event.type = "nodeAdded";
+        auto nodeEvent = nodePtr->toEventData();
+        event.set("node", nodeEvent);
         spatialIndex_.add(nodePtr);
-        EventEmitter::emit("nodeAdded");
+        EventEmitter::emit(event);
         return true;
     }
 
@@ -168,10 +171,16 @@ namespace CanvasMVP
             return false;
         }
         auto nodePtr = it->second.get();
+        auto event = EventData{};
+
+        event.type = "nodeRemoved";
+        event.set("node", nodePtr->toEventData());
         spatialIndex_.remove(nodePtr);
         sortedNodes_.erase(std::remove(sortedNodes_.begin(), sortedNodes_.end(), nodePtr), sortedNodes_.end());
         nodes_.erase(it);
-        EventEmitter::emit("nodeRemoved");
+
+        EventEmitter::emit(event);
+
         return true;
     }
 
@@ -211,7 +220,10 @@ namespace CanvasMVP
         {
             if (node->containsPoint(x, y))
             {
-                EventEmitter::emit("selectionChanged");
+                auto event = EventData{};
+                event.set("node", node->toEventData());
+                event.type = "selectionChanged";
+                EventEmitter::emit(event);
                 return node;
             }
         }
@@ -225,7 +237,10 @@ namespace CanvasMVP
             return;
         spatialIndex_.remove(node);
         spatialIndex_.add(node);
-        EventEmitter::emit("nodeUpdated");
+        auto event = EventData{};
+        event.type = "nodeUpdated";
+        event.set("node", node->toEventData());
+        EventEmitter::emit(event);
     }
 
     void SceneGraph::clear()
@@ -234,7 +249,9 @@ namespace CanvasMVP
         sortedNodes_.clear();
         spatialIndex_.clear();
         needsSort_ = false;
-        EventEmitter::emit("cleared");
+        auto event = EventData{};
+        event.type = "cleared";
+        EventEmitter::emit(event);
     }
 
     size_t SceneGraph::nodeCount() const
@@ -253,7 +270,7 @@ namespace CanvasMVP
 
         return nodes;
     }
-    ListenerId SceneGraph::addEventListener(EventType eventType, std::function<void()> callback)
+    ListenerId SceneGraph::addEventListener(EventType eventType, std::function<void(EventData event)> callback)
     {
         return EventEmitter::on(eventType, callback);
     }

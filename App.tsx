@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, StatusBar, Button } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
-import { Commands } from './src/specs/CanvasViewNativeComponent';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useCanvasCamera } from './src/hooks/useCanvasCamera';
 import { installSceneGraph, useSceneGraph } from './src/hooks/useSceneGraph';
@@ -20,10 +19,6 @@ function AppContent(): React.JSX.Element {
   const canvasCamera = useCanvasCamera();
   const sceneGraph = useSceneGraph();
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const redraw = () => {
-    if (!canvasRef.current) return;
-    Commands.redrawNative(canvasRef.current);
-  };
 
   const handleAddNode = () => {
     if (!canvasCamera) {
@@ -36,9 +31,8 @@ function AppContent(): React.JSX.Element {
       const y = Math.random() * 500;
 
       const worldPoint = canvasCamera.screenToWorld(x, y);
-      // Call JSI function (synchronous!)
-      const start = performance.now();
-      const nodeId = sceneGraph.addNode({
+
+      sceneGraph.addNode({
         x: worldPoint.x,
         y: worldPoint.y,
         width: 100,
@@ -46,9 +40,6 @@ function AppContent(): React.JSX.Element {
         fillColor: '#0000FF',
         zIndex: 0,
       });
-      const duration = performance.now() - start;
-
-      console.log(`[App] Added node ${nodeId} in ${duration.toFixed(3)}ms`);
     } catch (error) {
       console.error('[App] Error adding node:', error);
     }
@@ -85,7 +76,6 @@ function AppContent(): React.JSX.Element {
   };
   const handleClearGraph = () => {
     sceneGraph.clear();
-    console.log(`[App] Scene graph cleared `);
     setSelectedNodeId(null);
   };
   return (
