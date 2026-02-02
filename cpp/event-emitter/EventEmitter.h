@@ -14,6 +14,12 @@ namespace CanvasMVP
     struct EventData
     {
         EventType type;
+        using EventValue = std::variant<std::string,
+                                        int,
+                                        float,
+                                        bool,
+                                        EventData,
+                                        std::vector<EventData>>;
         std::unordered_map<std::string, EventValue> data;
 
         void set(std::string key, EventValue value)
@@ -21,7 +27,7 @@ namespace CanvasMVP
             data[key] = value;
         }
 
-        jsi::Value convertValue(jsi::Runtime &runtime, const EventValue &value)
+        jsi::Value convertValue(jsi::Runtime &runtime, const EventValue &value) const
         {
             return std::visit([&](auto &&arg) -> jsi::Value
                               {
@@ -67,30 +73,19 @@ namespace CanvasMVP
         {
             jsi::Object obj(runtime);
 
-            // Convert EventType to string
-            obj.setProperty(
-                runtime,
-                "type",
-                jsi::String::createFromUtf8(runtime, type));
-
+            obj.setProperty(runtime, "type", jsi::String::createFromUtf8(runtime, type));
             for (const auto &[key, val] : data)
             {
-                // obj.setProperty(
-                //     runtime,
-                //     key.c_str(),
-                //    convertValue(runtime, val));
+                obj.setProperty(
+                    runtime,
+                    key.c_str(),
+                    convertValue(runtime, val));
             }
 
             return obj;
         };
     };
 
-    using EventValue = std::variant<std::string,
-                                    int,
-                                    float,
-                                    bool,
-                                    EventData,
-                                    std::vector<EventData>>;
     struct EventListener
     {
         ListenerId id;

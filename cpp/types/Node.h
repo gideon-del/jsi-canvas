@@ -101,15 +101,15 @@ namespace CanvasMVP
         EventData toEventData()
         {
             auto event = EventData{};
-            event.setString("id", id);
-            event.setFloat("x", bounds.x);
-            event.setFloat("y", bounds.y);
-            event.setFloat("width", bounds.width);
-            event.setFloat("height", bounds.width);
-            event.setString("fillColor", fillColor.toHexColor());
-            event.setString("strokeColor", strokeColor.toHexColor());
-            event.setFloat("strokeWidth", strokeWidth);
-            event.setInt("zIndex", zIndex);
+            event.set("id", id);
+            event.set("x", bounds.x);
+            event.set("y", bounds.y);
+            event.set("width", bounds.width);
+            event.set("height", bounds.width);
+            event.set("fillColor", fillColor.toHexColor());
+            event.set("strokeColor", strokeColor.toHexColor());
+            event.set("strokeWidth", strokeWidth);
+            event.set("zIndex", zIndex);
             return event;
         };
     };
