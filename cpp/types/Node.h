@@ -47,8 +47,7 @@ namespace CanvasMVP
             return RectF(x, y, width, height);
         }
     };
-
-    struct Node
+    struct NodeData
     {
         std::string id;
         NodeType type;
@@ -62,56 +61,75 @@ namespace CanvasMVP
 
         bool selected;
         bool visible;
+    };
+    struct Node
+    {
+        NodeData data;
 
         Node()
-            : id(""),
-              type(NodeType::RECTANGLE),
-              bounds(0, 0, 100, 100),
-              zIndex(0),
-              fillColor(Color::gray(0.8f)),
-              strokeColor(Color::gray(0.3f)),
-              strokeWidth(1.0f),
-              selected(false),
-              visible(true)
+            : data(NodeData{
+                  .id = "",
+                  .type = NodeType::RECTANGLE,
+                  .bounds = Rect{0, 0, 100, 100},
+                  .zIndex = 0,
+                  .fillColor = Color::gray(0.8f),
+                  .strokeColor = Color::gray(0.3f),
+                  .strokeWidth = 1.0f,
+                  .selected = false,
+                  .visible = true})
         {
         }
         Node(const std::string &nodeId, NodeType nodeType,
-             float x, float y, float w, float h) : id(nodeId),
-                                                   type(nodeType),
-                                                   bounds(x, y, w, h),
-                                                   zIndex(0),
-                                                   fillColor(Color::gray(0.8f)),
-                                                   strokeColor(Color::gray(0.3f)),
-                                                   strokeWidth(1.0f),
-                                                   selected(false),
-                                                   visible(true) {};
+             float x, float y, float w, float h) : data(NodeData{
+                                                       .id = nodeId,
+                                                       .type = nodeType,
+                                                       .bounds = Rect{x, y, w, h},
+                                                       .zIndex = 0,
+                                                       .fillColor = Color::gray(0.8f),
+                                                       .strokeColor = Color::gray(0.3f),
+                                                       .strokeWidth = 1.0f,
+                                                       .selected = false,
+                                                       .visible = true}) {};
 
+        Node(const NodeData &nodeData) : data(nodeData) {};
         virtual ~Node() = default;
 
         bool containsPoint(float px, float py) const
         {
-            return visible && bounds.contains(px, py);
+            return data.visible && data.bounds.contains(px, py);
         }
 
         bool intersectsRect(const Rect &rect) const
         {
-            return visible && bounds.intersects(rect);
+            return data.visible && data.bounds.intersects(rect);
         }
 
         EventData toEventData()
         {
             auto event = EventData{};
-            event.set("id", id);
-            event.set("x", bounds.x);
-            event.set("y", bounds.y);
-            event.set("width", bounds.width);
-            event.set("height", bounds.width);
-            event.set("fillColor", fillColor.toHexColor());
-            event.set("strokeColor", strokeColor.toHexColor());
-            event.set("strokeWidth", strokeWidth);
-            event.set("zIndex", zIndex);
+            event.set("id", data.id);
+            event.set("x", data.bounds.x);
+            event.set("y", data.bounds.y);
+            event.set("width", data.bounds.width);
+            event.set("height", data.bounds.height);
+            event.set("fillColor", data.fillColor.toHexColor());
+            event.set("strokeColor", data.strokeColor.toHexColor());
+            event.set("strokeWidth", data.strokeWidth);
+            event.set("zIndex", data.zIndex);
             return event;
         };
     };
 
+    struct NodeSnapShot
+    {
+        NodeData data;
+        Node toNode() const
+        {
+            return Node(data);
+        };
+        static NodeSnapShot fromNode(const Node &node)
+        {
+            return NodeSnapShot{node.data};
+        }
+    };
 }

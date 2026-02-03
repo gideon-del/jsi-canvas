@@ -216,7 +216,7 @@ namespace CanvasMVP
         {
             auto node = jsObjectToNode(runtime, nodeConfig);
 
-            std::string nodeId = node->id;
+            std::string nodeId = node->data.id;
             sceneGraph_->addNode(std::move(node));
             std::cout << "[SceneGraphJSI]  Node added: " << nodeId << std::endl;
 
@@ -288,7 +288,7 @@ namespace CanvasMVP
 
             if (xValue.isNumber())
             {
-                node->bounds.x = static_cast<float>(xValue.asNumber());
+                node->data.bounds.x = static_cast<float>(xValue.asNumber());
                 boundsChanged = true;
             }
         }
@@ -299,7 +299,7 @@ namespace CanvasMVP
 
             if (yValue.isNumber())
             {
-                node->bounds.y = static_cast<float>(yValue.asNumber());
+                node->data.bounds.y = static_cast<float>(yValue.asNumber());
                 boundsChanged = true;
             }
         }
@@ -310,7 +310,7 @@ namespace CanvasMVP
 
             if (widthValue.isNumber())
             {
-                node->bounds.width = static_cast<float>(widthValue.asNumber());
+                node->data.bounds.width = static_cast<float>(widthValue.asNumber());
                 boundsChanged = true;
             }
         }
@@ -321,7 +321,7 @@ namespace CanvasMVP
 
             if (heightValue.isNumber())
             {
-                node->bounds.height = static_cast<float>(heightValue.asNumber());
+                node->data.bounds.height = static_cast<float>(heightValue.asNumber());
                 boundsChanged = true;
             }
         }
@@ -333,7 +333,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->fillColor = Color::parseHexColor(colorStr);
+                node->data.fillColor = Color::parseHexColor(colorStr);
             }
         }
 
@@ -344,7 +344,7 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->strokeColor = Color::parseHexColor(colorStr);
+                node->data.strokeColor = Color::parseHexColor(colorStr);
             }
         }
 
@@ -354,7 +354,7 @@ namespace CanvasMVP
 
             if (strokeWidthValue.isNumber())
             {
-                node->strokeWidth = static_cast<float>(strokeWidthValue.asNumber());
+                node->data.strokeWidth = static_cast<float>(strokeWidthValue.asNumber());
             }
         }
 
@@ -364,7 +364,7 @@ namespace CanvasMVP
 
             if (zIndexValue.isNumber())
             {
-                node->zIndex = static_cast<int>(zIndexValue.asNumber());
+                node->data.zIndex = static_cast<int>(zIndexValue.asNumber());
             }
         }
 
@@ -381,14 +381,14 @@ namespace CanvasMVP
         auto node = std::make_unique<Node>();
 
         static int nodeCounter = 0;
-        node->id = "node_" + std::to_string(++nodeCounter);
+        node->data.id = "node_" + std::to_string(++nodeCounter);
 
         if (obj.hasProperty(runtime, "x"))
         {
             auto xValue = obj.getProperty(runtime, "x");
             if (xValue.isNumber())
             {
-                node->bounds.x = static_cast<float>(xValue.asNumber());
+                node->data.bounds.x = static_cast<float>(xValue.asNumber());
             }
         }
 
@@ -397,7 +397,7 @@ namespace CanvasMVP
             auto yValue = obj.getProperty(runtime, "y");
             if (yValue.isNumber())
             {
-                node->bounds.y = static_cast<float>(yValue.asNumber());
+                node->data.bounds.y = static_cast<float>(yValue.asNumber());
             }
         }
 
@@ -406,12 +406,12 @@ namespace CanvasMVP
             auto widthValue = obj.getProperty(runtime, "width");
             if (widthValue.isNumber())
             {
-                node->bounds.width = static_cast<float>(widthValue.asNumber());
+                node->data.bounds.width = static_cast<float>(widthValue.asNumber());
             }
         }
         else
         {
-            node->bounds.width = 100.0f;
+            node->data.bounds.width = 100.0f;
         }
 
         if (obj.hasProperty(runtime, "height"))
@@ -419,12 +419,12 @@ namespace CanvasMVP
             auto heightValue = obj.getProperty(runtime, "height");
             if (heightValue.isNumber())
             {
-                node->bounds.height = static_cast<float>(heightValue.asNumber());
+                node->data.bounds.height = static_cast<float>(heightValue.asNumber());
             }
         }
         else
         {
-            node->bounds.height = 100.0f;
+            node->data.bounds.height = 100.0f;
         }
 
         if (obj.hasProperty(runtime, "fillColor"))
@@ -434,23 +434,23 @@ namespace CanvasMVP
             if (colorValue.isString())
             {
                 std::string colorStr = colorValue.asString(runtime).utf8(runtime);
-                node->fillColor = Color::parseHexColor(colorStr);
+                node->data.fillColor = Color::parseHexColor(colorStr);
             }
         }
         else
         {
-            node->fillColor = Color::red();
+            node->data.fillColor = Color::red();
         }
 
-        node->strokeColor = Color::black();
-        node->strokeWidth = 2.0f;
+        node->data.strokeColor = Color::black();
+        node->data.strokeWidth = 2.0f;
 
         if (obj.hasProperty(runtime, "zIndex"))
         {
             auto zValue = obj.getProperty(runtime, "zIndex");
             if (zValue.isNumber())
             {
-                node->zIndex = static_cast<int>(zValue.asNumber());
+                node->data.zIndex = static_cast<int>(zValue.asNumber());
             }
         }
 
@@ -483,14 +483,14 @@ namespace CanvasMVP
     jsi::Object SceneGraphJSI::nodeToJSObject(jsi::Runtime &runtime, const Node *node)
     {
         auto obj = jsi::Object(runtime);
-        obj.setProperty(runtime, "id", jsi::String::createFromUtf8(runtime, node->id));
-        obj.setProperty(runtime, "x", jsi::Value(node->bounds.x));
-        obj.setProperty(runtime, "y", jsi::Value(node->bounds.y));
-        obj.setProperty(runtime, "width", jsi::Value(node->bounds.width));
-        obj.setProperty(runtime, "height", jsi::Value(node->bounds.height));
-        obj.setProperty(runtime, "zIndex", jsi::Value(node->zIndex));
+        obj.setProperty(runtime, "id", jsi::String::createFromUtf8(runtime, node->data.id));
+        obj.setProperty(runtime, "x", jsi::Value(node->data.bounds.x));
+        obj.setProperty(runtime, "y", jsi::Value(node->data.bounds.y));
+        obj.setProperty(runtime, "width", jsi::Value(node->data.bounds.width));
+        obj.setProperty(runtime, "height", jsi::Value(node->data.bounds.height));
+        obj.setProperty(runtime, "zIndex", jsi::Value(node->data.zIndex));
 
-        obj.setProperty(runtime, "fillColor", jsi::String::createFromUtf8(runtime, node->fillColor.toHexColor()));
+        obj.setProperty(runtime, "fillColor", jsi::String::createFromUtf8(runtime, node->data.fillColor.toHexColor()));
 
         return obj;
     }

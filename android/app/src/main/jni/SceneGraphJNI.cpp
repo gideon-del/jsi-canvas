@@ -95,10 +95,10 @@ env->ReleaseStringUTFChars(jid, idChars);
 
 
  auto node = std::make_unique<Node>(id, NodeType::RECTANGLE, x, y, width, height);
-  node->fillColor = Color(fillR, fillG, fillB, fillA);
-  node->strokeColor = Color(strokeR, strokeG, strokeB, strokeA);
-  node->strokeWidth = strokeWidth;
-  node->zIndex = zIndex;
+  node->data.fillColor = Color(fillR, fillG, fillB, fillA);
+  node->data.strokeColor = Color(strokeR, strokeG, strokeB, strokeA);
+  node->data.strokeWidth = strokeWidth;
+  node->data.zIndex = zIndex;
 auto graph = CanvasMVP::getCurrentSceneGraph();
 
    if(graph == nullptr){
@@ -159,7 +159,7 @@ Java_com_canvasmvp_graph_NodeWrapper_getNodeIdNative(
         JNIEnv* env, jobject obj, jlong handle
         ) {
      auto* node = reinterpret_cast<Node*>(handle);
-    return env->NewStringUTF(node->id.c_str());
+    return env->NewStringUTF(node->data.id.c_str());
  }
 
 JNIEXPORT jfloatArray JNICALL
@@ -168,10 +168,10 @@ Java_com_canvasmvp_graph_NodeWrapper_getNodeBoundsNative(JNIEnv* env, jobject ob
 
     jfloatArray result = env->NewFloatArray(4);
     jfloat bounds[4] = {
-            node->bounds.x,
-            node->bounds.y,
-            node->bounds.width,
-            node->bounds.height
+            node->data.bounds.x,
+            node->data.bounds.y,
+            node->data.bounds.width,
+            node->data.bounds.height
     };
     env->SetFloatArrayRegion(result, 0, 4, bounds);
     return result;
@@ -183,10 +183,10 @@ Java_com_canvasmvp_graph_NodeWrapper_getNodeFillColorNative(JNIEnv* env, jobject
 
     jfloatArray result = env->NewFloatArray(4);
     jfloat color[4] = {
-            node->fillColor.r,
-            node->fillColor.g,
-            node->fillColor.b,
-            node->fillColor.a
+            node->data.fillColor.r,
+            node->data.fillColor.g,
+            node->data.fillColor.b,
+            node->data.fillColor.a
     };
     env->SetFloatArrayRegion(result, 0, 4, color);
     return result;
@@ -198,10 +198,10 @@ Java_com_canvasmvp_graph_NodeWrapper_getNodeStrokeColorNative(JNIEnv* env, jobje
 
     jfloatArray result = env->NewFloatArray(4);
     jfloat color[4] = {
-            node->strokeColor.r,
-            node->strokeColor.g,
-            node->strokeColor.b,
-            node->strokeColor.a
+            node->data.strokeColor.r,
+            node->data.strokeColor.g,
+            node->data.strokeColor.b,
+            node->data.strokeColor.a
     };
     env->SetFloatArrayRegion(result, 0, 4, color);
     return result;
@@ -209,11 +209,11 @@ Java_com_canvasmvp_graph_NodeWrapper_getNodeStrokeColorNative(JNIEnv* env, jobje
 JNIEXPORT jfloat JNICALL
 Java_com_canvasmvp_graph_NodeWrapper_getNodeStrokeWidthNative(JNIEnv* env, jobject obj, jlong nodePtr) {
     auto* node = reinterpret_cast<Node*>(nodePtr);
-    return node->strokeWidth;
+    return node->data.strokeWidth;
 }
 JNIEXPORT jint JNICALL
 Java_com_canvasmvp_graph_NodeWrapper_getNodeZIndexNative(JNIEnv* env, jobject obj, jlong nodePtr) {
     auto* node = reinterpret_cast<Node*>(nodePtr);
-    return node->zIndex;
+    return node->data.zIndex;
 }
 }

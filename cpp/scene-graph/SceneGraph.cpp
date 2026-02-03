@@ -26,10 +26,10 @@ namespace CanvasMVP
         if (!node)
             return;
 
-        int32_t minCellX = static_cast<int32_t>(std::floor(node->bounds.x / CELL_SIZE));
-        int32_t minCellY = static_cast<int32_t>(std::floor(node->bounds.y / CELL_SIZE));
-        int32_t maxCellX = static_cast<int32_t>(std::floor((node->bounds.x + node->bounds.width) / CELL_SIZE));
-        int32_t maxCellY = static_cast<int32_t>(std::floor((node->bounds.y + node->bounds.height) / CELL_SIZE));
+        int32_t minCellX = static_cast<int32_t>(std::floor(node->data.bounds.x / CELL_SIZE));
+        int32_t minCellY = static_cast<int32_t>(std::floor(node->data.bounds.y / CELL_SIZE));
+        int32_t maxCellX = static_cast<int32_t>(std::floor((node->data.bounds.x + node->data.bounds.width) / CELL_SIZE));
+        int32_t maxCellY = static_cast<int32_t>(std::floor((node->data.bounds.y + node->data.bounds.height) / CELL_SIZE));
 
         for (int32_t cx = minCellX; cx <= maxCellX; cx++)
             for (int32_t cy = minCellY; cy <= maxCellY; cy++)
@@ -41,10 +41,10 @@ namespace CanvasMVP
         if (!node)
             return;
 
-        int32_t minCellX = floor(node->bounds.x / CELL_SIZE);
-        int32_t minCellY = floor(node->bounds.y / CELL_SIZE);
-        int32_t maxCellX = floor((node->bounds.x + node->bounds.width) / CELL_SIZE);
-        int32_t maxCellY = floor((node->bounds.y + node->bounds.height) / CELL_SIZE);
+        int32_t minCellX = floor(node->data.bounds.x / CELL_SIZE);
+        int32_t minCellY = floor(node->data.bounds.y / CELL_SIZE);
+        int32_t maxCellX = floor((node->data.bounds.x + node->data.bounds.width) / CELL_SIZE);
+        int32_t maxCellY = floor((node->data.bounds.y + node->data.bounds.height) / CELL_SIZE);
 
         for (int32_t cx = minCellX; cx <= maxCellX; cx++)
         {
@@ -131,7 +131,7 @@ namespace CanvasMVP
             return false;
         }
 
-        auto it = nodes_.find(node->id);
+        auto it = nodes_.find(node->data.id);
 
         if (it != nodes_.end())
         {
@@ -139,7 +139,7 @@ namespace CanvasMVP
         }
         auto nodePtr = node.get();
 
-        nodes_.emplace(node->id, std::move(node));
+        nodes_.emplace(node->data.id, std::move(node));
         sortedNodes_.push_back(nodePtr);
 
         needsSort_ = true;
@@ -194,7 +194,7 @@ namespace CanvasMVP
         {
             std::sort(sortedNodes_.begin(),
                       sortedNodes_.end(), [](Node *a, Node *b)
-                      { return a->zIndex < b->zIndex; });
+                      { return a->data.zIndex < b->data.zIndex; });
 
             needsSort_ = false;
         }
@@ -213,7 +213,7 @@ namespace CanvasMVP
         std::sort(candidates.begin(), candidates.end(),
                   [](const Node *a, const Node *b)
                   {
-                      return a->zIndex > b->zIndex;
+                      return a->data.zIndex > b->data.zIndex;
                   });
         // Return first that contains point
         for (Node *node : candidates)
