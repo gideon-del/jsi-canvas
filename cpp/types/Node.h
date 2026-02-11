@@ -127,6 +127,10 @@ namespace CanvasMVP
         {
             return Node(data);
         };
+        Node toNode()
+        {
+            return Node(data);
+        };
         static NodeSnapShot fromNode(const Node &node)
         {
             return NodeSnapShot{node.data};
