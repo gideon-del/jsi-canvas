@@ -6,6 +6,7 @@ namespace CanvasMVP
     {
         if (!command)
         {
+            logger.info("Command not found");
             return;
         }
 
@@ -16,7 +17,9 @@ namespace CanvasMVP
 
         if (currentIndex_ >= 0 && history_[currentIndex_]->canMergeWith(command.get()))
         {
+
             history_[currentIndex_]->mergeWith(command.get());
+            logger.info("Command merged");
             history_[currentIndex_]->execute(sceneGraph_);
             return;
         }
@@ -24,10 +27,12 @@ namespace CanvasMVP
 
         history_.push_back(std::move(command));
         currentIndex_++;
+        logger.info("Command History updated");
 
         if (history_.size() > maxHistorySize)
         {
             history_.erase(history_.begin());
+
             currentIndex_--;
         }
     }
@@ -36,23 +41,26 @@ namespace CanvasMVP
     {
         if (!canUndo())
         {
+            logger.info("Cannot undo - no commands");
             return false;
         }
 
         history_[currentIndex_]->undo(sceneGraph_);
 
         currentIndex_--;
+        logger.info("Undo Successful");
         return true;
     }
     bool CommandHistory::redo()
     {
         if (!canRedo())
         {
+            logger.info("Cannot redo");
             return false;
         }
         currentIndex_++;
         history_[currentIndex_]->execute(sceneGraph_);
-
+        logger.info("Redo Successful");
         return true;
     }
 
@@ -60,6 +68,7 @@ namespace CanvasMVP
     {
         history_.clear();
         currentIndex_ = -1;
+        logger.info("Cleared");
     }
 
 }
