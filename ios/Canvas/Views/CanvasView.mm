@@ -35,12 +35,7 @@ static std::shared_ptr<CanvasMVP::SceneGraph> g_sceneGraph = nullptr;
   
 }
 + (void)load {
-  static dispatch_once_t onceToken;
   
-  dispatch_once(&onceToken, ^{
-    g_sceneGraph =std::make_shared<CanvasMVP::SceneGraph>();
-    NSLog(@"[CanvasView] Scene graph created");
-  });
 }
 - (CanvasMVP::CameraState*)camera {
     return &_camera;
@@ -196,8 +191,6 @@ Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
          args);
   RCTCanvasViewHandleCommand(self, commandName, args);
 }
-
-
 
 - (void)createTestScene:(int)nodeCount {
     _sceneGraph.clear();
