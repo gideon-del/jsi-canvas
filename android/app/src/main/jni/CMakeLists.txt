@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.18.1)
 
 project(appmodules)
 # ---- Include shared headers ----
-file(GLOB_RECURSE SHARED_CPP
+file(GLOB_RECURSE SHARED_CPP_FILE
         ${CMAKE_SOURCE_DIR}/../../../../../cpp/**/*.cpp
 )
 
-list(FILTER SHARED_CPP EXCLUDE REGEX ".*/tests/.*")
+list(FILTER SHARED_CPP_FILE EXCLUDE REGEX ".*/tests/.*")
 include_directories(${CMAKE_SOURCE_DIR}/../../../../../cpp)
 include(${REACT_ANDROID_DIR}/cmake-utils/ReactNative-application.cmake)
 # ---- Build native library ----
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-        ${SHARED_CPP}
+        ${SHARED_CPP_FILE}
         OnLoad.cpp
         CameraJNI.cpp
         SceneGraphJNI.cpp

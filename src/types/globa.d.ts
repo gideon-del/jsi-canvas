@@ -27,6 +27,25 @@ export type NodeUpdate = Partial<Omit<Node, 'id'>>;
 export interface SceneGraphEvent {
   type: string;
 }
+
+export interface Command {
+  type: string;
+}
+export interface AddNodeCommand extends Command {
+  type: 'addNode';
+  node: NodeConfig;
+}
+export interface UpdateNodeCommand extends Command {
+  type: 'updateNode';
+  node: NodeConfig;
+  nodeId: string;
+}
+export interface RemoveNodeCommand extends Command {
+  type: 'removeNode';
+  nodeId: string;
+}
+
+export type AnyCommand = RemoveNodeCommand | AddNodeCommand | UpdateNodeCommand;
 export interface AddNodeEvent extends SceneGraphEvent {
   node: Node;
 }
@@ -44,21 +63,21 @@ export interface SceneGraphEventMap {
   cleared: ClearedGraphEvent;
 }
 
-// SceneGraph
-
 export interface SceneGraphAPI {
-  addNode(config: NodeConfig): string;
   getNode(id: string): Node | null;
   getAllNodes(): Node[];
   getNodeCount(): number;
-  updateNode(id: string, update: NodeUpdate): boolean;
-  removeNode(id: string): boolean;
-  clear(): void;
   on: <K extends keyof SceneGraphEventMap>(
     eventType: K,
     fn: (event: SceneGraphEventMap[K]) => void,
   ) => number;
   off: <K extends keyof SceneGraphEventMap>(eventType: K, id: number) => void;
+  executeCommand: (command: AnyCommand) => boolean;
+  redo: () => boolean;
+  undo: () => boolean;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  clearHistory: () => boolean;
 }
 
 // Camera

@@ -6,6 +6,7 @@
 #include <string>
 #include "../scene-graph/SceneGraph.h"
 #include "../commands/CommandHistory.h"
+#include "../logger/Logger.h"
 namespace CanvasMVP
 {
     using namespace facebook;

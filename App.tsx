@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, StatusBar, Button } from 'react-native';
+import { StyleSheet, View, StatusBar, Button, ScrollView } from 'react-native';
 import { CanvasView } from './src/components/CanvasView';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useCanvasCamera } from './src/hooks/useCanvasCamera';
@@ -17,7 +17,7 @@ function App() {
 function AppContent(): React.JSX.Element {
   const canvasRef = useRef<React.ElementRef<typeof View> | null>(null);
   const canvasCamera = useCanvasCamera();
-  const sceneGraph = useSceneGraph();
+  const { sceneGraph, addNode, removeNode, canRedo, canUndo } = useSceneGraph();
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const handleAddNode = () => {
@@ -32,7 +32,7 @@ function AppContent(): React.JSX.Element {
 
       const worldPoint = canvasCamera.screenToWorld(x, y);
 
-      sceneGraph.addNode({
+      addNode({
         x: worldPoint.x,
         y: worldPoint.y,
         width: 100,
@@ -66,16 +66,10 @@ function AppContent(): React.JSX.Element {
   };
   const handleRemoveNode = () => {
     if (!selectedNodeId) return;
-    const nodeRemoved = sceneGraph.removeNode(selectedNodeId);
+    removeNode(selectedNodeId);
     setSelectedNodeId(null);
-    if (nodeRemoved) {
-      console.log(`[App] Removed node with id ${selectedNodeId} `);
-    } else {
-      console.log(`[App] Failed to remove node with id ${selectedNodeId} `);
-    }
   };
   const handleClearGraph = () => {
-    sceneGraph.clear();
     setSelectedNodeId(null);
   };
   return (
@@ -84,19 +78,26 @@ function AppContent(): React.JSX.Element {
       <View style={[styles.container]}>
         <CanvasView ref={canvasRef} style={styles.canvas} />
 
-        <View style={styles.controls}>
-          {selectedNodeId ? (
-            <>
-              <Button title="Get node" onPress={handleGetNode} />
-              <Button title="Remove node" onPress={handleRemoveNode} />
-            </>
-          ) : (
-            <>
-              <Button title="Add random node" onPress={handleAddNode} />
-              <Button title="List nodes" onPress={handleListNode} />
-            </>
-          )}
-          <Button title="Clear Graph" onPress={handleClearGraph} />
+        <View style={{ height: 80 }}>
+          <ScrollView horizontal>
+            <View style={styles.controls}>
+              {selectedNodeId ? (
+                <>
+                  <Button title="Get node" onPress={handleGetNode} />
+                  <Button title="Remove node" onPress={handleRemoveNode} />
+                </>
+              ) : (
+                <>
+                  <Button title="Add random node" onPress={handleAddNode} />
+                  <Button title="List nodes" onPress={handleListNode} />
+                </>
+              )}
+              <Button title="Clear Graph" onPress={handleClearGraph} />
+              {canRedo && <Button title="Redo" onPress={sceneGraph.redo} />}
+              <Button title="Redo" onPress={sceneGraph.redo} />
+              {canUndo && <Button title="Undo" onPress={sceneGraph.undo} />}
+            </View>
+          </ScrollView>
         </View>
       </View>
     </>
@@ -128,6 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderTopWidth: 1,
     borderTopColor: '#ddd',
+    gap: 20,
+    alignItems: 'center',
   },
 });
 
