@@ -51,7 +51,7 @@
   // Sort by z Index
   std::sort(visibleNodes.begin(),visibleNodes.end(),
             [](const CanvasMVP::Node* a, const CanvasMVP::Node* b){
-    return  a->zIndex < b->zIndex;
+    return  a->data.zIndex < b->data.zIndex;
   }
             );
   
@@ -62,24 +62,24 @@
 }
 
 -(void)drawNode:(const CanvasMVP::Node *)node context:(CGContextRef)ctx {
-  if(!node || !node->visible) return;
+  if(!node || !node->data.visible) return;
   
-  CanvasMVP::RectF screenBounds = _camera->worldToScreen(node->bounds.toRectF());
-  UIColor* nodeFillColor = [self fromCppColor:node->fillColor];
-  UIColor* nodeStrokeColor = [self fromCppColor:node->strokeColor];
+  CanvasMVP::RectF screenBounds = _camera->worldToScreen(node->data.bounds.toRectF());
+  UIColor* nodeFillColor = [self fromCppColor:node->data.fillColor];
+  UIColor* nodeStrokeColor = [self fromCppColor:node->data.strokeColor];
   
 
 
   
   CGContextSetFillColorWithColor(ctx, nodeFillColor.CGColor);
   CGContextFillRect(ctx,[self fromCppRect:screenBounds]);
-  if(node->strokeWidth > 0) {
-    CGFloat nodeLineWidth = node->strokeWidth;
+  if(node->data.strokeWidth > 0) {
+    CGFloat nodeLineWidth = node->data.strokeWidth;
     CGContextSetStrokeColorWithColor(ctx, nodeStrokeColor.CGColor);
     CGContextSetLineWidth(ctx, nodeLineWidth);
     CGContextStrokeRect(ctx, [self fromCppRect:screenBounds]);
   }
-  if(node->selected) {
+  if(node->data.selected) {
     CGContextSetStrokeColorWithColor(ctx, [[UIColor blueColor] CGColor]);
     CGContextSetLineWidth(ctx, 3.0f);
     CGRect selectionBound = CGRectInset([self fromCppRect:screenBounds], -4, -4);

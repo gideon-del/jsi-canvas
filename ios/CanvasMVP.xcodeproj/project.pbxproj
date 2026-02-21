@@ -12,8 +12,19 @@
 		2CFD94FCF28A72FD74162A88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5224D9922F0303DE00BF9FAD /* ColorBoxRegistry.m */; };
 		5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5238C6A72F07A1350014AD85 /* CanvasView.mm */; };
-		52A0902F2F0E6AA000CCA2D8 /* SceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */; };
 		52B9D2A42F0AA59E00C9248D /* CanvasDrawingView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */; };
+		52C3FB5B2F47185000B2D8F0 /* EventEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB412F47185000B2D8F0 /* EventEmitter.cpp */; };
+		52C3FB5C2F47185000B2D8F0 /* CameraStateRegistry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB482F47185000B2D8F0 /* CameraStateRegistry.cpp */; };
+		52C3FB5D2F47185000B2D8F0 /* CameraJSI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB442F47185000B2D8F0 /* CameraJSI.cpp */; };
+		52C3FB5E2F47185000B2D8F0 /* JSInvokerRegistery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB4A2F47185000B2D8F0 /* JSInvokerRegistery.cpp */; };
+		52C3FB5F2F47185000B2D8F0 /* SceneGraphJSI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB4C2F47185000B2D8F0 /* SceneGraphJSI.cpp */; };
+		52C3FB602F47185000B2D8F0 /* Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB3C2F47185000B2D8F0 /* Command.cpp */; };
+		52C3FB612F47185000B2D8F0 /* CameraStateModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB462F47185000B2D8F0 /* CameraStateModule.cpp */; };
+		52C3FB622F47185000B2D8F0 /* CommandHistory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB3E2F47185000B2D8F0 /* CommandHistory.cpp */; };
+		52C3FB632F47185000B2D8F0 /* SceneGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB562F47185000B2D8F0 /* SceneGraph.cpp */; };
+		52C3FB642F47185000B2D8F0 /* SceneGraphModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB4E2F47185000B2D8F0 /* SceneGraphModule.cpp */; };
+		52C3FB652F47185000B2D8F0 /* SceneGraphRegistry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB502F47185000B2D8F0 /* SceneGraphRegistry.cpp */; };
+		52C3FB662F47185000B2D8F0 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52C3FB532F47185000B2D8F0 /* Logger.cpp */; };
 		52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5251CDB12F02DC7A008A3681 /* ColorBox.mm */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -30,10 +41,35 @@
 		5238C6A72F07A1350014AD85 /* CanvasView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasView.mm; sourceTree = "<group>"; };
 		5251CDB02F02DC12008A3681 /* ColorBox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ColorBox.h; sourceTree = "<group>"; };
 		5251CDB12F02DC7A008A3681 /* ColorBox.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ColorBox.mm; sourceTree = "<group>"; };
-		52A0902C2F0E6A8000CCA2D8 /* SceneGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraph.h; sourceTree = "<group>"; };
-		52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraph.cpp; sourceTree = "<group>"; };
 		52B9D2A32F0AA59E00C9248D /* CanvasDrawingView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasDrawingView.mm; sourceTree = "<group>"; };
 		52B9D2A52F0AB33B00C9248D /* CanvasDrawingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CanvasDrawingView.h; sourceTree = "<group>"; };
+		52C3FB392F47185000B2D8F0 /* CameraState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraState.h; sourceTree = "<group>"; };
+		52C3FB3B2F47185000B2D8F0 /* Command.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		52C3FB3C2F47185000B2D8F0 /* Command.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Command.cpp; sourceTree = "<group>"; };
+		52C3FB3D2F47185000B2D8F0 /* CommandHistory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandHistory.h; sourceTree = "<group>"; };
+		52C3FB3E2F47185000B2D8F0 /* CommandHistory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandHistory.cpp; sourceTree = "<group>"; };
+		52C3FB402F47185000B2D8F0 /* EventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventEmitter.h; sourceTree = "<group>"; };
+		52C3FB412F47185000B2D8F0 /* EventEmitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventEmitter.cpp; sourceTree = "<group>"; };
+		52C3FB432F47185000B2D8F0 /* CameraJSI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraJSI.h; sourceTree = "<group>"; };
+		52C3FB442F47185000B2D8F0 /* CameraJSI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraJSI.cpp; sourceTree = "<group>"; };
+		52C3FB452F47185000B2D8F0 /* CameraStateModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraStateModule.h; sourceTree = "<group>"; };
+		52C3FB462F47185000B2D8F0 /* CameraStateModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraStateModule.cpp; sourceTree = "<group>"; };
+		52C3FB472F47185000B2D8F0 /* CameraStateRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraStateRegistry.h; sourceTree = "<group>"; };
+		52C3FB482F47185000B2D8F0 /* CameraStateRegistry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraStateRegistry.cpp; sourceTree = "<group>"; };
+		52C3FB492F47185000B2D8F0 /* JSInvokerRegistery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSInvokerRegistery.h; sourceTree = "<group>"; };
+		52C3FB4A2F47185000B2D8F0 /* JSInvokerRegistery.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JSInvokerRegistery.cpp; sourceTree = "<group>"; };
+		52C3FB4B2F47185000B2D8F0 /* SceneGraphJSI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraphJSI.h; sourceTree = "<group>"; };
+		52C3FB4C2F47185000B2D8F0 /* SceneGraphJSI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraphJSI.cpp; sourceTree = "<group>"; };
+		52C3FB4D2F47185000B2D8F0 /* SceneGraphModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraphModule.h; sourceTree = "<group>"; };
+		52C3FB4E2F47185000B2D8F0 /* SceneGraphModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraphModule.cpp; sourceTree = "<group>"; };
+		52C3FB4F2F47185000B2D8F0 /* SceneGraphRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraphRegistry.h; sourceTree = "<group>"; };
+		52C3FB502F47185000B2D8F0 /* SceneGraphRegistry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraphRegistry.cpp; sourceTree = "<group>"; };
+		52C3FB522F47185000B2D8F0 /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		52C3FB532F47185000B2D8F0 /* Logger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		52C3FB552F47185000B2D8F0 /* SceneGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneGraph.h; sourceTree = "<group>"; };
+		52C3FB562F47185000B2D8F0 /* SceneGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGraph.cpp; sourceTree = "<group>"; };
+		52C3FB582F47185000B2D8F0 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
+		52C3FB592F47185000B2D8F0 /* PlatformTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlatformTypes.h; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CanvasMVP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CanvasMVP.release.xcconfig"; path = "Target Support Files/Pods-CanvasMVP/Pods-CanvasMVP.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-CanvasMVP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CanvasMVP.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = CanvasMVP/AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +124,13 @@
 		5251CDAF2F02DBEE008A3681 /* Canvas */ = {
 			isa = PBXGroup;
 			children = (
+				52C3FB3A2F47185000B2D8F0 /* camera-state */,
+				52C3FB3F2F47185000B2D8F0 /* commands */,
+				52C3FB422F47185000B2D8F0 /* event-emitter */,
+				52C3FB512F47185000B2D8F0 /* jsi */,
+				52C3FB542F47185000B2D8F0 /* logger */,
+				52C3FB572F47185000B2D8F0 /* scene-graph */,
+				52C3FB5A2F47185000B2D8F0 /* types */,
 				5238C6A52F079F990014AD85 /* Views */,
 				5251CDB02F02DC12008A3681 /* ColorBox.h */,
 				5251CDB12F02DC7A008A3681 /* ColorBox.mm */,
@@ -96,15 +139,88 @@
 			path = Canvas;
 			sourceTree = "<group>";
 		};
-		52A0902E2F0E6A8000CCA2D8 /* scene-graph */ = {
+		52C3FB3A2F47185000B2D8F0 /* camera-state */ = {
 			isa = PBXGroup;
 			children = (
-				52A0902C2F0E6A8000CCA2D8 /* SceneGraph.h */,
-				52A0902D2F0E6A8000CCA2D8 /* SceneGraph.cpp */,
+				52C3FB392F47185000B2D8F0 /* CameraState.h */,
+			);
+			name = "camera-state";
+			path = "../cpp/camera-state";
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB3F2F47185000B2D8F0 /* commands */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB3B2F47185000B2D8F0 /* Command.h */,
+				52C3FB3C2F47185000B2D8F0 /* Command.cpp */,
+				52C3FB3D2F47185000B2D8F0 /* CommandHistory.h */,
+				52C3FB3E2F47185000B2D8F0 /* CommandHistory.cpp */,
+			);
+			name = commands;
+			path = ../cpp/commands;
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB422F47185000B2D8F0 /* event-emitter */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB402F47185000B2D8F0 /* EventEmitter.h */,
+				52C3FB412F47185000B2D8F0 /* EventEmitter.cpp */,
+			);
+			name = "event-emitter";
+			path = "../cpp/event-emitter";
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB512F47185000B2D8F0 /* jsi */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB432F47185000B2D8F0 /* CameraJSI.h */,
+				52C3FB442F47185000B2D8F0 /* CameraJSI.cpp */,
+				52C3FB452F47185000B2D8F0 /* CameraStateModule.h */,
+				52C3FB462F47185000B2D8F0 /* CameraStateModule.cpp */,
+				52C3FB472F47185000B2D8F0 /* CameraStateRegistry.h */,
+				52C3FB482F47185000B2D8F0 /* CameraStateRegistry.cpp */,
+				52C3FB492F47185000B2D8F0 /* JSInvokerRegistery.h */,
+				52C3FB4A2F47185000B2D8F0 /* JSInvokerRegistery.cpp */,
+				52C3FB4B2F47185000B2D8F0 /* SceneGraphJSI.h */,
+				52C3FB4C2F47185000B2D8F0 /* SceneGraphJSI.cpp */,
+				52C3FB4D2F47185000B2D8F0 /* SceneGraphModule.h */,
+				52C3FB4E2F47185000B2D8F0 /* SceneGraphModule.cpp */,
+				52C3FB4F2F47185000B2D8F0 /* SceneGraphRegistry.h */,
+				52C3FB502F47185000B2D8F0 /* SceneGraphRegistry.cpp */,
+			);
+			name = jsi;
+			path = ../cpp/jsi;
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB542F47185000B2D8F0 /* logger */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB522F47185000B2D8F0 /* Logger.h */,
+				52C3FB532F47185000B2D8F0 /* Logger.cpp */,
+			);
+			name = logger;
+			path = ../cpp/logger;
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB572F47185000B2D8F0 /* scene-graph */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB552F47185000B2D8F0 /* SceneGraph.h */,
+				52C3FB562F47185000B2D8F0 /* SceneGraph.cpp */,
 			);
 			name = "scene-graph";
 			path = "../cpp/scene-graph";
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
+		};
+		52C3FB5A2F47185000B2D8F0 /* types */ = {
+			isa = PBXGroup;
+			children = (
+				52C3FB582F47185000B2D8F0 /* Node.h */,
+				52C3FB592F47185000B2D8F0 /* PlatformTypes.h */,
+			);
+			name = types;
+			path = ../cpp/types;
+			sourceTree = SOURCE_ROOT;
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
@@ -116,7 +232,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				52A0902E2F0E6A8000CCA2D8 /* scene-graph */,
 				5251CDAF2F02DBEE008A3681 /* Canvas */,
 				13B07FAE1A68108700A75B9A /* CanvasMVP */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -302,12 +417,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52A0902F2F0E6AA000CCA2D8 /* SceneGraph.cpp in Sources */,
 				5224D9932F0303DE00BF9FAD /* ColorBoxRegistry.m in Sources */,
 				52CEB3372F02ED2A005DECFF /* ColorBox.mm in Sources */,
 				5238C6A82F07A1350014AD85 /* CanvasView.mm in Sources */,
 				52B9D2A42F0AA59E00C9248D /* CanvasDrawingView.mm in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
+				52C3FB5B2F47185000B2D8F0 /* EventEmitter.cpp in Sources */,
+				52C3FB5C2F47185000B2D8F0 /* CameraStateRegistry.cpp in Sources */,
+				52C3FB5D2F47185000B2D8F0 /* CameraJSI.cpp in Sources */,
+				52C3FB5E2F47185000B2D8F0 /* JSInvokerRegistery.cpp in Sources */,
+				52C3FB5F2F47185000B2D8F0 /* SceneGraphJSI.cpp in Sources */,
+				52C3FB602F47185000B2D8F0 /* Command.cpp in Sources */,
+				52C3FB612F47185000B2D8F0 /* CameraStateModule.cpp in Sources */,
+				52C3FB622F47185000B2D8F0 /* CommandHistory.cpp in Sources */,
+				52C3FB632F47185000B2D8F0 /* SceneGraph.cpp in Sources */,
+				52C3FB642F47185000B2D8F0 /* SceneGraphModule.cpp in Sources */,
+				52C3FB652F47185000B2D8F0 /* SceneGraphRegistry.cpp in Sources */,
+				52C3FB662F47185000B2D8F0 /* Logger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,7 +451,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../cpp",
+					"$(PROJECT_DIR)/../cpp/**",
 				);
 				INFOPLIST_FILE = CanvasMVP/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;

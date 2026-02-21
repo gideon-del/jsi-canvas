@@ -12,7 +12,7 @@
 #import <React/RCTBridge+Private.h>
 #import <ReactCommon/RCTTurboModule.h>
 #import <jsi/jsi.h>
-
+#include "jsi/SceneGraphRegistry.h"
 using namespace facebook::react;
 
 
@@ -25,7 +25,6 @@ static std::shared_ptr<CanvasMVP::SceneGraph> g_sceneGraph = nullptr;
 {
   CanvasDrawingView *_canvasLayer;
   CanvasMVP::CameraState _camera;
-  CanvasMVP::SceneGraph _sceneGraph;
   
   
   UIPanGestureRecognizer *_panGesture;
@@ -41,7 +40,7 @@ static std::shared_ptr<CanvasMVP::SceneGraph> g_sceneGraph = nullptr;
     return &_camera;
 }
 - (CanvasMVP::SceneGraph*)sceneGraph {
-    return &_sceneGraph;
+    return CanvasMVP::getCurrentSceneGraph();
 }
 - (instancetype)initWithFrame:(CGRect)frame {
   if(self = [super initWithFrame:frame]){
@@ -73,28 +72,14 @@ static std::shared_ptr<CanvasMVP::SceneGraph> g_sceneGraph = nullptr;
       
       jsi::Runtime *runtime = (jsi::Runtime *)cxxBridge.runtime;
       
-      // Only install once
-      if (runtime->global().hasProperty(*runtime, "sceneGraph")) {
-          NSLog(@"[CanvasView] JSI already installed");
-          return;
-      }
+      CanvasMVP::installSceneGraph(*runtime);
       
-      NSLog(@"[CanvasView] Installing JSI...");
-      
-      // Create JSI host object
-      auto jsiWrapper = std::make_shared<CanvasMVP::SceneGraphJSI>(g_sceneGraph);
-      
-      // Install as global.sceneGraph
-      runtime->global().setProperty(
-          *runtime,
-          "sceneGraph",
-          jsi::Object::createFromHostObject(*runtime, jsiWrapper)
-      );
-      
-      NSLog(@"[CanvasView] ✅ JSI installed! Available as global.sceneGraph");
+   
 }
 - (void)setupView {
-  _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera sceneGraph:&_sceneGraph];
+  auto graph =[self sceneGraph];
+  
+  _canvasLayer = [[CanvasDrawingView alloc] initWithFrame:self.bounds camera:&_camera sceneGraph:graph];
   
   _canvasLayer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   
@@ -193,7 +178,9 @@ Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
 }
 
 - (void)createTestScene:(int)nodeCount {
-    _sceneGraph.clear();
+  auto graph = [self sceneGraph];
+  if(!graph) return;
+    graph->clear();
       
       int cols = (int)std::ceil(std::sqrt(nodeCount));
       float spacing = 250;
@@ -209,13 +196,13 @@ Class<RCTCanvasViewViewProtocol> CanvasViewCls(void) {
               100, 100
           );
           
-          node->fillColor = (i % 2 == 0) ?
+          node->data.fillColor = (i % 2 == 0) ?
               CanvasMVP::Color::red() :
               CanvasMVP::Color::blue();
         
-        node->zIndex = i;
+        node->data.zIndex = i;
           
-          _sceneGraph.addNode(std::move(node));
+          graph->addNode(std::move(node));
       }
       NSLog(@"Created %d nodes", nodeCount);
       [_canvasLayer setNeedsDisplay];

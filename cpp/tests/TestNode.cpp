@@ -34,11 +34,11 @@ void testNode()
 
     Node node("test1", NodeType::RECTANGLE, 50, 50, 100, 100);
 
-    assert(node.id == "test1");
-    assert(node.bounds.x == 50);
-    assert(node.bounds.y == 50);
-    assert(node.visible == true);
-    assert(node.selected == false);
+    assert(node.data.id == "test1");
+    assert(node.data.bounds.x == 50);
+    assert(node.data.bounds.y == 50);
+    assert(node.data.visible == true);
+    assert(node.data.selected == false);
     std::cout << "  ✓ Node constructor works" << std::endl;
 
     assert(node.containsPoint(100, 100) == true);
