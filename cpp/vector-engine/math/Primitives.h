@@ -5,7 +5,9 @@
 struct Line
 {
     Vec2 origin;
-    Vec2 direction; // note to self - always normalize this
+    Vec2 direction;
+
+    Line(Vec2 o, Vec2 d) : origin(o), direction(d.normalized()) {}
 
     Vec2 pointAt(double t) { return origin + direction * t; }
 
