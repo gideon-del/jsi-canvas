@@ -88,9 +88,61 @@ void testPrimitives()
         std::cout << "Saved output/primitives.svg" << std::endl;
     }
 }
+
+void testCubicBezier()
+{
+    SvgWriter svg({0, 0, 600, 800});
+    svg.grid(50, "#f5f5f5");
+
+    Vec2 p0{50, 150}, p1{150, 30}, p2{350, 30}, p3{450, 150};
+
+    svg.comment("=== Basic Curve with Debug Info ===");
+    svg.bezierDebug(p0, p1, p2, p3);
+    svg.text({50, 20}, "Basic cubic bezier with control points", "black", 14);
+
+    svg.comment("=== Sample Points ===");
+    // Offset for second example
+    Vec2 offset{0, 200};
+    Vec2 q0 = p0 + offset, q1 = p1 + offset, q2 = p2 + offset, q3 = p3 + offset;
+
+    svg.cubicBezier(q0, q1, q2, q3, "#ccc", 3);
+    svg.bezierSamples(q0, q1, q2, q3, 20);
+    svg.text({50, 220}, "Sample points along curve (t = 0 to 1)", "black", 14);
+
+    svg.comment("=== Tangent Vectors ===");
+    offset = {0, 400};
+    Vec2 r0 = p0 + offset, r1 = p1 + offset, r2 = p2 + offset, r3 = p3 + offset;
+
+    svg.cubicBezier(r0, r1, r2, r3, "#ccc", 3);
+    svg.bezierTangents(r0, r1, r2, r3, 8, 40);
+    svg.text({50, 420}, "Tangent vectors", "black", 14);
+
+    svg.comment("=== de Casteljau Subdivision ===");
+    offset = {0, 600};
+    Vec2 s0 = p0 + offset, s1 = p1 + offset, s2 = p2 + offset, s3 = p3 + offset;
+
+    svg.deCasteljauDebug(s0, s1, s2, s3, 0.35);
+    svg.text({50, 620}, "de Casteljau at t=0.35", "black", 14);
+
+    // for (int i = 0; i <= 4; i++)
+    // {
+    //     Vec2 newOffset = offset + Vec2{0, offset.y * (i - 1)};
+    //     s0 = p0 + newOffset;
+    //     s1 = p1 + newOffset;
+    //     s2 = p2 + newOffset;
+    //     s3 = p3 + newOffset;
+    //     svg.deCasteljauDebug(s0, s1, s2, s3, i * 0.25);
+    // }
+    bool saved = svg.save("visual/output/bezier.svg");
+    if (saved)
+    {
+
+        std::cout << "Saved output/bezier.svg" << std::endl;
+    }
+}
 int main()
 {
-    testPrimitives();
+    testCubicBezier();
 
     return 0;
 }
