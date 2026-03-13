@@ -94,10 +94,13 @@ void testCubicBezier()
     SvgWriter svg({0, 0, 600, 800});
     svg.grid(50, "#f5f5f5");
 
-    Vec2 p0{50, 150}, p1{150, 30}, p2{350, 30}, p3{450, 150};
+    Vec2 p0{50, 150}, p1{150, 30}, p2{550, 30}, p3{450, 150};
 
     svg.comment("=== Basic Curve with Debug Info ===");
     svg.bezierDebug(p0, p1, p2, p3);
+    auto testBezier = CubicBezier(p0, p1, p2, p3);
+    auto box = testBezier.boundingBox();
+    svg.boundingBox(box, "#00f");
     svg.text({50, 20}, "Basic cubic bezier with control points", "black", 14);
 
     svg.comment("=== Sample Points ===");
@@ -140,9 +143,56 @@ void testCubicBezier()
         std::cout << "Saved output/bezier.svg" << std::endl;
     }
 }
+void testBoundingBox()
+{
+    SvgWriter svg({0, 0, 600, 900});
+    svg.grid(50, "#f5f5f5");
+
+    auto testCase = [&](Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
+                        const std::string &label, double offsetY)
+    {
+        Vec2 o{0, offsetY};
+        Vec2 a = p0 + o, b = p1 + o, c = p2 + o, d = p3 + o;
+
+        svg.bezierDebug(a, b, c, d);
+        auto box = CubicBezier(a, b, c, d).boundingBox();
+        svg.boundingBox(box, "#00f");
+        svg.text({10, offsetY - 8}, label, "#333", 11);
+    };
+
+    // 1. Symmetric arch — both endpoints same Y, bulges above
+    //    Box must capture the top bulge (Y extremum at t=0.5)
+    testCase({50, 150}, {150, 30}, {350, 30}, {450, 150},
+             "1. Symmetric arch — Y extremum at t=0.5", 0);
+
+    // 2. S-curve — goes above AND below the endpoint Y
+    //    Two Y extrema, box must wrap both bulges
+    testCase({50, 150}, {250, 30}, {250, 270}, {450, 150},
+             "2. S-curve — two Y extrema", 180);
+
+    // 3. Horizontal bulge — control points push left/right
+    //    X extrema matter here, not just Y
+    testCase({150, 50}, {30, 80}, {30, 120}, {150, 150},
+             "3. Left bulge — X extremum", 340);
+
+    // 4. Asymmetric — P1 up, P2 down (your original failing case)
+    //    Both a Y-max and a Y-min inside (0,1)
+    testCase({50, 150}, {150, 30}, {350, 300}, {450, 150},
+             "4. Asymmetric — P1 up / P2 down", 500);
+
+    // 5. Near-straight — control points barely off the line
+    //    Box should be almost identical to just the endpoints
+    testCase({50, 150}, {150, 145}, {350, 155}, {450, 150},
+             "5. Near-straight — box hugs endpoints", 700);
+
+    svg.save("visual/output/bbox_tests.svg");
+    std::cout << "Saved output/bbox_tests.svg" << std::endl;
+}
 int main()
 {
+    testPrimitives();
     testCubicBezier();
+    testBoundingBox();
 
     return 0;
 }

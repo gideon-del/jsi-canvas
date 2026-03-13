@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="0" x2="600" y2="0" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="50" x2="600" y2="50" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="100" x2="600" y2="100" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="150" x2="600" y2="150" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="200" x2="600" y2="200" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="250" x2="600" y2="250" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="300" x2="600" y2="300" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="350" x2="600" y2="350" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="400" x2="600" y2="400" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="450" x2="600" y2="450" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="500" x2="600" y2="500" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="550" x2="600" y2="550" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="600" x2="600" y2="600" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="650" x2="600" y2="650" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="700" x2="600" y2="700" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="750" x2="600" y2="750" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="800" x2="600" y2="800" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="850" x2="600" y2="850" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="900" x2="600" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="50" y1="150" x2="150" y2="30" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="150" x2="350" y2="30" stroke="#aaa" stroke-width="4" />
+<path d="M50 150 C 150 30 350 30 450 150" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="50" cy="150" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="150" r="6" fill="#2196F3"/> 
+<circle cx="150" cy="30" r="4" fill="#F44336"/> 
+<circle cx="350" cy="30" r="4" fill="#F44336"/> 
+<rect x="50" y="60" width="400" height="90" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="50" cy="60" r="3" fill="#00f"/> 
+<circle cx="450" cy="60" r="3" fill="#00f"/> 
+<circle cx="50" cy="150" r="3" fill="#00f"/> 
+<circle cx="450" cy="150" r="3" fill="#00f"/> 
+<text x="10" y="-8" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">1. Symmetric arch — Y extremum at t=0.5</text> 
+<line x1="50" y1="330" x2="250" y2="210" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="330" x2="250" y2="450" stroke="#aaa" stroke-width="4" />
+<path d="M50 330 C 250 210 250 450 450 330" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="50" cy="330" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="330" r="6" fill="#2196F3"/> 
+<circle cx="250" cy="210" r="4" fill="#F44336"/> 
+<circle cx="250" cy="450" r="4" fill="#F44336"/> 
+<rect x="50" y="295.359" width="400" height="69.282" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="50" cy="295.359" r="3" fill="#00f"/> 
+<circle cx="450" cy="295.359" r="3" fill="#00f"/> 
+<circle cx="50" cy="364.641" r="3" fill="#00f"/> 
+<circle cx="450" cy="364.641" r="3" fill="#00f"/> 
+<text x="10" y="172" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">2. S-curve — two Y extrema</text> 
+<line x1="150" y1="390" x2="30" y2="420" stroke="#aaa" stroke-width="4" />
+<line x1="150" y1="490" x2="30" y2="460" stroke="#aaa" stroke-width="4" />
+<path d="M150 390 C 30 420 30 460 150 490" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="150" cy="390" r="6" fill="#2196F3"/> 
+<circle cx="150" cy="490" r="6" fill="#2196F3"/> 
+<circle cx="30" cy="420" r="4" fill="#F44336"/> 
+<circle cx="30" cy="460" r="4" fill="#F44336"/> 
+<rect x="60" y="390" width="90" height="100" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="60" cy="390" r="3" fill="#00f"/> 
+<circle cx="150" cy="390" r="3" fill="#00f"/> 
+<circle cx="60" cy="490" r="3" fill="#00f"/> 
+<circle cx="150" cy="490" r="3" fill="#00f"/> 
+<text x="10" y="332" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. Left bulge — X extremum</text> 
+<line x1="50" y1="650" x2="150" y2="530" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="650" x2="350" y2="800" stroke="#aaa" stroke-width="4" />
+<path d="M50 650 C 150 530 350 800 450 650" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="50" cy="650" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="650" r="6" fill="#2196F3"/> 
+<circle cx="150" cy="530" r="4" fill="#F44336"/> 
+<circle cx="350" cy="800" r="4" fill="#F44336"/> 
+<rect x="50" y="618.278" width="400" height="78.4239" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="50" cy="618.278" r="3" fill="#00f"/> 
+<circle cx="450" cy="618.278" r="3" fill="#00f"/> 
+<circle cx="50" cy="696.702" r="3" fill="#00f"/> 
+<circle cx="450" cy="696.702" r="3" fill="#00f"/> 
+<text x="10" y="492" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. Asymmetric — P1 up / P2 down</text> 
+<line x1="50" y1="850" x2="150" y2="845" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="850" x2="350" y2="855" stroke="#aaa" stroke-width="4" />
+<path d="M50 850 C 150 845 350 855 450 850" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="50" cy="850" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="850" r="6" fill="#2196F3"/> 
+<circle cx="150" cy="845" r="4" fill="#F44336"/> 
+<circle cx="350" cy="855" r="4" fill="#F44336"/> 
+<rect x="50" y="848.557" width="400" height="2.88675" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="50" cy="848.557" r="3" fill="#00f"/> 
+<circle cx="450" cy="848.557" r="3" fill="#00f"/> 
+<circle cx="50" cy="851.443" r="3" fill="#00f"/> 
+<circle cx="450" cy="851.443" r="3" fill="#00f"/> 
+<text x="10" y="692" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">5. Near-straight — box hugs endpoints</text> 
+</svg>
