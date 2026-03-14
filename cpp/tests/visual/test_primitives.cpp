@@ -1,8 +1,9 @@
+#include <iomanip>
 #include "../../vector-engine/math/Primitives.h"
 #include "../../vector-engine/math/vec2.h"
 #include "../../vector-engine/debug/SvgWriter.h"
-#include <iomanip>
 #include "../../vector-engine/path/PathPoint.h"
+#include "../../vector-engine/path/Segment.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -344,6 +345,114 @@ void testPathPoint()
     svg.save("visual/output/pathpoint.svg");
 }
 
+void testSegment()
+{
+    SvgWriter svg({0, 0, 600, 700});
+    svg.grid(50, "#eee");
+
+    // ─── Helper ───────────────────────────────────────────────────
+    auto drawSegment = [&](PathPoint &a, PathPoint &b,
+                           const std::string &label, Vec2 offset)
+    {
+        PathPoint ao = a, bo = b;
+        ao.position = a.position + offset;
+        bo.position = b.position + offset;
+
+        Segment seg(&ao, &bo);
+
+        // Curve or line
+        if (seg.isLine())
+            svg.line(ao.position, bo.position, "#000", 2);
+        else
+            svg.cubicBezier(ao.position,
+                            ao.absoluteHandleOut(),
+                            bo.absoluteHandleIn(),
+                            bo.position, "#000", 2);
+
+        // Handle lines
+        if (ao.hasHandleOut())
+        {
+            svg.line(ao.position, ao.absoluteHandleOut(), "#aaa", 1);
+            svg.point(ao.absoluteHandleOut(), "#F44336", 4);
+        }
+        if (bo.hasHandleIn())
+        {
+            svg.line(bo.position, bo.absoluteHandleIn(), "#aaa", 1);
+            svg.point(bo.absoluteHandleIn(), "#F44336", 4);
+        }
+
+        // Anchors
+        svg.point(ao.position, "#2196F3", 6);
+        svg.point(bo.position, "#2196F3", 6);
+
+        // Sample pointAt + tangentAt + normalAt at t=0.25, 0.5, 0.75
+        for (double t : {0.25, 0.5, 0.75})
+        {
+            Vec2 p = seg.pointAt(t);
+            Vec2 tan = seg.tangentAt(t).normalized() * 20;
+            Vec2 nor = seg.normalAt(t).normalized() * 15;
+
+            svg.point(p, "#4CAF50", 3);
+            svg.line(p, p + tan, "#9C27B0", 1); // tangent purple
+            svg.line(p, p + nor, "#00BCD4", 1); // normal cyan
+        }
+
+        // Bounding box
+        Rect box = seg.boundingBox();
+        // box.x += offset.x;
+        // box.y += offset.y;
+        svg.boundingBox(box, "#00f");
+
+        svg.text(ao.position + Vec2{0, -20}, label, "#333", 11);
+    };
+
+    // ─── 1. Line segment (no handles) ────────────────────────────
+    // isLine() should return true, pointAt uses lerp, tangent is constant
+    {
+        PathPoint a, b;
+        a.position = {80, 120};
+        b.position = {300, 80};
+        // no handles set
+        drawSegment(a, b, "1. Line — isLine()=true, constant tangent", {0, 0});
+    }
+
+    // ─── 2. Curve segment (both handles) ─────────────────────────
+    // isLine() false, toCubicBezier() used, bbox wraps the bulge
+    {
+        PathPoint a, b;
+        a.position = {80, 120};
+        a.setHandleOut({80, -80});
+        b.position = {400, 120};
+        b.setHandleIn({-80, -80});
+        drawSegment(a, b, "2. Curve — symmetric arch, bbox above endpoints", {0, 160});
+    }
+
+    // ─── 3. Only handleOut on start ───────────────────────────────
+    // One-sided curve — asymmetric shape
+    {
+        PathPoint a, b;
+        a.position = {80, 120};
+        a.setHandleOut({120, -90});
+        b.position = {400, 120};
+        // no handleIn on b
+        drawSegment(a, b, "3. Partial handle — only handleOut on start", {0, 330});
+    }
+
+    // ─── 4. S-curve ───────────────────────────────────────────────
+    // handleOut and handleIn pull in opposite vertical directions
+    // bbox must expand both above and below
+    {
+        PathPoint a, b;
+        a.position = {80, 120};
+        a.setHandleOut({100, -90});
+        b.position = {400, 120};
+        b.setHandleIn({-100, 90}); // opposite direction → S
+        drawSegment(a, b, "4. S-curve — bbox expands up AND down", {0, 490});
+    }
+
+    svg.save("visual/output/segment_tests.svg");
+    std::cout << "Saved output/segment_tests.svg" << std::endl;
+}
 int main()
 {
     testPrimitives();
@@ -351,5 +460,6 @@ int main()
     testBoundingBox();
     testSubdivision();
     testPathPoint();
+    testSegment();
     return 0;
 }
