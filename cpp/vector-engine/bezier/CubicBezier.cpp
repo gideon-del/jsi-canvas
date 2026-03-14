@@ -177,3 +177,76 @@ Rect CubicBezier::controlPointBounds() const
     double maxY = std::max({p0.y, p1.y, p2.y, p3.y});
     return {minX, minY, maxX - minX, maxY - minY};
 }
+std::pair<CubicBezier, CubicBezier> CubicBezier::splitAt(double t) const
+{
+    Vec2 q0 = p0.lerp(p1, t);
+    Vec2 q1 = p1.lerp(p2, t);
+    Vec2 q2 = p2.lerp(p3, t);
+
+    Vec2 r0 = q0.lerp(q1, t);
+    Vec2 r1 = q1.lerp(q2, t);
+
+    Vec2 s = r0.lerp(r1, t);
+
+    return {CubicBezier(p0, q0, r0, s), CubicBezier(s, r1, q2, p3)};
+}
+
+double CubicBezier::flatness() const
+{
+    Vec2 baseline = p3 - p0;
+    double len = baseline.length();
+    if (len < 1e-10)
+    {
+        // Degenerate — measure distance from P1/P2 to P0
+        return std::max(p1.distanceTo(p0), p2.distanceTo(p0));
+    }
+
+    Vec2 dir = baseline / len;
+    Vec2 toP1 = p1 - p0;
+    Vec2 toP2 = p2 - p0;
+
+    double d1 = std::abs(toP1.cross(dir));
+    double d2 = std::abs(toP2.cross(dir));
+
+    return std::max(d1, d2);
+}
+
+std::vector<Vec2> CubicBezier::flatten(double tolerance) const
+{
+    std::vector<Vec2> result;
+    result.push_back(p0);
+    flattenRecursive(result, tolerance);
+
+    return result;
+}
+void CubicBezier::flattenRecursive(std::vector<Vec2> &results, double tolerance) const
+{
+    if (flatness() <= tolerance)
+    {
+        results.push_back(p3);
+    }
+    else
+    {
+        auto [left, right] = splitAt(0.5);
+
+        left.flattenRecursive(results, tolerance);
+        right.flattenRecursive(results, tolerance);
+    };
+}
+
+std::vector<CubicBezier> CubicBezier::subdivide(int n) const
+{
+    std::vector<CubicBezier> result;
+    CubicBezier current = *this;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        double t = 1.0 / (n - i);
+        auto [left, right] = current.splitAt(t);
+        result.push_back(left);
+        current = right;
+    }
+    result.push_back(current);
+
+    return result;
+}

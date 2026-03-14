@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1000">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="0" x2="600" y2="0" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="50" x2="600" y2="50" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="100" x2="600" y2="100" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="150" x2="600" y2="150" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="200" x2="600" y2="200" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="250" x2="600" y2="250" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="300" x2="600" y2="300" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="350" x2="600" y2="350" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="400" x2="600" y2="400" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="450" x2="600" y2="450" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="500" x2="600" y2="500" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="550" x2="600" y2="550" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="600" x2="600" y2="600" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="650" x2="600" y2="650" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="700" x2="600" y2="700" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="750" x2="600" y2="750" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="800" x2="600" y2="800" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="850" x2="600" y2="850" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="900" x2="600" y2="900" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="950" x2="600" y2="950" stroke="#f5f5f5" stroke-width="0.5" />
+<line x1="0" y1="1000" x2="600" y2="1000" stroke="#f5f5f5" stroke-width="0.5" />
+<text x="10" y="20" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">1. splitAt(0.5) — two halves</text> 
+<path d="M50 150 C 100 90 175 127.5 250 161.25" stroke="#E91E63" stroke-width="2" fill="none"/>
+<path d="M250 161.25 C 325 195 400 225 450 150" stroke="#2196F3" stroke-width="2" fill="none"/>
+<circle cx="250" cy="161.25" r="6" fill="#4CAF50"/> 
+<line x1="50" y1="150" x2="150" y2="30" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="150" x2="350" y2="300" stroke="#aaa" stroke-width="4" />
+<path d="M50 150 C 150 30 350 300 450 150" stroke="#ccc" stroke-width="2" fill="none"/>
+<circle cx="50" cy="150" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="150" r="6" fill="#2196F3"/> 
+<circle cx="150" cy="30" r="4" fill="#F44336"/> 
+<circle cx="350" cy="300" r="4" fill="#F44336"/> 
+<text x="10" y="220" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">2. flatten — tolerance 20 (red) vs 2 (green)</text> 
+<line x1="50" y1="370" x2="91.7969" y2="341.699" stroke="#F44336" stroke-width="1.5" />
+<line x1="91.7969" y1="341.699" x2="140.625" y2="340.469" stroke="#F44336" stroke-width="1.5" />
+<line x1="140.625" y1="340.469" x2="250" y2="381.25" stroke="#F44336" stroke-width="1.5" />
+<line x1="250" y1="381.25" x2="359.375" y2="416.406" stroke="#F44336" stroke-width="1.5" />
+<line x1="359.375" y1="416.406" x2="408.203" y2="408.145" stroke="#F44336" stroke-width="1.5" />
+<line x1="408.203" y1="408.145" x2="450" y2="370" stroke="#F44336" stroke-width="1.5" />
+<circle cx="50" cy="370" r="4" fill="#F44336"/> 
+<circle cx="91.7969" cy="341.699" r="4" fill="#F44336"/> 
+<circle cx="140.625" cy="340.469" r="4" fill="#F44336"/> 
+<circle cx="250" cy="381.25" r="4" fill="#F44336"/> 
+<circle cx="359.375" cy="416.406" r="4" fill="#F44336"/> 
+<circle cx="408.203" cy="408.145" r="4" fill="#F44336"/> 
+<circle cx="450" cy="370" r="4" fill="#F44336"/> 
+<line x1="50" y1="370" x2="69.873" y2="351.873" stroke="#4CAF50" stroke-width="1" />
+<line x1="69.873" y1="351.873" x2="91.7969" y2="341.699" stroke="#4CAF50" stroke-width="1" />
+<line x1="91.7969" y1="341.699" x2="115.479" y2="338.293" stroke="#4CAF50" stroke-width="1" />
+<line x1="115.479" y1="338.293" x2="140.625" y2="340.469" stroke="#4CAF50" stroke-width="1" />
+<line x1="140.625" y1="340.469" x2="166.943" y2="347.039" stroke="#4CAF50" stroke-width="1" />
+<line x1="166.943" y1="347.039" x2="194.141" y2="356.816" stroke="#4CAF50" stroke-width="1" />
+<line x1="194.141" y1="356.816" x2="250" y2="381.25" stroke="#4CAF50" stroke-width="1" />
+<line x1="250" y1="381.25" x2="305.859" y2="404.277" stroke="#4CAF50" stroke-width="1" />
+<line x1="305.859" y1="404.277" x2="333.057" y2="412.297" stroke="#4CAF50" stroke-width="1" />
+<line x1="333.057" y1="412.297" x2="359.375" y2="416.406" stroke="#4CAF50" stroke-width="1" />
+<line x1="359.375" y1="416.406" x2="384.521" y2="415.417" stroke="#4CAF50" stroke-width="1" />
+<line x1="384.521" y1="415.417" x2="408.203" y2="408.145" stroke="#4CAF50" stroke-width="1" />
+<line x1="408.203" y1="408.145" x2="430.127" y2="393.401" stroke="#4CAF50" stroke-width="1" />
+<line x1="430.127" y1="393.401" x2="450" y2="370" stroke="#4CAF50" stroke-width="1" />
+<circle cx="50" cy="370" r="3" fill="#4CAF50"/> 
+<circle cx="69.873" cy="351.873" r="3" fill="#4CAF50"/> 
+<circle cx="91.7969" cy="341.699" r="3" fill="#4CAF50"/> 
+<circle cx="115.479" cy="338.293" r="3" fill="#4CAF50"/> 
+<circle cx="140.625" cy="340.469" r="3" fill="#4CAF50"/> 
+<circle cx="166.943" cy="347.039" r="3" fill="#4CAF50"/> 
+<circle cx="194.141" cy="356.816" r="3" fill="#4CAF50"/> 
+<circle cx="250" cy="381.25" r="3" fill="#4CAF50"/> 
+<circle cx="305.859" cy="404.277" r="3" fill="#4CAF50"/> 
+<circle cx="333.057" cy="412.297" r="3" fill="#4CAF50"/> 
+<circle cx="359.375" cy="416.406" r="3" fill="#4CAF50"/> 
+<circle cx="384.521" cy="415.417" r="3" fill="#4CAF50"/> 
+<circle cx="408.203" cy="408.145" r="3" fill="#4CAF50"/> 
+<circle cx="430.127" cy="393.401" r="3" fill="#4CAF50"/> 
+<circle cx="450" cy="370" r="3" fill="#4CAF50"/> 
+<text x="10" y="390" fill="#F44336" font-size="10" font-family="Arial,sans-serif" text-anchor="start">coarse segments: 6</text> 
+<text x="10" y="403" fill="#4CAF50" font-size="10" font-family="Arial,sans-serif" text-anchor="start">fine segments:   14</text> 
+<text x="10" y="470" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">3. subdivide(4) — 4 equal pieces</text> 
+<path d="M50 620 C 75 590 106.25 584.375 140.625 590.469" stroke="#E91E63" stroke-width="2" fill="none"/>
+<line x1="50" y1="620" x2="75" y2="590" stroke="#aaa" stroke-width="4" />
+<line x1="140.625" y1="590.469" x2="106.25" y2="584.375" stroke="#aaa" stroke-width="4" />
+<path d="M50 620 C 75 590 106.25 584.375 140.625 590.469" stroke="#E91E63" stroke-width="2" fill="none"/>
+<circle cx="50" cy="620" r="6" fill="#2196F3"/> 
+<circle cx="140.625" cy="590.469" r="6" fill="#2196F3"/> 
+<circle cx="75" cy="590" r="4" fill="#F44336"/> 
+<circle cx="106.25" cy="584.375" r="4" fill="#F44336"/> 
+<circle cx="50" cy="620" r="5" fill="#E91E63"/> 
+<path d="M140.625 590.469 C 175 596.562 212.5 614.375 250 631.25" stroke="#FF9800" stroke-width="2" fill="none"/>
+<line x1="140.625" y1="590.469" x2="175" y2="596.562" stroke="#aaa" stroke-width="4" />
+<line x1="250" y1="631.25" x2="212.5" y2="614.375" stroke="#aaa" stroke-width="4" />
+<path d="M140.625 590.469 C 175 596.562 212.5 614.375 250 631.25" stroke="#FF9800" stroke-width="2" fill="none"/>
+<circle cx="140.625" cy="590.469" r="6" fill="#2196F3"/> 
+<circle cx="250" cy="631.25" r="6" fill="#2196F3"/> 
+<circle cx="175" cy="596.562" r="4" fill="#F44336"/> 
+<circle cx="212.5" cy="614.375" r="4" fill="#F44336"/> 
+<circle cx="140.625" cy="590.469" r="5" fill="#FF9800"/> 
+<path d="M250 631.25 C 287.5 648.125 325 664.062 359.375 666.406" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<line x1="250" y1="631.25" x2="287.5" y2="648.125" stroke="#aaa" stroke-width="4" />
+<line x1="359.375" y1="666.406" x2="325" y2="664.062" stroke="#aaa" stroke-width="4" />
+<path d="M250 631.25 C 287.5 648.125 325 664.062 359.375 666.406" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<circle cx="250" cy="631.25" r="6" fill="#2196F3"/> 
+<circle cx="359.375" cy="666.406" r="6" fill="#2196F3"/> 
+<circle cx="287.5" cy="648.125" r="4" fill="#F44336"/> 
+<circle cx="325" cy="664.062" r="4" fill="#F44336"/> 
+<circle cx="250" cy="631.25" r="5" fill="#4CAF50"/> 
+<path d="M359.375 666.406 C 393.75 668.75 425 657.5 450 620" stroke="#2196F3" stroke-width="2" fill="none"/>
+<line x1="359.375" y1="666.406" x2="393.75" y2="668.75" stroke="#aaa" stroke-width="4" />
+<line x1="450" y1="620" x2="425" y2="657.5" stroke="#aaa" stroke-width="4" />
+<path d="M359.375 666.406 C 393.75 668.75 425 657.5 450 620" stroke="#2196F3" stroke-width="2" fill="none"/>
+<circle cx="359.375" cy="666.406" r="6" fill="#2196F3"/> 
+<circle cx="450" cy="620" r="6" fill="#2196F3"/> 
+<circle cx="393.75" cy="668.75" r="4" fill="#F44336"/> 
+<circle cx="425" cy="657.5" r="4" fill="#F44336"/> 
+<circle cx="359.375" cy="666.406" r="5" fill="#2196F3"/> 
+<circle cx="450" cy="620" r="5" fill="#2196F3"/> 
+<text x="10" y="700" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">4. flatness per subdivided piece</text> 
+<path d="M50 850 C 62.5 835 76.5625 826.094 91.7969 821.699" stroke="rgb(10,245,50)" stroke-width="3" fill="none"/>
+<text x="69.873" y="823.873" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">5.4</text> 
+<path d="M91.7969 821.699 C 107.031 817.305 123.438 817.422 140.625 820.469" stroke="rgb(8,247,50)" stroke-width="3" fill="none"/>
+<text x="115.479" y="810.293" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">4.0</text> 
+<path d="M140.625 820.469 C 157.812 823.516 175.781 829.492 194.141 836.816" stroke="rgb(4,251,50)" stroke-width="3" fill="none"/>
+<text x="166.943" y="819.039" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">2.1</text> 
+<path d="M194.141 836.816 C 212.5 844.141 231.25 852.812 250 861.25" stroke="rgb(1,254,50)" stroke-width="3" fill="none"/>
+<text x="221.924" y="840.616" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">0.6</text> 
+<path d="M250 861.25 C 268.75 869.688 287.5 877.891 305.859 884.277" stroke="rgb(2,253,50)" stroke-width="3" fill="none"/>
+<text x="278.076" y="865.533" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">1.1</text> 
+<path d="M305.859 884.277 C 324.219 890.664 342.188 895.234 359.375 896.406" stroke="rgb(5,250,50)" stroke-width="3" fill="none"/>
+<text x="333.057" y="884.297" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">2.7</text> 
+<path d="M359.375 896.406 C 376.562 897.578 392.969 895.352 408.203 888.145" stroke="rgb(9,246,50)" stroke-width="3" fill="none"/>
+<text x="384.521" y="887.417" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">4.6</text> 
+<path d="M408.203 888.145 C 423.438 880.938 437.5 868.75 450 850" stroke="rgb(10,245,50)" stroke-width="3" fill="none"/>
+<text x="430.127" y="865.401" fill="#333" font-size="9" font-family="Arial,sans-serif" text-anchor="start">5.4</text> 
+</svg>

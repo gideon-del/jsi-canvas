@@ -1,6 +1,7 @@
 #include "../../vector-engine/math/Primitives.h"
 #include "../../vector-engine/math/vec2.h"
 #include "../../vector-engine/debug/SvgWriter.h"
+#include <iomanip>
 void testPrimitives()
 {
     SvgWriter svg({0, 0, 600, 500});
@@ -188,11 +189,107 @@ void testBoundingBox()
     svg.save("visual/output/bbox_tests.svg");
     std::cout << "Saved output/bbox_tests.svg" << std::endl;
 }
+
+void testSubdivision()
+{
+    SvgWriter svg({0, 0, 600, 1000});
+    svg.grid(50, "#f5f5f5");
+
+    Vec2 p0{50, 150}, p1{150, 30}, p2{350, 300}, p3{450, 150};
+
+    // 1. splitAt — show the two halves in different colors
+    svg.text({10, 20}, "1. splitAt(0.5) — two halves", "black", 12);
+    {
+        auto bez = CubicBezier(p0, p1, p2, p3);
+        auto [left, right] = bez.splitAt(0.5);
+
+        svg.cubicBezier(left.p0, left.p1, left.p2, left.p3, "#E91E63", 2);
+        svg.cubicBezier(right.p0, right.p1, right.p2, right.p3, "#2196F3", 2);
+
+        // Show the split point
+        svg.point(left.p3, "#4CAF50", 6);        // = right.p0, the midpoint
+        svg.bezierDebug(p0, p1, p2, p3, "#ccc"); // original underneath
+    }
+
+    // 2. flatten — different tolerances, count the segments
+    Vec2 o{0, 220};
+    svg.text({10, 220}, "2. flatten — tolerance 20 (red) vs 2 (green)", "black", 12);
+    {
+        auto bez = CubicBezier(p0 + o, p1 + o, p2 + o, p3 + o);
+
+        auto coarse = bez.flatten(20);
+        auto fine = bez.flatten(2);
+
+        // Draw polylines
+        for (size_t i = 1; i < coarse.size(); i++)
+            svg.line(coarse[i - 1], coarse[i], "#F44336", 1.5);
+        for (auto &pt : coarse)
+            svg.point(pt, "#F44336", 4);
+
+        for (size_t i = 1; i < fine.size(); i++)
+            svg.line(fine[i - 1], fine[i], "#4CAF50", 1);
+        for (auto &pt : fine)
+            svg.point(pt, "#4CAF50", 3);
+
+        // Segment counts as labels
+        svg.text({10, 390}, "coarse segments: " + std::to_string(coarse.size() - 1), "#F44336", 10);
+        svg.text({10, 403}, "fine segments:   " + std::to_string(fine.size() - 1), "#4CAF50", 10);
+    }
+
+    // 3. subdivide(n) — uniform split into equal t-intervals
+    o = {0, 470};
+    svg.text({10, 470}, "3. subdivide(4) — 4 equal pieces", "black", 12);
+    {
+        std::vector<std::string> colors = {"#E91E63", "#FF9800", "#4CAF50", "#2196F3"};
+        auto bez = CubicBezier(p0 + o, p1 + o, p2 + o, p3 + o);
+        auto pieces = bez.subdivide(4);
+
+        for (size_t i = 0; i < pieces.size(); i++)
+        {
+            auto &b = pieces[i];
+            auto color = colors[i % colors.size()];
+            svg.cubicBezier(b.p0, b.p1, b.p2, b.p3, color, 2);
+            svg.bezierDebug(b.p0, b.p1, b.p2, b.p3, color);
+            svg.point(b.p0, colors[i % colors.size()], 5); // junction points
+        }
+        svg.point(pieces.back().p3, colors[3], 5);
+    }
+
+    // 4. flatness — visualize which regions are flat vs curved
+    o = {0, 700};
+    svg.text({10, 700}, "4. flatness per subdivided piece", "black", 12);
+    {
+        auto bez = CubicBezier(p0 + o, p1 + o, p2 + o, p3 + o);
+        auto pieces = bez.subdivide(8);
+
+        for (auto &b : pieces)
+        {
+            double f = b.flatness();
+            // Red = very curved, green = very flat
+            int r = std::min(255, static_cast<int>(f * 2));
+            int g = 255 - r;
+            char color[32];
+            std::snprintf(color, sizeof(color), "rgb(%d,%d,50)", r, g);
+
+            svg.cubicBezier(b.p0, b.p1, b.p2, b.p3, color, 3);
+
+            // Label each piece with its flatness value
+            Vec2 mid = b.evaluate(0.5);
+            std::ostringstream ss;
+            ss << std::fixed << std::setprecision(1) << f;
+            svg.text(mid + Vec2{0, -8}, ss.str(), "#333", 9);
+        }
+    }
+
+    svg.save("visual/output/subdivision_tests.svg");
+    std::cout << "Saved output/subdivision_tests.svg" << std::endl;
+}
 int main()
 {
     testPrimitives();
     testCubicBezier();
     testBoundingBox();
+    testSubdivision();
 
     return 0;
 }

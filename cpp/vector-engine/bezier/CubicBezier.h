@@ -3,9 +3,9 @@
 #include "../math/Primitives.h"
 class CubicBezier
 {
-    Vec2 p0, p1, p2, p3;
 
 public:
+    Vec2 p0, p1, p2, p3;
     CubicBezier(Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3) : p0(p0), p1(p1), p2(p2), p3(p3) {};
     // Bernstein Form
     Vec2 evaluate(double t) const;
@@ -33,4 +33,15 @@ public:
 
     Rect boundingBox() const;
     Rect controlPointBounds() const;
+
+    // subDivision
+
+    std::pair<CubicBezier, CubicBezier> splitAt(double t) const;
+    double flatness() const;
+    // Adaptive flattening — convert to polyline
+    std::vector<Vec2> flatten(double tolerance = 0.5) const;
+    std::vector<CubicBezier> subdivide(int n) const;
+
+private:
+    void flattenRecursive(std::vector<Vec2> &result, double tolerance) const;
 };
