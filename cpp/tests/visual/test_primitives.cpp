@@ -2,6 +2,32 @@
 #include "../../vector-engine/math/vec2.h"
 #include "../../vector-engine/debug/SvgWriter.h"
 #include <iomanip>
+#include "../../vector-engine/path/PathPoint.h"
+
+void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
+{
+    Vec2 pos = p.position;
+    Vec2 in = p.absoluteHandleIn();
+    Vec2 out = p.absoluteHandleOut();
+
+    // anchor
+    svg.point(pos, "#2196F3", 6);
+
+    // handles
+    if (p.hasHandleIn())
+    {
+        svg.line(pos, in, "#aaa", 1);
+        svg.point(in, "#F44336", 4);
+    }
+
+    if (p.hasHandleOut())
+    {
+        svg.line(pos, out, "#aaa", 1);
+        svg.point(out, "#F44336", 4);
+    }
+
+    svg.text(pos + Vec2{8, -8}, label, "black", 12);
+}
 void testPrimitives()
 {
     SvgWriter svg({0, 0, 600, 500});
@@ -284,12 +310,46 @@ void testSubdivision()
     svg.save("visual/output/subdivision_tests.svg");
     std::cout << "Saved output/subdivision_tests.svg" << std::endl;
 }
+void testPathPoint()
+{
+    SvgWriter svg({0, 0, 600, 400});
+    svg.grid(50, "#eee");
+
+    // Corner
+    PathPoint corner;
+    corner.position = {100, 200};
+    corner.setType(PointType::Corner);
+    corner.setHandleOut({80, -80});
+    corner.setHandleIn({-40, -40});
+
+    drawPathPoint(svg, corner, "Corner");
+
+    // Smooth
+    PathPoint smooth;
+    smooth.position = {300, 200};
+    smooth.setType(PointType::Smooth);
+    smooth.setHandleOut({80, -80});
+    smooth.setHandleIn({-20, 80});
+
+    drawPathPoint(svg, smooth, "Smooth");
+
+    // Symmetric
+    PathPoint symmetric;
+    symmetric.position = {500, 200};
+    symmetric.setType(PointType::Symmetric);
+    symmetric.setHandleOut({100, -80});
+
+    drawPathPoint(svg, symmetric, "Symmetric");
+
+    svg.save("visual/output/pathpoint.svg");
+}
+
 int main()
 {
     testPrimitives();
     testCubicBezier();
     testBoundingBox();
     testSubdivision();
-
+    testPathPoint();
     return 0;
 }
