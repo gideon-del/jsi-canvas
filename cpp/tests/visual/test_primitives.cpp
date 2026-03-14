@@ -4,6 +4,7 @@
 #include "../../vector-engine/debug/SvgWriter.h"
 #include "../../vector-engine/path/PathPoint.h"
 #include "../../vector-engine/path/Segment.h"
+#include "../../vector-engine/path/Path.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -453,6 +454,212 @@ void testSegment()
     svg.save("visual/output/segment_tests.svg");
     std::cout << "Saved output/segment_tests.svg" << std::endl;
 }
+void testPath()
+{
+    SvgWriter svg({0, 0, 700, 800});
+    svg.grid(50, "#eee");
+
+    auto drawPath = [&](const Path &path, Vec2 offset, std::string color)
+    {
+        // Draw each segment
+        for (size_t i = 0; i < path.segmentCount(); i++)
+        {
+            Segment seg = path.getSegment(i);
+            CubicBezier bez = seg.toCubicBezier();
+
+            if (seg.isLine())
+                svg.line(seg.start().position + offset,
+                         seg.end().position + offset, color, 2);
+            else
+                svg.cubicBezier(
+                    bez.p0 + offset, bez.p1 + offset,
+                    bez.p2 + offset, bez.p3 + offset, color, 2);
+        }
+
+        // Draw points
+        for (size_t i = 0; i < path.pointCount(); i++)
+        {
+            const PathPoint &pt = path.pointAt(i);
+            Vec2 pos = pt.position + offset;
+            svg.point(pos, "#2196F3", 5);
+
+            if (pt.hasHandleOut())
+            {
+                Vec2 hout = pt.absoluteHandleOut() + offset;
+                svg.line(pos, hout, "#aaa", 1);
+                svg.point(hout, "#F44336", 3);
+            }
+            if (pt.hasHandleIn())
+            {
+                Vec2 hin = pt.absoluteHandleIn() + offset;
+                svg.line(pos, hin, "#aaa", 1);
+                svg.point(hin, "#E91E63", 3);
+            }
+
+            // index label
+            std::ostringstream ss;
+            ss << i;
+            svg.text(pos + Vec2{6, -8}, ss.str(), "#555", 10);
+        }
+
+        // Bounding box
+        if (path.pointCount() > 0)
+        {
+            Rect box = path.bounds();
+            box.x += offset.x;
+            box.y += offset.y;
+            svg.boundingBox(box, "#00f");
+        }
+    };
+
+    // ─── 1. Open path — 4 points, 3 segments ─────────────────────
+    // segmentCount should be 3
+    svg.text({20, 22}, "1. Open path — 4 pts, 3 segs, bbox hugs curve", "#333", 11);
+    {
+        Path path;
+        PathPoint a;
+        a.position = {60, 100};
+        a.setHandleOut({60, -60});
+        PathPoint b;
+        b.position = {200, 80};
+        b.setHandleIn({-40, 40});
+        b.setHandleOut({40, -40});
+        PathPoint c;
+        c.position = {360, 120};
+        c.setHandleIn({-60, 0});
+        c.setHandleOut({60, 0});
+        PathPoint d;
+        d.position = {500, 80};
+        d.setHandleIn({-60, 60});
+
+        path.addPoint(a);
+        path.addPoint(b);
+        path.addPoint(c);
+        path.addPoint(d);
+
+        std::cout << "1. segmentCount (expect 3): " << path.segmentCount() << "\n";
+        std::cout << "1. isClosed    (expect 0): " << path.isClosed() << "\n";
+
+        drawPath(path, {0, 0}, "#000");
+    }
+
+    // ─── 2. Closed path — same 4 points, now 4 segments ──────────
+    // closing adds segment from last → first
+    svg.text({20, 222}, "2. Closed path — 4 pts, 4 segs (last→first added)", "#333", 11);
+    {
+        Path path;
+        PathPoint a;
+        a.position = {60, 300};
+        a.setHandleOut({40, -60});
+        PathPoint b;
+        b.position = {200, 260};
+        b.setHandleIn({-40, 40});
+        b.setHandleOut({40, -40});
+        PathPoint c;
+        c.position = {360, 320};
+        c.setHandleIn({-60, 0});
+        c.setHandleOut({60, 0});
+        PathPoint d;
+        d.position = {500, 280};
+        d.setHandleIn({-60, 60});
+        d.setHandleOut({-40, 60});
+
+        path.addPoint(a);
+        path.addPoint(b);
+        path.addPoint(c);
+        path.addPoint(d);
+        path.close();
+
+        std::cout << "2. segmentCount (expect 4): " << path.segmentCount() << "\n";
+        std::cout << "2. isClosed    (expect 1): " << path.isClosed() << "\n";
+
+        drawPath(path, {0, 0}, "#000");
+    }
+
+    // ─── 3. insertPoint — insert a point at index 1 ───────────────
+    // should appear between P0 and old P1
+    svg.text({20, 422}, "3. insertPoint at index 1 — green dot is inserted point", "#333", 11);
+    {
+        Path path;
+        PathPoint a;
+        a.position = {60, 520};
+        PathPoint b;
+        b.position = {500, 520};
+        path.addPoint(a);
+        path.addPoint(b);
+
+        PathPoint mid;
+        mid.position = {280, 420};
+        mid.setHandleOut({60, 0});
+        mid.setHandleIn({-60, 0});
+        path.insertPoint(1, mid);
+
+        std::cout << "3. pointCount after insert (expect 3): " << path.pointCount() << "\n";
+        std::cout << "3. segmentCount            (expect 2): " << path.segmentCount() << "\n";
+
+        drawPath(path, {0, 0}, "#000");
+        // highlight the inserted point
+        svg.point(path.pointAt(1).position, "#4CAF50", 8);
+    }
+
+    // ─── 4. removePoint — remove middle point ────────────────────
+    // path should go back to direct line P0→P2
+    svg.text({20, 602}, "4. removePoint index 1 — middle point removed", "#333", 11);
+    {
+        Path path;
+        PathPoint a;
+        a.position = {60, 700};
+        PathPoint b;
+        b.position = {280, 630};
+        b.setHandleIn({-50, 0});
+        b.setHandleOut({50, 0});
+        PathPoint c;
+        c.position = {500, 700};
+        path.addPoint(a);
+        path.addPoint(b);
+        path.addPoint(c);
+
+        std::cout << "4. before remove — segmentCount (expect 2): " << path.segmentCount() << "\n";
+        path.removePoint(1);
+        std::cout << "4. after  remove — segmentCount (expect 1): " << path.segmentCount() << "\n";
+
+        drawPath(path, {0, 0}, "#000");
+    }
+
+    // ─── 5. reverse — check point order and handle swap ──────────
+    svg.text({380, 422}, "5. reverse — handles swap, direction flips", "#333", 11);
+    {
+        Path path;
+        PathPoint a;
+        a.position = {420, 520};
+        a.setHandleOut({60, -80});
+        PathPoint b;
+        b.position = {560, 480};
+        b.setHandleIn({-40, 40});
+        b.setHandleOut({40, 20});
+        PathPoint c;
+        c.position = {650, 520};
+        c.setHandleIn({-60, 60});
+        path.addPoint(a);
+        path.addPoint(b);
+        path.addPoint(c);
+
+        // Draw original faint
+        drawPath(path, {0, 0}, "#ccc");
+
+        path.reverse();
+        // Draw reversed bold — direction should be right to left
+        drawPath(path, {0, 0}, "#E91E63");
+
+        std::cout << "5. after reverse — P0 pos (expect 650,520): "
+                  << path.pointAt(0).position.x << ","
+                  << path.pointAt(0).position.y << "\n";
+    }
+
+    svg.save("visual/output/path_tests.svg");
+    std::cout << "Saved output/path_tests.svg" << std::endl;
+}
+
 int main()
 {
     testPrimitives();
@@ -461,5 +668,6 @@ int main()
     testSubdivision();
     testPathPoint();
     testSegment();
+    testPath();
     return 0;
 }
