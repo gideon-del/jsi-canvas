@@ -1,7 +1,7 @@
 #include "Segment.h"
 
-const PathPoint &Segment::start() { return *start_; }
-const PathPoint &Segment::end() { return *end_; }
+const PathPoint &Segment::start() const { return *start_; }
+const PathPoint &Segment::end() const { return *end_; }
 
 bool Segment::isLine() const
 {

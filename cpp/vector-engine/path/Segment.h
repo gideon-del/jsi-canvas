@@ -8,8 +8,8 @@ class Segment
 
 public:
     Segment(const PathPoint *start, const PathPoint *end) : start_(start), end_(end) {}
-    const PathPoint &start();
-    const PathPoint &end();
+    const PathPoint &start() const;
+    const PathPoint &end() const;
     bool isLine() const;
 
     CubicBezier toCubicBezier() const;
