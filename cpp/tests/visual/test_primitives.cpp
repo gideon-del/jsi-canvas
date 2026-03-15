@@ -649,7 +649,7 @@ void testPath()
 
         path.reverse();
         // Draw reversed bold — direction should be right to left
-        drawPath(path, {0, 0}, "#E91E63");
+        drawPath(path, {0, -100}, "#E91E63");
 
         std::cout << "5. after reverse — P0 pos (expect 650,520): "
                   << path.pointAt(0).position.x << ","

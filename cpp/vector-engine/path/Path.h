@@ -29,4 +29,5 @@ public:
     Rect bounds() const;
     double length() const;
     Vec2 pointAtLength(double len) const;
+    std::vector<Vec2> flatten(double tolerance) const;
 };

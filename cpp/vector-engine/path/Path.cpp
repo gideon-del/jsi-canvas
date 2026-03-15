@@ -106,3 +106,18 @@ Vec2 Path::pointAtLength(double len) const
 
     return points_.back().position;
 }
+
+std::vector<Vec2> Path::flatten(double tolerance) const
+{
+    std::vector<Vec2> result;
+    if (segmentCount() == 0 || !isClosed())
+        return result;
+
+    for (size_t i = 0; i < segmentCount(); ++i)
+    {
+        auto segmentPoints = getSegment(i).toCubicBezier().flatten(tolerance);
+        result.insert(result.end(), segmentPoints.begin(), segmentPoints.end());
+    }
+
+    return result;
+}
