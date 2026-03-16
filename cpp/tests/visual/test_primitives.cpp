@@ -5,6 +5,8 @@
 #include "../../vector-engine/path/PathPoint.h"
 #include "../../vector-engine/path/Segment.h"
 #include "../../vector-engine/path/Path.h"
+#include "../../vector-engine/path/CompoundPath.h"
+#include "../../vector-engine/path/SVGPathParser.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -659,7 +661,148 @@ void testPath()
     svg.save("visual/output/path_tests.svg");
     std::cout << "Saved output/path_tests.svg" << std::endl;
 }
+void testSVGPathParser()
+{
+    SvgWriter svg({0, 0, 700, 800});
+    svg.grid(50, "#eee");
 
+    auto drawCompound = [&](const CompoundPath &cp, Vec2 offset,
+                            std::string color, std::string label)
+    {
+        svg.text(offset + Vec2{0, -8}, label, "#333", 11);
+
+        for (size_t pi = 0; pi < cp.subpathCount(); pi++)
+        {
+            const Path &path = cp.subpathAt(pi);
+            for (size_t si = 0; si < path.segmentCount(); si++)
+            {
+                Segment seg = path.getSegment(si);
+                CubicBezier bez = seg.toCubicBezier();
+
+                if (seg.isLine())
+                    svg.line(seg.start().position + offset,
+                             seg.end().position + offset, color, 2);
+                else
+                    svg.cubicBezier(bez.p0 + offset, bez.p1 + offset,
+                                    bez.p2 + offset, bez.p3 + offset, color, 2);
+            }
+
+            // Draw points
+            for (size_t i = 0; i < path.pointCount(); i++)
+            {
+                const PathPoint &pt = path.pointAt(i);
+                svg.point(pt.position + offset, "#2196F3", 4);
+            }
+
+            // Bbox
+            if (path.pointCount() > 0)
+            {
+                Rect box = path.bounds();
+                box.x += offset.x;
+                box.y += offset.y;
+                svg.boundingBox(box, "#00f");
+            }
+        }
+    };
+
+    // ─── 1. M + L — simple open polyline ────────────────────────
+    {
+        std::string d = "M 50 100 L 200 60 L 350 120 L 500 50";
+        auto cp = SVGPathParser::parse(d);
+
+        drawCompound(cp, {0, 0}, "#000",
+                     "1. M+L — open polyline, 4 pts 3 segs");
+
+        std::cout << "1. subpaths (expect 1): " << cp.subpathCount() << "\n";
+        std::cout << "1. points   (expect 4): " << cp.subpathAt(0).pointCount() << "\n";
+        std::cout << "1. segments (expect 3): " << cp.subpathAt(0).segmentCount() << "\n";
+    }
+
+    // ─── 2. M + L + Z — closed triangle ─────────────────────────
+    {
+        std::string d = "M 80 280 L 300 200 L 520 280 Z";
+        auto cp = SVGPathParser::parse(d);
+
+        drawCompound(cp, {0, 0}, "#000",
+                     "2. M+L+Z — closed triangle, 4th seg back to P0");
+
+        std::cout << "2. isClosed (expect 1): " << cp.subpathAt(0).isClosed() << "\n";
+        std::cout << "2. segments (expect 3): " << cp.subpathAt(0).segmentCount() << "\n";
+    }
+
+    // ─── 3. M + C — single cubic bezier ─────────────────────────
+    {
+        std::string d = "M 60 480 C 150 380 350 380 500 480";
+        auto cp = SVGPathParser::parse(d);
+
+        drawCompound(cp, {0, 0}, "#000",
+                     "3. M+C — cubic bezier, arch shape, bbox above endpoints");
+
+        std::cout << "3. segments (expect 1): " << cp.subpathAt(0).segmentCount() << "\n";
+    }
+
+    // ─── 4. Multiple M — two subpaths ────────────────────────────
+    {
+        std::string d = "M 60 640 L 250 580 L 250 700 Z "
+                        "M 350 640 L 540 580 L 540 700 Z";
+        auto cp = SVGPathParser::parse(d);
+
+        drawCompound(cp, {0, 0}, "#000",
+                     "4. Two M commands — two separate closed subpaths");
+
+        std::cout << "4. subpaths (expect 2): " << cp.subpathCount() << "\n";
+    }
+
+    // ─── 5. Relative commands — lowercase m + l ──────────────────
+    {
+        // Relative: each point is offset from current position
+        // m 60 750 → absolute (60, 750)
+        // l 150 -60 → absolute (210, 690)
+        // l 150 60  → absolute (360, 750)
+        std::string d = "m 60 760 l 150 -60 l 150 60";
+        auto cp = SVGPathParser::parse(d);
+
+        drawCompound(cp, {0, 0}, "#E91E63",
+                     "5. Relative m+l — same shape as absolute, pink");
+
+        // Compare with absolute version
+        std::string dAbs = "M 60 760 L 210 700 L 360 760";
+        auto cpAbs = SVGPathParser::parse(dAbs);
+        drawCompound(cpAbs, {0, 0}, "#4CAF5066",
+                     ""); // green overlay should match pink exactly
+
+        std::cout << "5. points match: "
+                  << (cp.subpathAt(0).pointAt(1).position.x ==
+                              cpAbs.subpathAt(0).pointAt(1).position.x
+                          ? "YES"
+                          : "NO")
+                  << "\n";
+    }
+
+    // ─── 6. Roundtrip — parse → export → parse → compare ────────
+    {
+        std::string original = "M 60 200 C 120 100 280 100 340 200 Z";
+        auto cp1 = SVGPathParser::parse(original);
+        std::string exported = SVGPathParser::toSVGString(cp1);
+        auto cp2 = SVGPathParser::parse(exported);
+
+        // Draw original (black) and roundtrip (red dashed overlay)
+        drawCompound(cp1, {300, 0}, "#000",
+                     "6. Roundtrip — black=original, red=re-parsed (should match)");
+        drawCompound(cp2, {300, 0}, "#f4433666", "");
+
+        std::cout << "6. exported: " << exported << "\n";
+        std::cout << "6. P0 roundtrip match: "
+                  << (std::abs(cp1.subpathAt(0).pointAt(0).position.x -
+                               cp2.subpathAt(0).pointAt(0).position.x) < 0.01
+                          ? "YES"
+                          : "NO")
+                  << "\n";
+    }
+
+    svg.save("visual/output/svg_parser_tests.svg");
+    std::cout << "Saved output/svg_parser_tests.svg" << std::endl;
+}
 int main()
 {
     testPrimitives();
@@ -669,5 +812,6 @@ int main()
     testPathPoint();
     testSegment();
     testPath();
+    testSVGPathParser();
     return 0;
 }
