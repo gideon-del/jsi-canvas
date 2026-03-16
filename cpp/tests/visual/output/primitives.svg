@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="0" x2="600" y2="0" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="50" x2="600" y2="50" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="100" x2="600" y2="100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="150" x2="600" y2="150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="200" x2="600" y2="200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="250" x2="600" y2="250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="300" x2="600" y2="300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="350" x2="600" y2="350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="400" x2="600" y2="400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="450" x2="600" y2="450" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="500" x2="600" y2="500" stroke="#eee" stroke-width="0.5" />
+<!-- === Vec2 Operations === -->
+<line x1="50" y1="100" x2="250" y2="50" stroke="#ccc" stroke-width="1" />
+<circle cx="50" cy="100" r="5" fill="#2196F3"/> 
+<text x="58" y="92" fill="#2196F3" font-size="10" font-family="Arial,sans-serif" text-anchor="start">a (50,100)</text> 
+<circle cx="250" cy="50" r="5" fill="#2196F3"/> 
+<text x="258" y="42" fill="#2196F3" font-size="10" font-family="Arial,sans-serif" text-anchor="start">b (250,50)</text> 
+<circle cx="100" cy="87.5" r="5" fill="#4CAF50"/> 
+<text x="105" y="102.5" fill="#4CAF50" font-size="10" font-family="Arial,sans-serif" text-anchor="start">t=0.25</text> 
+<line x1="150" y1="75" x2="159.701" y2="113.806" stroke="#9C27B0" stroke-width="2" />
+<polygon points="159.701,113.806 154.657,106.821 160.866,105.268 " stroke="#9C27B0" stroke-width="2" fill="#9C27B0"/>
+<text x="164.701" y="113.806" fill="#9C27B0" font-size="10" font-family="Arial,sans-serif" text-anchor="start">perpendicular</text> 
+<circle cx="150" cy="75" r="5" fill="#4CAF50"/> 
+<text x="155" y="90" fill="#4CAF50" font-size="10" font-family="Arial,sans-serif" text-anchor="start">t=0.5</text> 
+<line x1="150" y1="75" x2="159.701" y2="113.806" stroke="#9C27B0" stroke-width="2" />
+<polygon points="159.701,113.806 154.657,106.821 160.866,105.268 " stroke="#9C27B0" stroke-width="2" fill="#9C27B0"/>
+<text x="164.701" y="113.806" fill="#9C27B0" font-size="10" font-family="Arial,sans-serif" text-anchor="start">perpendicular</text> 
+<circle cx="200" cy="62.5" r="5" fill="#4CAF50"/> 
+<text x="205" y="77.5" fill="#4CAF50" font-size="10" font-family="Arial,sans-serif" text-anchor="start">t=0.75</text> 
+<line x1="150" y1="75" x2="159.701" y2="113.806" stroke="#9C27B0" stroke-width="2" />
+<polygon points="159.701,113.806 154.657,106.821 160.866,105.268 " stroke="#9C27B0" stroke-width="2" fill="#9C27B0"/>
+<text x="164.701" y="113.806" fill="#9C27B0" font-size="10" font-family="Arial,sans-serif" text-anchor="start">perpendicular</text> 
+<!-- === Line Intersection === -->
+<line x1="50" y1="200" x2="337.348" y2="286.204" stroke="#FF5722" stroke-width="2" />
+<line x1="50" y1="350" x2="328.543" y2="238.583" stroke="#3F51B5" stroke-width="2" />
+<circle cx="264.286" cy="264.286" r="8" fill="#E91E63"/> 
+<text x="274.286" y="259.286" fill="#E91E63" font-size="12" font-family="Arial,sans-serif" text-anchor="start">intersection</text> 
+<!-- === Rect Operations === -->
+<rect x="350" y="150" width="100" height="80" stroke="#2196F3" fill="rgba(33,150,243,0.2)" stroke-width="2" />
+<rect x="400" y="190" width="120" height="100" stroke="#4CAF50" fill="rgba(76,175,80,0.2)" stroke-width="2" />
+<text x="355" y="165" fill="#2196F3" font-size="10" font-family="Arial,sans-serif" text-anchor="start">rect1</text> 
+<text x="405" y="205" fill="#4CAF50" font-size="10" font-family="Arial,sans-serif" text-anchor="start">rect2</text> 
+<rect x="350" y="150" width="170" height="140" stroke="#FF9800" fill="none" stroke-width="1" />
+<text x="350" y="145" fill="#FF9800" font-size="10" font-family="Arial,sans-serif" text-anchor="start">united</text> 
+<rect x="350" y="350" width="200" height="100" stroke="#607D8B" fill="rgba(96,125,139,0.1)" stroke-width="2" />
+<circle cx="400" cy="400" r="6" fill="#4CAF50"/> 
+<circle cx="450" cy="380" r="6" fill="#4CAF50"/> 
+<circle cx="300" cy="400" r="6" fill="#F44336"/> 
+<circle cx="560" cy="400" r="6" fill="#F44336"/> 
+<circle cx="450" cy="340" r="6" fill="#F44336"/> 
+<text x="350" y="345" fill="#607D8B" font-size="10" font-family="Arial,sans-serif" text-anchor="start">contains test (green=inside)</text> 
+</svg>

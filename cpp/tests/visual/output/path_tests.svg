@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 800">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="650" y1="0" x2="650" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="700" y1="0" x2="700" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="0" x2="700" y2="0" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="50" x2="700" y2="50" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="100" x2="700" y2="100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="150" x2="700" y2="150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="200" x2="700" y2="200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="250" x2="700" y2="250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="300" x2="700" y2="300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="350" x2="700" y2="350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="400" x2="700" y2="400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="450" x2="700" y2="450" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="500" x2="700" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="550" x2="700" y2="550" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="600" x2="700" y2="600" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="650" x2="700" y2="650" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="700" x2="700" y2="700" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="750" x2="700" y2="750" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="800" x2="700" y2="800" stroke="#eee" stroke-width="0.5" />
+<text x="20" y="22" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">1. Open path — 4 pts, 3 segs, bbox hugs curve</text> 
+<path d="M60 100 C 120 40 160 120 200 80" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M200 80 C 240 40 300 120 360 120" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M360 120 C 420 120 440 140 500 80" stroke="#000" stroke-width="2" fill="none"/>
+<circle cx="60" cy="100" r="5" fill="#2196F3"/> 
+<line x1="60" y1="100" x2="120" y2="40" stroke="#aaa" stroke-width="1" />
+<circle cx="120" cy="40" r="3" fill="#F44336"/> 
+<text x="66" y="92" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="200" cy="80" r="5" fill="#2196F3"/> 
+<line x1="200" y1="80" x2="240" y2="40" stroke="#aaa" stroke-width="1" />
+<circle cx="240" cy="40" r="3" fill="#F44336"/> 
+<line x1="200" y1="80" x2="160" y2="120" stroke="#aaa" stroke-width="1" />
+<circle cx="160" cy="120" r="3" fill="#E91E63"/> 
+<text x="206" y="72" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<circle cx="360" cy="120" r="5" fill="#2196F3"/> 
+<line x1="360" y1="120" x2="420" y2="120" stroke="#aaa" stroke-width="1" />
+<circle cx="420" cy="120" r="3" fill="#F44336"/> 
+<line x1="360" y1="120" x2="300" y2="120" stroke="#aaa" stroke-width="1" />
+<circle cx="300" cy="120" r="3" fill="#E91E63"/> 
+<text x="366" y="112" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2</text> 
+<circle cx="500" cy="80" r="5" fill="#2196F3"/> 
+<line x1="500" y1="80" x2="440" y2="140" stroke="#aaa" stroke-width="1" />
+<circle cx="440" cy="140" r="3" fill="#E91E63"/> 
+<text x="506" y="72" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">3</text> 
+<rect x="60" y="68.8" width="440" height="54.4" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="60" cy="68.8" r="3" fill="#00f"/> 
+<circle cx="500" cy="68.8" r="3" fill="#00f"/> 
+<circle cx="60" cy="123.2" r="3" fill="#00f"/> 
+<circle cx="500" cy="123.2" r="3" fill="#00f"/> 
+<text x="20" y="222" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">2. Closed path — 4 pts, 4 segs (last→first added)</text> 
+<path d="M60 300 C 100 240 160 300 200 260" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M200 260 C 240 220 300 320 360 320" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M360 320 C 420 320 440 340 500 280" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M500 280 C 460 340 60 300 60 300" stroke="#000" stroke-width="2" fill="none"/>
+<circle cx="60" cy="300" r="5" fill="#2196F3"/> 
+<line x1="60" y1="300" x2="100" y2="240" stroke="#aaa" stroke-width="1" />
+<circle cx="100" cy="240" r="3" fill="#F44336"/> 
+<text x="66" y="292" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="200" cy="260" r="5" fill="#2196F3"/> 
+<line x1="200" y1="260" x2="240" y2="220" stroke="#aaa" stroke-width="1" />
+<circle cx="240" cy="220" r="3" fill="#F44336"/> 
+<line x1="200" y1="260" x2="160" y2="300" stroke="#aaa" stroke-width="1" />
+<circle cx="160" cy="300" r="3" fill="#E91E63"/> 
+<text x="206" y="252" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<circle cx="360" cy="320" r="5" fill="#2196F3"/> 
+<line x1="360" y1="320" x2="420" y2="320" stroke="#aaa" stroke-width="1" />
+<circle cx="420" cy="320" r="3" fill="#F44336"/> 
+<line x1="360" y1="320" x2="300" y2="320" stroke="#aaa" stroke-width="1" />
+<circle cx="300" cy="320" r="3" fill="#E91E63"/> 
+<text x="366" y="312" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2</text> 
+<circle cx="500" cy="280" r="5" fill="#2196F3"/> 
+<line x1="500" y1="280" x2="460" y2="340" stroke="#aaa" stroke-width="1" />
+<circle cx="460" cy="340" r="3" fill="#F44336"/> 
+<line x1="500" y1="280" x2="440" y2="340" stroke="#aaa" stroke-width="1" />
+<circle cx="440" cy="340" r="3" fill="#E91E63"/> 
+<text x="506" y="272" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">3</text> 
+<rect x="60" y="250.556" width="440" height="72.6444" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="60" cy="250.556" r="3" fill="#00f"/> 
+<circle cx="500" cy="250.556" r="3" fill="#00f"/> 
+<circle cx="60" cy="323.2" r="3" fill="#00f"/> 
+<circle cx="500" cy="323.2" r="3" fill="#00f"/> 
+<text x="20" y="422" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. insertPoint at index 1 — green dot is inserted point</text> 
+<path d="M60 520 C 60 520 220 420 280 420" stroke="#000" stroke-width="2" fill="none"/>
+<path d="M280 420 C 340 420 500 520 500 520" stroke="#000" stroke-width="2" fill="none"/>
+<circle cx="60" cy="520" r="5" fill="#2196F3"/> 
+<text x="66" y="512" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="280" cy="420" r="5" fill="#2196F3"/> 
+<line x1="280" y1="420" x2="340" y2="420" stroke="#aaa" stroke-width="1" />
+<circle cx="340" cy="420" r="3" fill="#F44336"/> 
+<line x1="280" y1="420" x2="220" y2="420" stroke="#aaa" stroke-width="1" />
+<circle cx="220" cy="420" r="3" fill="#E91E63"/> 
+<text x="286" y="412" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<circle cx="500" cy="520" r="5" fill="#2196F3"/> 
+<text x="506" y="512" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2</text> 
+<rect x="60" y="420" width="440" height="100" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="60" cy="420" r="3" fill="#00f"/> 
+<circle cx="500" cy="420" r="3" fill="#00f"/> 
+<circle cx="60" cy="520" r="3" fill="#00f"/> 
+<circle cx="500" cy="520" r="3" fill="#00f"/> 
+<circle cx="280" cy="420" r="8" fill="#4CAF50"/> 
+<text x="20" y="602" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. removePoint index 1 — middle point removed</text> 
+<line x1="60" y1="700" x2="500" y2="700" stroke="#000" stroke-width="2" />
+<circle cx="60" cy="700" r="5" fill="#2196F3"/> 
+<text x="66" y="692" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="500" cy="700" r="5" fill="#2196F3"/> 
+<text x="506" y="692" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<rect x="60" y="700" width="440" height="0" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="60" cy="700" r="3" fill="#00f"/> 
+<circle cx="500" cy="700" r="3" fill="#00f"/> 
+<circle cx="60" cy="700" r="3" fill="#00f"/> 
+<circle cx="500" cy="700" r="3" fill="#00f"/> 
+<text x="380" y="422" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">5. reverse — handles swap, direction flips</text> 
+<path d="M420 520 C 480 440 520 520 560 480" stroke="#ccc" stroke-width="2" fill="none"/>
+<path d="M560 480 C 600 500 590 580 650 520" stroke="#ccc" stroke-width="2" fill="none"/>
+<circle cx="420" cy="520" r="5" fill="#2196F3"/> 
+<line x1="420" y1="520" x2="480" y2="440" stroke="#aaa" stroke-width="1" />
+<circle cx="480" cy="440" r="3" fill="#F44336"/> 
+<text x="426" y="512" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="560" cy="480" r="5" fill="#2196F3"/> 
+<line x1="560" y1="480" x2="600" y2="500" stroke="#aaa" stroke-width="1" />
+<circle cx="600" cy="500" r="3" fill="#F44336"/> 
+<line x1="560" y1="480" x2="520" y2="520" stroke="#aaa" stroke-width="1" />
+<circle cx="520" cy="520" r="3" fill="#E91E63"/> 
+<text x="566" y="472" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<circle cx="650" cy="520" r="5" fill="#2196F3"/> 
+<line x1="650" y1="520" x2="590" y2="580" stroke="#aaa" stroke-width="1" />
+<circle cx="590" cy="580" r="3" fill="#E91E63"/> 
+<text x="656" y="512" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2</text> 
+<rect x="420" y="480" width="230" height="61.9276" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="420" cy="480" r="3" fill="#00f"/> 
+<circle cx="650" cy="480" r="3" fill="#00f"/> 
+<circle cx="420" cy="541.928" r="3" fill="#00f"/> 
+<circle cx="650" cy="541.928" r="3" fill="#00f"/> 
+<path d="M650 420 C 590 480 600 400 560 380" stroke="#E91E63" stroke-width="2" fill="none"/>
+<path d="M560 380 C 520 420 480 340 420 420" stroke="#E91E63" stroke-width="2" fill="none"/>
+<circle cx="650" cy="420" r="5" fill="#2196F3"/> 
+<line x1="650" y1="420" x2="590" y2="480" stroke="#aaa" stroke-width="1" />
+<circle cx="590" cy="480" r="3" fill="#F44336"/> 
+<text x="656" y="412" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">0</text> 
+<circle cx="560" cy="380" r="5" fill="#2196F3"/> 
+<line x1="560" y1="380" x2="520" y2="420" stroke="#aaa" stroke-width="1" />
+<circle cx="520" cy="420" r="3" fill="#F44336"/> 
+<line x1="560" y1="380" x2="600" y2="400" stroke="#aaa" stroke-width="1" />
+<circle cx="600" cy="400" r="3" fill="#E91E63"/> 
+<text x="566" y="372" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1</text> 
+<circle cx="420" cy="420" r="5" fill="#2196F3"/> 
+<line x1="420" y1="420" x2="480" y2="340" stroke="#aaa" stroke-width="1" />
+<circle cx="480" cy="340" r="3" fill="#E91E63"/> 
+<text x="426" y="412" fill="#555" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2</text> 
+<rect x="420" y="380" width="230" height="61.9276" stroke="#00f" fill="none" stroke-width="1" />
+<circle cx="420" cy="380" r="3" fill="#00f"/> 
+<circle cx="650" cy="380" r="3" fill="#00f"/> 
+<circle cx="420" cy="441.928" r="3" fill="#00f"/> 
+<circle cx="650" cy="441.928" r="3" fill="#00f"/> 
+</svg>
