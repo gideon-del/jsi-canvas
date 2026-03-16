@@ -41,6 +41,10 @@ public:
     // Adaptive flattening — convert to polyline
     std::vector<Vec2> flatten(double tolerance = 0.5) const;
     std::vector<CubicBezier> subdivide(int n) const;
+    double arcLength() const;
+    double arcLengthBetween(double a, double b) const;
+    double arcLengthAt(double t) const;
+    double tAtLength(double targetLen) const;
 
 private:
     void flattenRecursive(std::vector<Vec2> &result, double tolerance) const;

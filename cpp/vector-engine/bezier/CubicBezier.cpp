@@ -1,5 +1,18 @@
 #include "CubicBezier.h"
 
+constexpr double GaussWeights5[] = {
+    0.5688888888888889,
+    0.4786286704993665,
+    0.4786286704993665,
+    0.2369268850561891,
+    0.2369268850561891};
+
+constexpr double GaussAbscissae5[] = {
+    0.0,
+    -0.5384693101056831,
+    0.5384693101056831,
+    -0.9061798459386640,
+    0.9061798459386640};
 Vec2 CubicBezier::evaluate(double t) const
 {
     double mt = 1.0 - t;
@@ -249,4 +262,64 @@ std::vector<CubicBezier> CubicBezier::subdivide(int n) const
     result.push_back(current);
 
     return result;
+}
+
+double CubicBezier::arcLength() const
+{
+    return arcLengthBetween(0, 1);
+}
+
+double CubicBezier::arcLengthAt(double t) const
+{
+    return arcLengthBetween(0, t);
+}
+
+double CubicBezier::arcLengthBetween(double a, double b) const
+{
+    double halfRange = (b - a) / 2.0;
+    double midPoint = (a + b) / 2.0;
+
+    double sum = 0;
+
+    for (int i = 0; i < 5; i++)
+    {
+        double t = midPoint + halfRange * GaussAbscissae5[i];
+        double speed = derivative(t).length();
+
+        sum += GaussWeights5[i] * speed;
+    }
+
+    return halfRange * sum;
+}
+
+double CubicBezier::tAtLength(double targetLen) const
+{
+    double totalLen = arcLength();
+    if (targetLen <= 0)
+        return 0;
+    if (targetLen >= totalLen)
+        return 1;
+
+    // Newton-Raphson iteration
+    double t = targetLen / totalLen;
+
+    for (int i = 0; i < 10; i++)
+    {
+        double currentLen = arcLengthAt(t);
+        double error = currentLen - targetLen;
+
+        if (std::abs(error) < 1e-6)
+            break;
+
+        double speed = derivative(t).length();
+
+        if (speed < 1e-10)
+            break;
+
+        t -= error / speed;
+
+        t = std::clamp(t, 0.0, 1.0);
+    }
+
+    return t;
 }

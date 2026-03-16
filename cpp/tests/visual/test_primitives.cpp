@@ -7,6 +7,7 @@
 #include "../../vector-engine/path/Path.h"
 #include "../../vector-engine/path/CompoundPath.h"
 #include "../../vector-engine/path/SVGPathParser.h"
+#include "../../vector-engine/bezier/ArcLengthTable.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -803,6 +804,93 @@ void testSVGPathParser()
     svg.save("visual/output/svg_parser_tests.svg");
     std::cout << "Saved output/svg_parser_tests.svg" << std::endl;
 }
+void testArcLength()
+{
+    SvgWriter svg({0, 0, 700, 800});
+    svg.grid(50, "#eee");
+
+    Vec2 p0{60, 300}, p1{160, 100}, p2{400, 100}, p3{580, 300};
+    CubicBezier curve(p0, p1, p2, p3);
+
+    // ─── 1. Equal spacing comparison ─────────────────────────────
+    svg.text({20, 22}, "1. Uniform t (red) vs arc-length spacing (green)", "#333", 11);
+
+    // Draw base curve
+    svg.cubicBezier(p0, p1, p2, p3, "#ccc", 2);
+
+    double total = curve.arcLength();
+    int n = 12;
+
+    for (int i = 0; i <= n; i++)
+    {
+        // Uniform t — red
+        double t_uniform = static_cast<double>(i) / n;
+        Vec2 pt_uniform = curve.evaluate(t_uniform);
+        svg.point(pt_uniform, "#F44336", 5);
+
+        // Arc-length t — green
+        double t_arc = curve.tAtLength((static_cast<double>(i) / n) * total);
+        Vec2 pt_arc = curve.evaluate(t_arc);
+        svg.point(pt_arc, "#4CAF50", 5);
+    }
+
+    std::cout << "1. totalArcLength: " << total << "\n";
+
+    // ─── 2. ArcLengthTable vs Newton-Raphson accuracy ─────────────
+    svg.text({20, 422}, "2. Table (blue) vs Newton-Raphson (orange) — should overlap", "#333", 11);
+
+    Vec2 q0{60, 600}, q1{60, 400}, q2{580, 400}, q3{580, 600};
+    CubicBezier curve2(q0, q1, q2, q3);
+
+    svg.cubicBezier(q0, q1, q2, q3, "#ccc", 2);
+
+    ArcLengthTable table(curve2, 100);
+    double total2 = table.totalLength();
+
+    std::cout << "2. table totalLength:  " << total2 << "\n";
+    std::cout << "2. NR    totalLength:  " << curve2.arcLength() << "\n";
+
+    for (int i = 0; i <= n; i++)
+    {
+        double targetLen = (static_cast<double>(i) / n) * total2;
+
+        // Newton-Raphson — orange
+        double t_nr = curve2.tAtLength(targetLen);
+        Vec2 pt_nr = curve2.evaluate(t_nr);
+        svg.point(pt_nr, "#FF9800", 7);
+
+        // Lookup table — blue
+        double t_table = table.tAtLength(targetLen);
+        Vec2 pt_table = curve2.evaluate(t_table);
+        svg.point(pt_table, "#2196F3", 4);
+    }
+
+    // ─── 3. arcLengthAt sanity check ─────────────────────────────
+    svg.text({20, 722}, "3. arcLengthAt — labeled t values along curve", "#333", 11);
+
+    Vec2 r0{60, 780}, r1{200, 680}, r2{450, 680}, r3{620, 780};
+    CubicBezier curve3(r0, r1, r2, r3);
+    svg.cubicBezier(r0, r1, r2, r3, "#ccc", 2);
+
+    for (double t : {0.0, 0.25, 0.5, 0.75, 1.0})
+    {
+        Vec2 pt = curve3.evaluate(t);
+        double l = curve3.arcLengthAt(t);
+
+        svg.point(pt, "#9C27B0", 5);
+
+        std::ostringstream ss;
+        ss << "t=" << t << " L=" << std::fixed << std::setprecision(1) << l;
+        svg.text(pt + Vec2{6, -8}, ss.str(), "#9C27B0", 9);
+    }
+
+    std::cout << "3. arcLengthAt(0.5) / arcLength() (expect ~0.5 for symmetric): "
+              << curve3.arcLengthAt(0.5) / curve3.arcLength() << "\n";
+
+    svg.save("visual/output/arc_length_tests.svg");
+    std::cout << "Saved output/arc_length_tests.svg" << std::endl;
+}
+
 int main()
 {
     testPrimitives();
@@ -813,5 +901,6 @@ int main()
     testSegment();
     testPath();
     testSVGPathParser();
+    testArcLength();
     return 0;
 }
