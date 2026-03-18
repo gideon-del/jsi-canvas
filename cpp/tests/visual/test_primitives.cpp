@@ -8,6 +8,7 @@
 #include "../../vector-engine/path/CompoundPath.h"
 #include "../../vector-engine/path/SVGPathParser.h"
 #include "../../vector-engine/bezier/ArcLengthTable.h"
+#include "../../vector-engine/bezier/BezierClipper.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -891,6 +892,80 @@ void testArcLength()
     std::cout << "Saved output/arc_length_tests.svg" << std::endl;
 }
 
+void testBezierClipper()
+{
+    SvgWriter svg({0, 0, 1000, 1500});
+    svg.grid(50, "#eee");
+
+    auto drawIntersections = [&](
+                                 Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
+                                 Vec2 q0, Vec2 q1, Vec2 q2, Vec2 q3,
+                                 Vec2 offset, const std::string &label)
+    {
+        // Offset all points
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+
+        // Draw curves
+        svg.cubicBezier(o(p0), o(p1), o(p2), o(p3), "#2196F3", 2);
+        svg.cubicBezier(o(q0), o(q1), o(q2), o(q3), "#F44336", 2);
+
+        // Find intersections
+        CubicBezier c1(o(p0), o(p1), o(p2), o(p3));
+        CubicBezier c2(o(q0), o(q1), o(q2), o(q3));
+
+        auto intersections = BezierClipper::findIntersections(c1, c2, 1e-6);
+
+        // Draw intersection points
+        for (auto &isect : intersections)
+        {
+            svg.point(isect.point, "#4CAF50", 6);
+            std::ostringstream ss;
+            ss << "t1=" << std::fixed << std::setprecision(2) << isect.t1
+               << " t2=" << isect.t2;
+            svg.text(isect.point + Vec2{8, -6}, ss.str(), "#4CAF50", 9);
+        }
+        Rect box = c1.boundingBox().united(c2.boundingBox());
+        svg.text(Vec2{box.x, box.y} + Vec2{0, -10}, label, "#333", 11);
+
+        std::cout << label << " — intersections found: "
+                  << intersections.size() << "\n";
+        for (auto &i : intersections)
+            std::cout << "  t1=" << i.t1 << " t2=" << i.t2
+                      << " pt=(" << i.point.x << "," << i.point.y << ")\n";
+    };
+
+    // ─── 1. Simple X cross ───────────────────────────────────────
+    // Two straight-ish curves crossing in the middle — expect 1 intersection
+    drawIntersections(
+        {50, 150}, {150, 50}, {300, 50}, {400, 150}, // blue: left→right arch up
+        {50, 50}, {150, 150}, {300, 150}, {400, 50}, // red:  left→right arch down
+        {0, 0}, "1. X cross — expect 1 intersection");
+
+    // ─── 2. Two arches — no intersection ─────────────────────────
+    // Blue above, red below — should never touch
+    drawIntersections(
+        {50, 280}, {150, 200}, {300, 200}, {450, 280},
+        {50, 380}, {150, 300}, {300, 300}, {450, 380},
+        {0, 200}, "2. Parallel arches — expect 0 intersections");
+
+    // ─── 3. S-curve crossing arch ────────────────────────────────
+    // Expect 2 intersections
+    drawIntersections(
+        {50, 530}, {150, 430}, {300, 630}, {450, 530}, // S-curve
+        {50, 430}, {150, 530}, {300, 430}, {480, 560}, // arch — different endpoint
+        {0, 300}, "3. S-curve vs arch — expect 2 intersections");
+
+    // ─── 4. Nearly tangent curves ────────────────────────────────
+    // Curves that barely touch — expect 1 intersection near touch point
+    drawIntersections(
+        {100, 680}, {200, 580}, {350, 700}, {500, 680},
+        {100, 700}, {200, 580}, {350, 580}, {500, 700},
+        {0, 450}, "4. Nearly tangent — expect 1 intersection");
+
+    svg.save("visual/output/intersection_tests.svg");
+    std::cout << "Saved output/intersection_tests.svg" << std::endl;
+}
 int main()
 {
     testPrimitives();
@@ -902,5 +977,6 @@ int main()
     testPath();
     testSVGPathParser();
     testArcLength();
+    testBezierClipper();
     return 0;
 }
