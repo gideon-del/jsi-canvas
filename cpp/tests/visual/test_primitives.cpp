@@ -966,17 +966,103 @@ void testBezierClipper()
     svg.save("visual/output/intersection_tests.svg");
     std::cout << "Saved output/intersection_tests.svg" << std::endl;
 }
+
+void testSelfIntersection()
+{
+    SvgWriter svg({0, 0, 700, 1400});
+    svg.grid(50, "#eee");
+
+    auto drawSelfIntersection = [&](
+                                    Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
+                                    Vec2 offset, const std::string &label)
+    {
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+        CubicBezier curve(o(p0), o(p1), o(p2), o(p3));
+
+        // Draw curve
+        svg.cubicBezier(o(p0), o(p1), o(p2), o(p3), "#2196F3", 2);
+
+        // Draw control polygon faint
+        svg.line(o(p0), o(p1), "#ccc", 1);
+        svg.line(o(p3), o(p2), "#ccc", 1);
+        svg.point(o(p0), "#2196F3", 5);
+        svg.point(o(p3), "#2196F3", 5);
+        svg.point(o(p1), "#F44336", 3);
+        svg.point(o(p2), "#F44336", 3);
+
+        // Inflection points — purple
+        auto inflections = curve.findInflectionPoints();
+        for (double t : inflections)
+        {
+            Vec2 pt = curve.evaluate(t);
+            svg.point(pt, "#9C27B0", 5);
+            std::ostringstream ss;
+            ss << "inf t=" << std::fixed << std::setprecision(2) << t;
+            svg.text(pt + Vec2{6, -6}, ss.str(), "#9C27B0", 9);
+        }
+
+        // Self intersection — green
+        auto result = curve.selfIntersection();
+        if (result)
+        {
+            auto [t1, t2] = *result;
+            Vec2 pt1 = curve.evaluate(t1);
+            Vec2 pt2 = curve.evaluate(t2);
+            Vec2 mid = (pt1 + pt2) * 0.5;
+
+            svg.point(mid, "#4CAF50", 7);
+
+            std::ostringstream ss;
+            ss << "t1=" << std::fixed << std::setprecision(2) << t1
+               << " t2=" << t2;
+            svg.text(mid + Vec2{8, -6}, ss.str(), "#4CAF50", 9);
+
+            // Verify remapping — both should be same point
+            std::cout << label << " — FOUND\n";
+            std::cout << "  t1=" << t1 << " pt=(" << pt1.x << "," << pt1.y << ")\n";
+            std::cout << "  t2=" << t2 << " pt=(" << pt2.x << "," << pt2.y << ")\n";
+            std::cout << "  distance between pts: "
+                      << pt1.distanceTo(pt2) << " (expect ~0)\n";
+        }
+        else
+        {
+            std::cout << label << " — none found\n";
+        }
+        Rect box = curve.boundingBox();
+        svg.text(Vec2{box.x, box.y} + Vec2{0, -10}, label, "#333", 11);
+    };
+
+    // ─── 1. Classic loop — self intersecting ─────────────────────
+    // Control points pulled far apart creating a loop
+    drawSelfIntersection(
+        {100, 200}, {400, 50}, {50, 50}, {350, 200},
+        {0, 0}, "1. Classic loop — expect self intersection");
+
+    // ─── 2. S-curve — no self intersection ───────────────────────
+    // Has inflection point but doesn't loop
+    drawSelfIntersection(
+        {80, 380}, {280, 280}, {120, 480}, {320, 380},
+        {0, 170}, "2. S-curve — inflection but no self intersection");
+
+    // ─── 3. Tight loop ───────────────────────────────────────────
+    // Very tight loop — tests tolerance
+    drawSelfIntersection(
+        {100, 630}, {350, 530}, {50, 530}, {300, 630},
+        {0, 370}, "3. Tight loop — expect self intersection");
+
+    // ─── 4. Straight-ish — no self intersection ──────────────────
+    // Nearly straight, no inflections, no loop
+    drawSelfIntersection(
+        {60, 780}, {160, 730}, {400, 730}, {500, 780},
+        {0, 570}, "4. Gentle arch — no inflection no self intersection");
+
+    svg.save("visual/output/self_intersection_tests.svg");
+    std::cout << "Saved output/self_intersection_tests.svg" << std::endl;
+}
 int main()
 {
-    testPrimitives();
-    testCubicBezier();
-    testBoundingBox();
-    testSubdivision();
-    testPathPoint();
-    testSegment();
-    testPath();
-    testSVGPathParser();
-    testArcLength();
-    testBezierClipper();
+
+    testSelfIntersection();
     return 0;
 }

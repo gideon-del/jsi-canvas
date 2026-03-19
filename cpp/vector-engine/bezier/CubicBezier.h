@@ -1,6 +1,7 @@
 #pragma once
 #include "../math/vec2.h"
 #include "../math/Primitives.h"
+#include <optional>
 class CubicBezier
 {
 
@@ -45,6 +46,8 @@ public:
     double arcLengthBetween(double a, double b) const;
     double arcLengthAt(double t) const;
     double tAtLength(double targetLen) const;
+    std::vector<double> findInflectionPoints() const;
+    std::optional<std::pair<double, double>> selfIntersection() const;
 
 private:
     void flattenRecursive(std::vector<Vec2> &result, double tolerance) const;

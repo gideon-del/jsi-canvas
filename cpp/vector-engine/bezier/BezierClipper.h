@@ -14,6 +14,7 @@ public:
         const CubicBezier c1,
         const CubicBezier c2,
         double tolerance = 1e-6);
+    static CubicBezier extractSubcurve(const CubicBezier &c, double t0, double t1);
 
 private:
     static void findIntersectionsRecursive(
@@ -21,6 +22,4 @@ private:
         const CubicBezier &c2, double t2min, double t2max,
         double tolerance,
         std::vector<Intersection> &results);
-
-    static CubicBezier extractSubcurve(const CubicBezier &c, double t0, double t1);
 };

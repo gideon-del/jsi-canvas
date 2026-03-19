@@ -62,10 +62,16 @@
 <path d="M50 480 C 150 400 300 400 450 480" stroke="#2196F3" stroke-width="2" fill="none"/>
 <path d="M50 580 C 150 500 300 500 450 580" stroke="#F44336" stroke-width="2" fill="none"/>
 <text x="50" y="410" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">2. Parallel arches — expect 0 intersections</text> 
-<path d="M50 830 C 250 680 250 980 450 830" stroke="#2196F3" stroke-width="2" fill="none"/>
-<path d="M50 780 C 150 680 350 680 450 780" stroke="#F44336" stroke-width="2" fill="none"/>
-<text x="50" y="695" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. S-curve vs arch — expect 2 intersections</text> 
-<path d="M100 1100 C 250 970 350 970 500 1100" stroke="#2196F3" stroke-width="2" fill="none"/>
-<path d="M100 1130 C 250 965 350 965 500 1130" stroke="#F44336" stroke-width="2" fill="none"/>
-<text x="100" y="992.5" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. Nearly tangent — expect 1 intersection</text> 
+<path d="M50 830 C 150 730 300 930 450 830" stroke="#2196F3" stroke-width="2" fill="none"/>
+<path d="M50 730 C 150 830 300 730 480 860" stroke="#F44336" stroke-width="2" fill="none"/>
+<circle cx="441.557" cy="835.316" r="6" fill="#4CAF50"/> 
+<text x="449.557" y="829.316" fill="#4CAF50" font-size="9" font-family="Arial,sans-serif" text-anchor="start">t1=0.98 t2=0.93</text> 
+<text x="50" y="720" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. S-curve vs arch — expect 2 intersections</text> 
+<path d="M100 1130 C 200 1030 350 1150 500 1130" stroke="#2196F3" stroke-width="2" fill="none"/>
+<path d="M100 1150 C 200 1030 350 1030 500 1150" stroke="#F44336" stroke-width="2" fill="none"/>
+<circle cx="162.695" cy="1094.2" r="6" fill="#4CAF50"/> 
+<text x="170.695" y="1088.2" fill="#4CAF50" font-size="9" font-family="Arial,sans-serif" text-anchor="start">t1=0.19 t2=0.19</text> 
+<circle cx="476.319" cy="1132.05" r="6" fill="#4CAF50"/> 
+<text x="484.319" y="1126.05" fill="#4CAF50" font-size="9" font-family="Arial,sans-serif" text-anchor="start">t1=0.95 t2=0.95</text> 
+<text x="100" y="1050" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. Nearly tangent — expect 1 intersection</text> 
 </svg>
