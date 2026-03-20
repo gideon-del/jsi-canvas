@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1400">
+<rect width="100%" height="100%" fill="white" />
+<path d="M150 150 C 250 200 450 200 450 150" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="150" cy="150" r="4" fill="green"/> 
+<circle cx="250" cy="200" r="4" fill="red"/> 
+<circle cx="450" cy="200" r="4" fill="red"/> 
+<circle cx="450" cy="150" r="4" fill="green"/> 
+<circle cx="428.4" cy="274" r="4" fill="purple"/> 
+<circle cx="428.4" cy="274" r="5" fill="black"/> 
+<text x="436.4" y="266" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">target (428,274)</text> 
+<circle cx="406.857" cy="180.885" r="4" fill="orange"/> 
+<circle cx="406.857" cy="180.885" r="5" fill="black"/> 
+<text x="414.857" y="172.885" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">closest-point (406,180)</text> 
+<line x1="428.4" y1="274" x2="406.857" y2="180.885" stroke="cyan" stroke-width="4" />
+<circle cx="417.629" cy="227.442" r="5" fill="black"/> 
+<text x="425.629" y="219.442" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">distance 95.574667 (417,227)</text> 
+<circle cx="150" cy="150" r="5" fill="black"/> 
+<text x="158" y="142" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1. Probe directly above the curve midpoint (150,150)</text> 
+<path d="M150 450 C 250 500 450 500 450 450" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="150" cy="450" r="4" fill="green"/> 
+<circle cx="250" cy="500" r="4" fill="red"/> 
+<circle cx="450" cy="500" r="4" fill="red"/> 
+<circle cx="450" cy="450" r="4" fill="green"/> 
+<circle cx="-150" cy="550" r="4" fill="purple"/> 
+<circle cx="-150" cy="550" r="5" fill="black"/> 
+<text x="-142" y="542" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">target (-150,550)</text> 
+<circle cx="150" cy="450" r="4" fill="orange"/> 
+<circle cx="150" cy="450" r="5" fill="black"/> 
+<text x="158" y="442" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">closest-point (150,450)</text> 
+<line x1="-150" y1="550" x2="150" y2="450" stroke="cyan" stroke-width="4" />
+<circle cx="0" cy="500" r="5" fill="black"/> 
+<text x="8" y="492" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">distance 316.227766 (0,500)</text> 
+<circle cx="150" cy="450" r="5" fill="black"/> 
+<text x="158" y="442" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2. Probe far outside the curve, past the endpoint  (150,450)</text> 
+<path d="M100 800 C 200 650 400 650 500 800" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="100" cy="800" r="4" fill="green"/> 
+<circle cx="200" cy="650" r="4" fill="red"/> 
+<circle cx="400" cy="650" r="4" fill="red"/> 
+<circle cx="500" cy="800" r="4" fill="green"/> 
+<circle cx="300" cy="600" r="4" fill="purple"/> 
+<circle cx="300" cy="600" r="5" fill="black"/> 
+<text x="308" y="592" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">target (300,600)</text> 
+<circle cx="300" cy="687.5" r="4" fill="orange"/> 
+<circle cx="300" cy="687.5" r="5" fill="black"/> 
+<text x="308" y="679.5" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">closest-point (300,687)</text> 
+<line x1="300" y1="600" x2="300" y2="687.5" stroke="cyan" stroke-width="4" />
+<circle cx="300" cy="643.75" r="5" fill="black"/> 
+<text x="308" y="635.75" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">distance 87.500000 (300,643)</text> 
+<circle cx="100" cy="687.5" r="5" fill="black"/> 
+<text x="108" y="679.5" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">3. Probe above arch peak (100,687)</text> 
+<path d="M100 1050 C 300 950 100 1150 300 1050" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="100" cy="1050" r="4" fill="green"/> 
+<circle cx="300" cy="950" r="4" fill="red"/> 
+<circle cx="100" cy="1150" r="4" fill="red"/> 
+<circle cx="300" cy="1050" r="4" fill="green"/> 
+<circle cx="140" cy="1050" r="4" fill="purple"/> 
+<circle cx="140" cy="1050" r="5" fill="black"/> 
+<text x="148" y="1042" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">target (140,1050)</text> 
+<circle cx="133.432" cy="1034.44" r="4" fill="orange"/> 
+<circle cx="133.432" cy="1034.44" r="5" fill="black"/> 
+<text x="141.432" y="1026.44" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">closest-point (133,1034)</text> 
+<line x1="140" y1="1050" x2="133.432" y2="1034.44" stroke="cyan" stroke-width="4" />
+<circle cx="136.716" cy="1042.22" r="5" fill="black"/> 
+<text x="144.716" y="1034.22" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">distance 16.889593 (136,1042)</text> 
+<circle cx="100" cy="1021.13" r="5" fill="black"/> 
+<text x="108" y="1013.13" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">4. S-curve probe near inflection (100,1021)</text> 
+<path d="M100 1350 C 200 1250 400 1250 500 1350" stroke="black" stroke-width="2" fill="none"/>
+<circle cx="100" cy="1350" r="4" fill="green"/> 
+<circle cx="200" cy="1250" r="4" fill="red"/> 
+<circle cx="400" cy="1250" r="4" fill="red"/> 
+<circle cx="500" cy="1350" r="4" fill="green"/> 
+<circle cx="255.2" cy="1278" r="4" fill="purple"/> 
+<circle cx="255.2" cy="1278" r="5" fill="black"/> 
+<text x="263.2" y="1270" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">target (255,1278)</text> 
+<circle cx="255.2" cy="1278" r="4" fill="orange"/> 
+<circle cx="255.2" cy="1278" r="5" fill="black"/> 
+<text x="263.2" y="1270" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">closest-point (255,1278)</text> 
+<line x1="255.2" y1="1278" x2="255.2" y2="1278" stroke="cyan" stroke-width="4" />
+<circle cx="255.2" cy="1278" r="5" fill="black"/> 
+<text x="263.2" y="1270" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">distance 0.000000 (255,1278)</text> 
+<circle cx="100" cy="1275" r="5" fill="black"/> 
+<text x="108" y="1267" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">5. Probe on curve — distance should be ~0 (100,1275)</text> 
+</svg>

@@ -2,6 +2,12 @@
 #include "../math/vec2.h"
 #include "../math/Primitives.h"
 #include <optional>
+struct ClosestPointResult
+{
+    double t;
+    Vec2 point;
+    double distance;
+};
 class CubicBezier
 {
 
@@ -48,6 +54,7 @@ public:
     double tAtLength(double targetLen) const;
     std::vector<double> findInflectionPoints() const;
     std::optional<std::pair<double, double>> selfIntersection() const;
+    ClosestPointResult closestPoint(Vec2 target) const;
 
 private:
     void flattenRecursive(std::vector<Vec2> &result, double tolerance) const;

@@ -400,3 +400,49 @@ std::optional<std::pair<double, double>> CubicBezier::selfIntersection() const
 
     return std::nullopt;
 }
+
+ClosestPointResult CubicBezier::closestPoint(Vec2 target) const
+{
+    double bestT = 0;
+    double bestDistance = target.distanceTo(p0);
+
+    const int samples = 20;
+
+    for (int i = 0; i < samples; i++)
+    {
+        double t = static_cast<double>(i) / samples;
+        Vec2 p = evaluate(t);
+        double dist = target.distanceTo(p);
+        if (dist < bestDistance)
+        {
+            bestDistance = dist;
+            bestT = t;
+        }
+    }
+
+    for (int iter = 0; iter < 10; iter++)
+    {
+        Vec2 p = evaluate(bestT);
+        Vec2 d1 = derivative(bestT);
+        Vec2 d2 = secondDerivative(bestT);
+
+        Vec2 diff = p - target;
+
+        double fp = diff.dot(d1);
+
+        double fpp = d1.dot(d1) + diff.dot(d2);
+
+        if (std::abs(fpp) < 1e-10)
+            break;
+
+        double newT = bestT - fp / fpp;
+        newT = std::clamp(newT, 0.0, 1.0);
+        if (std::abs(newT - bestT) < 1e-8)
+            break;
+        bestT = newT;
+    }
+
+    Vec2 closest = evaluate(bestT);
+
+    return {bestT, closest, target.distanceTo(closest)};
+}

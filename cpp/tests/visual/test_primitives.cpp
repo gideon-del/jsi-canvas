@@ -1060,9 +1060,102 @@ void testSelfIntersection()
     svg.save("visual/output/self_intersection_tests.svg");
     std::cout << "Saved output/self_intersection_tests.svg" << std::endl;
 }
+
+void testClosestPoint()
+{
+
+    SvgWriter svg({0, 0, 800, 1400});
+
+    auto drawClosePoint = [&](CubicBezier c, Vec2 target, Vec2 offset, const std::string label)
+    {
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+
+        svg.cubicBezier(o(c.p0), o(c.p1), o(c.p2), o(c.p3));
+
+        // Points
+        svg.point(o(c.p0), "green");
+        svg.point(o(c.p1), "red");
+        svg.point(o(c.p2), "red");
+        svg.point(o(c.p3), "green");
+
+        svg.point(target, "purple");
+        svg.labeledPoint(target, "target");
+
+        ClosestPointResult closet = c.closestPoint(target);
+
+        svg.point(closet.point, "orange");
+        svg.labeledPoint(closet.point, "closest-point");
+
+        svg.line(target, closet.point, "cyan");
+        Vec2 midPoint = target.lerp(closet.point, 0.5);
+        svg.labeledPoint(midPoint, "distance " + std::to_string(closet.distance));
+
+        Rect box = c.boundingBox();
+        svg.labeledPoint(o({box.x, box.y}), label);
+    };
+
+    auto firstCurve = CubicBezier{
+        Vec2{150, 150},
+        Vec2{250, 200},
+        Vec2{450, 200},
+        Vec2{450, 150},
+    };
+    // Test case 1 Probe directly above the curve midpoint
+    drawClosePoint(firstCurve, firstCurve.evaluate(0.8) + Vec2{0, 100}, {0, 0}, "1. Probe directly above the curve midpoint");
+
+    Vec2 offset = {0, 300};
+    auto secondCurve = CubicBezier{
+        firstCurve.p0 + offset,
+        firstCurve.p1 + offset,
+        firstCurve.p2 + offset,
+        firstCurve.p3 + offset,
+    };
+    drawClosePoint(secondCurve, secondCurve.evaluate(0) + Vec2{-300, 100}, {0, 0}, "2. Probe far outside the curve, past the endpoint ");
+    offset = {0, 600};
+    auto thirdCurve = CubicBezier{
+        Vec2{100, 800},
+        Vec2{200, 650},
+        Vec2{400, 650},
+        Vec2{500, 800},
+    };
+
+    drawClosePoint(thirdCurve, {300, 600}, {0, 0}, "3. Probe above arch peak");
+
+    auto sCurve = CubicBezier{
+        Vec2{100, 1050},
+        Vec2{300, 950},  // pulls up-right
+        Vec2{100, 1150}, // pulls down-left
+        Vec2{300, 1050},
+    };
+    // Find the inflection point first, then place probe perpendicular to it
+    auto inflections = sCurve.findInflectionPoints();
+    double infT = inflections.empty() ? 0.5 : inflections[0];
+    Vec2 infPt = sCurve.evaluate(infT);
+    Vec2 normal = sCurve.normalAt(infT);
+    Vec2 probe = infPt + normal * 60; // 60 units along the normal from inflection
+
+    drawClosePoint(sCurve, probe, {0, 0}, "4. S-curve probe near inflection");
+
+    auto fifthCurve = CubicBezier{
+        Vec2{100, 1350},
+        Vec2{200, 1250},
+        Vec2{400, 1250},
+        Vec2{500, 1350},
+    };
+    // Evaluate a point that's exactly on the curve
+    double onCurveT = 0.4;
+    Vec2 onCurvePt = fifthCurve.evaluate(onCurveT);
+
+    drawClosePoint(fifthCurve, onCurvePt, {0, 0}, "5. Probe on curve — distance should be ~0");
+
+    svg.save("visual/output/closest_points_test.svg");
+    std::cout << "Saved output/closest_points_test.svg" << std::endl;
+}
+
 int main()
 {
 
-    testSelfIntersection();
+    testClosestPoint();
     return 0;
 }
