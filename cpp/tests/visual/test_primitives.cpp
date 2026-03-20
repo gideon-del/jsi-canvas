@@ -7,6 +7,7 @@
 #include "../../vector-engine/path/Path.h"
 #include "../../vector-engine/path/CompoundPath.h"
 #include "../../vector-engine/path/SVGPathParser.h"
+#include "../../vector-engine/path/PathIntersector.h"
 #include "../../vector-engine/bezier/ArcLengthTable.h"
 #include "../../vector-engine/bezier/BezierClipper.h"
 
@@ -1153,9 +1154,95 @@ void testClosestPoint()
     std::cout << "Saved output/closest_points_test.svg" << std::endl;
 }
 
+void testPathIntersector()
+{
+    SvgWriter svg({0, 0, 800, 1400});
+
+    auto drawPathWithIntersections = [&](Path pathA, Path pathB, const std::string label)
+    {
+        CompoundPath compA;
+        CompoundPath compB;
+
+        compA.addSubPath(pathA);
+        compB.addSubPath(pathB);
+        std::string pathAd = SVGPathParser::toSVGString(compA);
+        std::string pathBd = SVGPathParser::toSVGString(compB);
+
+        svg.path(pathAd, "black", "blue");
+        svg.path(pathBd, "black", "red");
+
+        std::vector<PathIntersection> intersections = PathIntersector::findIntersections(pathA, pathB);
+
+        for (PathIntersection &isect : intersections)
+        {
+            std::cout << "Intersection found in segments [" << isect.path1Segment << ", " << isect.path2Segment << "] and t [" << isect.t1 << ", " << isect.t2 << "] in point (" << isect.point.x << ", " << isect.point.y << ")." << std::endl;
+            Segment pathASeg = pathA.getSegment(isect.path1Segment);
+            Segment pathBSeg = pathB.getSegment(isect.path2Segment);
+
+            svg.rect(pathASeg.boundingBox(), "purple");
+            svg.rect(pathBSeg.boundingBox(), "cyan");
+
+            svg.point(isect.point, "green");
+        }
+
+        Rect box = compA.bounds().united(compB.bounds());
+
+        svg.labeledPoint(Vec2{box.right() / 2, box.y} + Vec2{0, -10}, label);
+    };
+
+    // Test 1 -Two closed paths
+
+    Path squareA = Path();
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{150, 150}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{150, 250}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{250, 250}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{250, 150}});
+    squareA.close();
+    Path squareB = Path();
+
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{200, 200}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{200, 300}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{300, 300}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{300, 200}});
+
+    squareB.close();
+
+    drawPathWithIntersections(squareA, squareB, "1.  Two closed paths ");
+    // Test 2: Two paths that don't intersect at all
+    Path squareC = Path();
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{400, 400}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{400, 500}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{500, 500}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{500, 400}});
+    squareC.close();
+    Path squareD = Path();
+
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{600, 600}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{600, 700}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{700, 700}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{700, 600}});
+
+    squareD.close();
+
+    drawPathWithIntersections(squareC, squareD, "2.Two paths that don't intersect at all  ");
+
+    auto cpA = SVGPathParser::parse("M 100 800 C 200 700 400 900 500 800");
+    auto cpB = SVGPathParser::parse("M 100 900 C 200 800 400 700 500 900");
+    Path pathE = cpA.subpathAt(0);
+    Path pathF = cpB.subpathAt(0);
+
+    drawPathWithIntersections(pathE, pathF, "3. two paths with multiple segments ");
+
+    auto cpLine = SVGPathParser::parse("M 100 1150 L 600 1150");
+    auto cpCurve = SVGPathParser::parse("M 200 1050 C 300 1300 400 1000 500 1250");
+
+    drawPathWithIntersections(cpLine.subpathAt(0), cpCurve.subpathAt(0), "4. a straight line cutting through a curve at a known angle.");
+    svg.save("visual/output/path-path-intersection.svg");
+    std::cout << "Saved output/path-path-intersection.svg" << std::endl;
+}
 int main()
 {
 
-    testClosestPoint();
+    testPathIntersector();
     return 0;
 }
