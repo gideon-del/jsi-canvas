@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 1400">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="650" y1="0" x2="650" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="700" y1="0" x2="700" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="0" x2="700" y2="0" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="50" x2="700" y2="50" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="100" x2="700" y2="100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="150" x2="700" y2="150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="200" x2="700" y2="200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="250" x2="700" y2="250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="300" x2="700" y2="300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="350" x2="700" y2="350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="400" x2="700" y2="400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="450" x2="700" y2="450" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="500" x2="700" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="550" x2="700" y2="550" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="600" x2="700" y2="600" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="650" x2="700" y2="650" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="700" x2="700" y2="700" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="750" x2="700" y2="750" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="800" x2="700" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="850" x2="700" y2="850" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="900" x2="700" y2="900" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="950" x2="700" y2="950" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1000" x2="700" y2="1000" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1050" x2="700" y2="1050" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1100" x2="700" y2="1100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1150" x2="700" y2="1150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1200" x2="700" y2="1200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1250" x2="700" y2="1250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1300" x2="700" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1350" x2="700" y2="1350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1400" x2="700" y2="1400" stroke="#eee" stroke-width="0.5" />
+<path d="M100 200 C 400 50 50 50 350 200" stroke="#2196F3" stroke-width="2" fill="none"/>
+<line x1="100" y1="200" x2="400" y2="50" stroke="#ccc" stroke-width="1" />
+<line x1="350" y1="200" x2="50" y2="50" stroke="#ccc" stroke-width="1" />
+<circle cx="100" cy="200" r="5" fill="#2196F3"/> 
+<circle cx="350" cy="200" r="5" fill="#2196F3"/> 
+<circle cx="400" cy="50" r="3" fill="#F44336"/> 
+<circle cx="50" cy="50" r="3" fill="#F44336"/> 
+<circle cx="222.3" cy="117.105" r="5" fill="#9C27B0"/> 
+<text x="228.3" y="111.105" fill="#9C27B0" font-size="9" font-family="Arial,sans-serif" text-anchor="start">inf t=0.24</text> 
+<circle cx="227.7" cy="117.105" r="5" fill="#9C27B0"/> 
+<text x="233.7" y="111.105" fill="#9C27B0" font-size="9" font-family="Arial,sans-serif" text-anchor="start">inf t=0.76</text> 
+<circle cx="225" cy="113.462" r="7" fill="#4CAF50"/> 
+<text x="233" y="107.462" fill="#4CAF50" font-size="9" font-family="Arial,sans-serif" text-anchor="start">t1=0.26 t2=0.74</text> 
+<text x="100" y="77.5" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">1. Classic loop — expect self intersection</text> 
+<path d="M80 550 C 280 450 120 650 320 550" stroke="#2196F3" stroke-width="2" fill="none"/>
+<line x1="80" y1="550" x2="280" y2="450" stroke="#ccc" stroke-width="1" />
+<line x1="320" y1="550" x2="120" y2="650" stroke="#ccc" stroke-width="1" />
+<circle cx="80" cy="550" r="5" fill="#2196F3"/> 
+<circle cx="320" cy="550" r="5" fill="#2196F3"/> 
+<circle cx="280" cy="450" r="3" fill="#F44336"/> 
+<circle cx="120" cy="650" r="3" fill="#F44336"/> 
+<circle cx="200" cy="550" r="5" fill="#9C27B0"/> 
+<text x="206" y="544" fill="#9C27B0" font-size="9" font-family="Arial,sans-serif" text-anchor="start">inf t=0.50</text> 
+<text x="80" y="511.132" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">2. S-curve — inflection but no self intersection</text> 
+<path d="M100 1000 C 350 900 50 900 300 1000" stroke="#2196F3" stroke-width="2" fill="none"/>
+<line x1="100" y1="1000" x2="350" y2="900" stroke="#ccc" stroke-width="1" />
+<line x1="300" y1="1000" x2="50" y2="900" stroke="#ccc" stroke-width="1" />
+<circle cx="100" cy="1000" r="5" fill="#2196F3"/> 
+<circle cx="300" cy="1000" r="5" fill="#2196F3"/> 
+<circle cx="350" cy="900" r="3" fill="#F44336"/> 
+<circle cx="50" cy="900" r="3" fill="#F44336"/> 
+<circle cx="201.562" cy="943.75" r="5" fill="#9C27B0"/> 
+<text x="207.562" y="937.75" fill="#9C27B0" font-size="9" font-family="Arial,sans-serif" text-anchor="start">inf t=0.25</text> 
+<circle cx="198.438" cy="943.75" r="5" fill="#9C27B0"/> 
+<text x="204.438" y="937.75" fill="#9C27B0" font-size="9" font-family="Arial,sans-serif" text-anchor="start">inf t=0.75</text> 
+<circle cx="200" cy="945.455" r="7" fill="#4CAF50"/> 
+<text x="208" y="939.455" fill="#4CAF50" font-size="9" font-family="Arial,sans-serif" text-anchor="start">t1=0.24 t2=0.76</text> 
+<text x="100" y="915" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. Tight loop — expect self intersection</text> 
+<path d="M60 1350 C 160 1300 400 1300 500 1350" stroke="#2196F3" stroke-width="2" fill="none"/>
+<line x1="60" y1="1350" x2="160" y2="1300" stroke="#ccc" stroke-width="1" />
+<line x1="500" y1="1350" x2="400" y2="1300" stroke="#ccc" stroke-width="1" />
+<circle cx="60" cy="1350" r="5" fill="#2196F3"/> 
+<circle cx="500" cy="1350" r="5" fill="#2196F3"/> 
+<circle cx="160" cy="1300" r="3" fill="#F44336"/> 
+<circle cx="400" cy="1300" r="3" fill="#F44336"/> 
+<text x="60" y="1302.5" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. Gentle arch — no inflection no self intersection</text> 
+</svg>

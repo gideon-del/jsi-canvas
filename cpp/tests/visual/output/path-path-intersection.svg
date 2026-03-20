@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1400">
+<rect width="100%" height="100%" fill="white" />
+<path d="M 150 150 L 150 250 L 250 250 L 250 150 L 150 150 Z" stroke="black" stroke-width="2" fill="blue"/>
+<path d="M 200 200 L 200 300 L 300 300 L 300 200 L 200 200 Z" stroke="black" stroke-width="2" fill="red"/>
+<rect x="150" y="250" width="100" height="0" stroke="purple" fill="none" stroke-width="1" />
+<rect x="200" y="200" width="0" height="100" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="200" cy="250" r="4" fill="green"/> 
+<rect x="250" y="150" width="0" height="100" stroke="purple" fill="none" stroke-width="1" />
+<rect x="200" y="200" width="100" height="0" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="250" cy="200" r="4" fill="green"/> 
+<circle cx="150" cy="140" r="5" fill="black"/> 
+<text x="158" y="132" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1.  Two closed paths  (150,140)</text> 
+<path d="M 400 400 L 400 500 L 500 500 L 500 400 L 400 400 Z" stroke="black" stroke-width="2" fill="blue"/>
+<path d="M 600 600 L 600 700 L 700 700 L 700 600 L 600 600 Z" stroke="black" stroke-width="2" fill="red"/>
+<circle cx="350" cy="390" r="5" fill="black"/> 
+<text x="358" y="382" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2.Two paths that don't intersect at all   (350,390)</text> 
+<path d="M 100 800 C 200 700 400 900 500 800" stroke="black" stroke-width="2" fill="blue"/>
+<path d="M 100 900 C 200 800 400 700 500 900" stroke="black" stroke-width="2" fill="red"/>
+<rect x="100" y="771.132" width="400" height="57.735" stroke="purple" fill="none" stroke-width="1" />
+<rect x="100" y="784.53" width="400" height="115.47" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="277.121" cy="792.444" r="4" fill="green"/> 
+<rect x="100" y="771.132" width="400" height="57.735" stroke="purple" fill="none" stroke-width="1" />
+<rect x="100" y="784.53" width="400" height="115.47" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="446.67" cy="827.174" r="4" fill="green"/> 
+<circle cx="250" cy="761.132" r="5" fill="black"/> 
+<text x="258" y="753.132" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">3. two paths with multiple segments  (250,761)</text> 
+<path d="M 100 1150 L 600 1150" stroke="black" stroke-width="2" fill="blue"/>
+<path d="M 200 1050 C 300 1300 400 1000 500 1250" stroke="black" stroke-width="2" fill="red"/>
+<rect x="100" y="1150" width="500" height="0" stroke="purple" fill="none" stroke-width="1" />
+<rect x="200" y="1050" width="300" height="200" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="271.665" cy="1150" r="4" fill="green"/> 
+<rect x="100" y="1150" width="500" height="0" stroke="purple" fill="none" stroke-width="1" />
+<rect x="200" y="1050" width="300" height="200" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="350" cy="1150" r="4" fill="green"/> 
+<rect x="100" y="1150" width="500" height="0" stroke="purple" fill="none" stroke-width="1" />
+<rect x="200" y="1050" width="300" height="200" stroke="cyan" fill="none" stroke-width="1" />
+<circle cx="428.335" cy="1150" r="4" fill="green"/> 
+<circle cx="300" cy="1040" r="5" fill="black"/> 
+<text x="308" y="1032" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">4. a straight line cutting through a curve at a known angle. (300,1040)</text> 
+</svg>

@@ -121,3 +121,24 @@ std::vector<Vec2> Path::flatten(double tolerance) const
 
     return result;
 }
+
+ClosestPointResult Path::closestPoint(Vec2 target) const
+{
+    ClosestPointResult best = {0, points_[0].position, target.distanceTo(points_[0].position)};
+
+    for (size_t i = 0; i < segmentCount(); i++)
+    {
+        Segment seg = getSegment(i);
+        auto result = seg.toCubicBezier().closestPoint(target);
+
+        if (result.distance < best.distance)
+        {
+            best = {
+                static_cast<double>(i) + result.t,
+                result.point,
+                result.distance,
+            };
+        }
+    }
+    return best;
+}

@@ -7,6 +7,9 @@
 #include "../../vector-engine/path/Path.h"
 #include "../../vector-engine/path/CompoundPath.h"
 #include "../../vector-engine/path/SVGPathParser.h"
+#include "../../vector-engine/path/PathIntersector.h"
+#include "../../vector-engine/bezier/ArcLengthTable.h"
+#include "../../vector-engine/bezier/BezierClipper.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -803,15 +806,443 @@ void testSVGPathParser()
     svg.save("visual/output/svg_parser_tests.svg");
     std::cout << "Saved output/svg_parser_tests.svg" << std::endl;
 }
+void testArcLength()
+{
+    SvgWriter svg({0, 0, 700, 800});
+    svg.grid(50, "#eee");
+
+    Vec2 p0{60, 300}, p1{160, 100}, p2{400, 100}, p3{580, 300};
+    CubicBezier curve(p0, p1, p2, p3);
+
+    // ─── 1. Equal spacing comparison ─────────────────────────────
+    svg.text({20, 22}, "1. Uniform t (red) vs arc-length spacing (green)", "#333", 11);
+
+    // Draw base curve
+    svg.cubicBezier(p0, p1, p2, p3, "#ccc", 2);
+
+    double total = curve.arcLength();
+    int n = 12;
+
+    for (int i = 0; i <= n; i++)
+    {
+        // Uniform t — red
+        double t_uniform = static_cast<double>(i) / n;
+        Vec2 pt_uniform = curve.evaluate(t_uniform);
+        svg.point(pt_uniform, "#F44336", 5);
+
+        // Arc-length t — green
+        double t_arc = curve.tAtLength((static_cast<double>(i) / n) * total);
+        Vec2 pt_arc = curve.evaluate(t_arc);
+        svg.point(pt_arc, "#4CAF50", 5);
+    }
+
+    std::cout << "1. totalArcLength: " << total << "\n";
+
+    // ─── 2. ArcLengthTable vs Newton-Raphson accuracy ─────────────
+    svg.text({20, 422}, "2. Table (blue) vs Newton-Raphson (orange) — should overlap", "#333", 11);
+
+    Vec2 q0{60, 600}, q1{60, 400}, q2{580, 400}, q3{580, 600};
+    CubicBezier curve2(q0, q1, q2, q3);
+
+    svg.cubicBezier(q0, q1, q2, q3, "#ccc", 2);
+
+    ArcLengthTable table(curve2, 100);
+    double total2 = table.totalLength();
+
+    std::cout << "2. table totalLength:  " << total2 << "\n";
+    std::cout << "2. NR    totalLength:  " << curve2.arcLength() << "\n";
+
+    for (int i = 0; i <= n; i++)
+    {
+        double targetLen = (static_cast<double>(i) / n) * total2;
+
+        // Newton-Raphson — orange
+        double t_nr = curve2.tAtLength(targetLen);
+        Vec2 pt_nr = curve2.evaluate(t_nr);
+        svg.point(pt_nr, "#FF9800", 7);
+
+        // Lookup table — blue
+        double t_table = table.tAtLength(targetLen);
+        Vec2 pt_table = curve2.evaluate(t_table);
+        svg.point(pt_table, "#2196F3", 4);
+    }
+
+    // ─── 3. arcLengthAt sanity check ─────────────────────────────
+    svg.text({20, 722}, "3. arcLengthAt — labeled t values along curve", "#333", 11);
+
+    Vec2 r0{60, 780}, r1{200, 680}, r2{450, 680}, r3{620, 780};
+    CubicBezier curve3(r0, r1, r2, r3);
+    svg.cubicBezier(r0, r1, r2, r3, "#ccc", 2);
+
+    for (double t : {0.0, 0.25, 0.5, 0.75, 1.0})
+    {
+        Vec2 pt = curve3.evaluate(t);
+        double l = curve3.arcLengthAt(t);
+
+        svg.point(pt, "#9C27B0", 5);
+
+        std::ostringstream ss;
+        ss << "t=" << t << " L=" << std::fixed << std::setprecision(1) << l;
+        svg.text(pt + Vec2{6, -8}, ss.str(), "#9C27B0", 9);
+    }
+
+    std::cout << "3. arcLengthAt(0.5) / arcLength() (expect ~0.5 for symmetric): "
+              << curve3.arcLengthAt(0.5) / curve3.arcLength() << "\n";
+
+    svg.save("visual/output/arc_length_tests.svg");
+    std::cout << "Saved output/arc_length_tests.svg" << std::endl;
+}
+
+void testBezierClipper()
+{
+    SvgWriter svg({0, 0, 1000, 1500});
+    svg.grid(50, "#eee");
+
+    auto drawIntersections = [&](
+                                 Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
+                                 Vec2 q0, Vec2 q1, Vec2 q2, Vec2 q3,
+                                 Vec2 offset, const std::string &label)
+    {
+        // Offset all points
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+
+        // Draw curves
+        svg.cubicBezier(o(p0), o(p1), o(p2), o(p3), "#2196F3", 2);
+        svg.cubicBezier(o(q0), o(q1), o(q2), o(q3), "#F44336", 2);
+
+        // Find intersections
+        CubicBezier c1(o(p0), o(p1), o(p2), o(p3));
+        CubicBezier c2(o(q0), o(q1), o(q2), o(q3));
+
+        auto intersections = BezierClipper::findIntersections(c1, c2, 1e-6);
+
+        // Draw intersection points
+        for (auto &isect : intersections)
+        {
+            svg.point(isect.point, "#4CAF50", 6);
+            std::ostringstream ss;
+            ss << "t1=" << std::fixed << std::setprecision(2) << isect.t1
+               << " t2=" << isect.t2;
+            svg.text(isect.point + Vec2{8, -6}, ss.str(), "#4CAF50", 9);
+        }
+        Rect box = c1.boundingBox().united(c2.boundingBox());
+        svg.text(Vec2{box.x, box.y} + Vec2{0, -10}, label, "#333", 11);
+
+        std::cout << label << " — intersections found: "
+                  << intersections.size() << "\n";
+        for (auto &i : intersections)
+            std::cout << "  t1=" << i.t1 << " t2=" << i.t2
+                      << " pt=(" << i.point.x << "," << i.point.y << ")\n";
+    };
+
+    // ─── 1. Simple X cross ───────────────────────────────────────
+    // Two straight-ish curves crossing in the middle — expect 1 intersection
+    drawIntersections(
+        {50, 150}, {150, 50}, {300, 50}, {400, 150}, // blue: left→right arch up
+        {50, 50}, {150, 150}, {300, 150}, {400, 50}, // red:  left→right arch down
+        {0, 0}, "1. X cross — expect 1 intersection");
+
+    // ─── 2. Two arches — no intersection ─────────────────────────
+    // Blue above, red below — should never touch
+    drawIntersections(
+        {50, 280}, {150, 200}, {300, 200}, {450, 280},
+        {50, 380}, {150, 300}, {300, 300}, {450, 380},
+        {0, 200}, "2. Parallel arches — expect 0 intersections");
+
+    // ─── 3. S-curve crossing arch ────────────────────────────────
+    // Expect 2 intersections
+    drawIntersections(
+        {50, 530}, {150, 430}, {300, 630}, {450, 530}, // S-curve
+        {50, 430}, {150, 530}, {300, 430}, {480, 560}, // arch — different endpoint
+        {0, 300}, "3. S-curve vs arch — expect 2 intersections");
+
+    // ─── 4. Nearly tangent curves ────────────────────────────────
+    // Curves that barely touch — expect 1 intersection near touch point
+    drawIntersections(
+        {100, 680}, {200, 580}, {350, 700}, {500, 680},
+        {100, 700}, {200, 580}, {350, 580}, {500, 700},
+        {0, 450}, "4. Nearly tangent — expect 1 intersection");
+
+    svg.save("visual/output/intersection_tests.svg");
+    std::cout << "Saved output/intersection_tests.svg" << std::endl;
+}
+
+void testSelfIntersection()
+{
+    SvgWriter svg({0, 0, 700, 1400});
+    svg.grid(50, "#eee");
+
+    auto drawSelfIntersection = [&](
+                                    Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
+                                    Vec2 offset, const std::string &label)
+    {
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+        CubicBezier curve(o(p0), o(p1), o(p2), o(p3));
+
+        // Draw curve
+        svg.cubicBezier(o(p0), o(p1), o(p2), o(p3), "#2196F3", 2);
+
+        // Draw control polygon faint
+        svg.line(o(p0), o(p1), "#ccc", 1);
+        svg.line(o(p3), o(p2), "#ccc", 1);
+        svg.point(o(p0), "#2196F3", 5);
+        svg.point(o(p3), "#2196F3", 5);
+        svg.point(o(p1), "#F44336", 3);
+        svg.point(o(p2), "#F44336", 3);
+
+        // Inflection points — purple
+        auto inflections = curve.findInflectionPoints();
+        for (double t : inflections)
+        {
+            Vec2 pt = curve.evaluate(t);
+            svg.point(pt, "#9C27B0", 5);
+            std::ostringstream ss;
+            ss << "inf t=" << std::fixed << std::setprecision(2) << t;
+            svg.text(pt + Vec2{6, -6}, ss.str(), "#9C27B0", 9);
+        }
+
+        // Self intersection — green
+        auto result = curve.selfIntersection();
+        if (result)
+        {
+            auto [t1, t2] = *result;
+            Vec2 pt1 = curve.evaluate(t1);
+            Vec2 pt2 = curve.evaluate(t2);
+            Vec2 mid = (pt1 + pt2) * 0.5;
+
+            svg.point(mid, "#4CAF50", 7);
+
+            std::ostringstream ss;
+            ss << "t1=" << std::fixed << std::setprecision(2) << t1
+               << " t2=" << t2;
+            svg.text(mid + Vec2{8, -6}, ss.str(), "#4CAF50", 9);
+
+            // Verify remapping — both should be same point
+            std::cout << label << " — FOUND\n";
+            std::cout << "  t1=" << t1 << " pt=(" << pt1.x << "," << pt1.y << ")\n";
+            std::cout << "  t2=" << t2 << " pt=(" << pt2.x << "," << pt2.y << ")\n";
+            std::cout << "  distance between pts: "
+                      << pt1.distanceTo(pt2) << " (expect ~0)\n";
+        }
+        else
+        {
+            std::cout << label << " — none found\n";
+        }
+        Rect box = curve.boundingBox();
+        svg.text(Vec2{box.x, box.y} + Vec2{0, -10}, label, "#333", 11);
+    };
+
+    // ─── 1. Classic loop — self intersecting ─────────────────────
+    // Control points pulled far apart creating a loop
+    drawSelfIntersection(
+        {100, 200}, {400, 50}, {50, 50}, {350, 200},
+        {0, 0}, "1. Classic loop — expect self intersection");
+
+    // ─── 2. S-curve — no self intersection ───────────────────────
+    // Has inflection point but doesn't loop
+    drawSelfIntersection(
+        {80, 380}, {280, 280}, {120, 480}, {320, 380},
+        {0, 170}, "2. S-curve — inflection but no self intersection");
+
+    // ─── 3. Tight loop ───────────────────────────────────────────
+    // Very tight loop — tests tolerance
+    drawSelfIntersection(
+        {100, 630}, {350, 530}, {50, 530}, {300, 630},
+        {0, 370}, "3. Tight loop — expect self intersection");
+
+    // ─── 4. Straight-ish — no self intersection ──────────────────
+    // Nearly straight, no inflections, no loop
+    drawSelfIntersection(
+        {60, 780}, {160, 730}, {400, 730}, {500, 780},
+        {0, 570}, "4. Gentle arch — no inflection no self intersection");
+
+    svg.save("visual/output/self_intersection_tests.svg");
+    std::cout << "Saved output/self_intersection_tests.svg" << std::endl;
+}
+
+void testClosestPoint()
+{
+
+    SvgWriter svg({0, 0, 800, 1400});
+
+    auto drawClosePoint = [&](CubicBezier c, Vec2 target, Vec2 offset, const std::string label)
+    {
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+
+        svg.cubicBezier(o(c.p0), o(c.p1), o(c.p2), o(c.p3));
+
+        // Points
+        svg.point(o(c.p0), "green");
+        svg.point(o(c.p1), "red");
+        svg.point(o(c.p2), "red");
+        svg.point(o(c.p3), "green");
+
+        svg.point(target, "purple");
+        svg.labeledPoint(target, "target");
+
+        ClosestPointResult closet = c.closestPoint(target);
+
+        svg.point(closet.point, "orange");
+        svg.labeledPoint(closet.point, "closest-point");
+
+        svg.line(target, closet.point, "cyan");
+        Vec2 midPoint = target.lerp(closet.point, 0.5);
+        svg.labeledPoint(midPoint, "distance " + std::to_string(closet.distance));
+
+        Rect box = c.boundingBox();
+        svg.labeledPoint(o({box.x, box.y}), label);
+    };
+
+    auto firstCurve = CubicBezier{
+        Vec2{150, 150},
+        Vec2{250, 200},
+        Vec2{450, 200},
+        Vec2{450, 150},
+    };
+    // Test case 1 Probe directly above the curve midpoint
+    drawClosePoint(firstCurve, firstCurve.evaluate(0.8) + Vec2{0, 100}, {0, 0}, "1. Probe directly above the curve midpoint");
+
+    Vec2 offset = {0, 300};
+    auto secondCurve = CubicBezier{
+        firstCurve.p0 + offset,
+        firstCurve.p1 + offset,
+        firstCurve.p2 + offset,
+        firstCurve.p3 + offset,
+    };
+    drawClosePoint(secondCurve, secondCurve.evaluate(0) + Vec2{-300, 100}, {0, 0}, "2. Probe far outside the curve, past the endpoint ");
+    offset = {0, 600};
+    auto thirdCurve = CubicBezier{
+        Vec2{100, 800},
+        Vec2{200, 650},
+        Vec2{400, 650},
+        Vec2{500, 800},
+    };
+
+    drawClosePoint(thirdCurve, {300, 600}, {0, 0}, "3. Probe above arch peak");
+
+    auto sCurve = CubicBezier{
+        Vec2{100, 1050},
+        Vec2{300, 950},  // pulls up-right
+        Vec2{100, 1150}, // pulls down-left
+        Vec2{300, 1050},
+    };
+    // Find the inflection point first, then place probe perpendicular to it
+    auto inflections = sCurve.findInflectionPoints();
+    double infT = inflections.empty() ? 0.5 : inflections[0];
+    Vec2 infPt = sCurve.evaluate(infT);
+    Vec2 normal = sCurve.normalAt(infT);
+    Vec2 probe = infPt + normal * 60; // 60 units along the normal from inflection
+
+    drawClosePoint(sCurve, probe, {0, 0}, "4. S-curve probe near inflection");
+
+    auto fifthCurve = CubicBezier{
+        Vec2{100, 1350},
+        Vec2{200, 1250},
+        Vec2{400, 1250},
+        Vec2{500, 1350},
+    };
+    // Evaluate a point that's exactly on the curve
+    double onCurveT = 0.4;
+    Vec2 onCurvePt = fifthCurve.evaluate(onCurveT);
+
+    drawClosePoint(fifthCurve, onCurvePt, {0, 0}, "5. Probe on curve — distance should be ~0");
+
+    svg.save("visual/output/closest_points_test.svg");
+    std::cout << "Saved output/closest_points_test.svg" << std::endl;
+}
+
+void testPathIntersector()
+{
+    SvgWriter svg({0, 0, 800, 1400});
+
+    auto drawPathWithIntersections = [&](Path pathA, Path pathB, const std::string label)
+    {
+        CompoundPath compA;
+        CompoundPath compB;
+
+        compA.addSubPath(pathA);
+        compB.addSubPath(pathB);
+        std::string pathAd = SVGPathParser::toSVGString(compA);
+        std::string pathBd = SVGPathParser::toSVGString(compB);
+
+        svg.path(pathAd, "black", "blue");
+        svg.path(pathBd, "black", "red");
+
+        std::vector<PathIntersection> intersections = PathIntersector::findIntersections(pathA, pathB);
+
+        for (PathIntersection &isect : intersections)
+        {
+            std::cout << "Intersection found in segments [" << isect.path1Segment << ", " << isect.path2Segment << "] and t [" << isect.t1 << ", " << isect.t2 << "] in point (" << isect.point.x << ", " << isect.point.y << ")." << std::endl;
+            Segment pathASeg = pathA.getSegment(isect.path1Segment);
+            Segment pathBSeg = pathB.getSegment(isect.path2Segment);
+
+            svg.rect(pathASeg.boundingBox(), "purple");
+            svg.rect(pathBSeg.boundingBox(), "cyan");
+
+            svg.point(isect.point, "green");
+        }
+
+        Rect box = compA.bounds().united(compB.bounds());
+
+        svg.labeledPoint(Vec2{box.right() / 2, box.y} + Vec2{0, -10}, label);
+    };
+
+    // Test 1 -Two closed paths
+
+    Path squareA = Path();
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{150, 150}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{150, 250}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{250, 250}});
+    squareA.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{250, 150}});
+    squareA.close();
+    Path squareB = Path();
+
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{200, 200}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{200, 300}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{300, 300}});
+    squareB.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{300, 200}});
+
+    squareB.close();
+
+    drawPathWithIntersections(squareA, squareB, "1.  Two closed paths ");
+    // Test 2: Two paths that don't intersect at all
+    Path squareC = Path();
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{400, 400}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{400, 500}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{500, 500}});
+    squareC.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{500, 400}});
+    squareC.close();
+    Path squareD = Path();
+
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{600, 600}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{600, 700}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{700, 700}});
+    squareD.addPoint({Vec2{0, 0}, Vec2{0, 0}, Vec2{700, 600}});
+
+    squareD.close();
+
+    drawPathWithIntersections(squareC, squareD, "2.Two paths that don't intersect at all  ");
+
+    auto cpA = SVGPathParser::parse("M 100 800 C 200 700 400 900 500 800");
+    auto cpB = SVGPathParser::parse("M 100 900 C 200 800 400 700 500 900");
+    Path pathE = cpA.subpathAt(0);
+    Path pathF = cpB.subpathAt(0);
+
+    drawPathWithIntersections(pathE, pathF, "3. two paths with multiple segments ");
+
+    auto cpLine = SVGPathParser::parse("M 100 1150 L 600 1150");
+    auto cpCurve = SVGPathParser::parse("M 200 1050 C 300 1300 400 1000 500 1250");
+
+    drawPathWithIntersections(cpLine.subpathAt(0), cpCurve.subpathAt(0), "4. a straight line cutting through a curve at a known angle.");
+    svg.save("visual/output/path-path-intersection.svg");
+    std::cout << "Saved output/path-path-intersection.svg" << std::endl;
+}
 int main()
 {
-    testPrimitives();
-    testCubicBezier();
-    testBoundingBox();
-    testSubdivision();
-    testPathPoint();
-    testSegment();
-    testPath();
-    testSVGPathParser();
+
+    testPathIntersector();
     return 0;
 }

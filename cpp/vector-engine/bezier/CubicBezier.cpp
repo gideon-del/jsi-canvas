@@ -1,5 +1,18 @@
 #include "CubicBezier.h"
+#include "BezierClipper.h"
+constexpr double GaussWeights5[] = {
+    0.5688888888888889,
+    0.4786286704993665,
+    0.4786286704993665,
+    0.2369268850561891,
+    0.2369268850561891};
 
+constexpr double GaussAbscissae5[] = {
+    0.0,
+    -0.5384693101056831,
+    0.5384693101056831,
+    -0.9061798459386640,
+    0.9061798459386640};
 Vec2 CubicBezier::evaluate(double t) const
 {
     double mt = 1.0 - t;
@@ -249,4 +262,187 @@ std::vector<CubicBezier> CubicBezier::subdivide(int n) const
     result.push_back(current);
 
     return result;
+}
+
+double CubicBezier::arcLength() const
+{
+    return arcLengthBetween(0, 1);
+}
+
+double CubicBezier::arcLengthAt(double t) const
+{
+    return arcLengthBetween(0, t);
+}
+
+double CubicBezier::arcLengthBetween(double a, double b) const
+{
+    double halfRange = (b - a) / 2.0;
+    double midPoint = (a + b) / 2.0;
+
+    double sum = 0;
+
+    for (int i = 0; i < 5; i++)
+    {
+        double t = midPoint + halfRange * GaussAbscissae5[i];
+        double speed = derivative(t).length();
+
+        sum += GaussWeights5[i] * speed;
+    }
+
+    return halfRange * sum;
+}
+
+double CubicBezier::tAtLength(double targetLen) const
+{
+    double totalLen = arcLength();
+    if (targetLen <= 0)
+        return 0;
+    if (targetLen >= totalLen)
+        return 1;
+
+    // Newton-Raphson iteration
+    double t = targetLen / totalLen;
+
+    for (int i = 0; i < 10; i++)
+    {
+        double currentLen = arcLengthAt(t);
+        double error = currentLen - targetLen;
+
+        if (std::abs(error) < 1e-6)
+            break;
+
+        double speed = derivative(t).length();
+
+        if (speed < 1e-10)
+            break;
+
+        t -= error / speed;
+
+        t = std::clamp(t, 0.0, 1.0);
+    }
+
+    return t;
+}
+
+std::vector<double> CubicBezier::findInflectionPoints() const
+{
+    // Inflection where B'(t) × B''(t) = 0
+
+    Vec2 d0 = p1 - p0;
+    Vec2 d1 = p2 - p1;
+    Vec2 d2 = p3 - p2;
+
+    // Coefficients of the quadratic
+
+    double a = d1.cross(d0);
+    double b = d2.cross(d0);
+    double c = d2.cross(d1);
+
+    auto roots = solveQuadraticInUnitInterval(
+        a - 2 * b + c,
+        -2 * a + 2 * b,
+        a);
+
+    return roots;
+}
+
+std::optional<std::pair<double, double>> CubicBezier::selfIntersection() const
+{
+    auto inflections = findInflectionPoints();
+    std::vector<double> splits = {0.0};
+    for (double t : inflections)
+    {
+        if (t > 0.01 && t < 0.99)
+            splits.push_back(t);
+    }
+
+    splits.push_back(1.0);
+
+    for (size_t i = 0; i < splits.size() - 1; i++)
+    {
+        for (size_t j = i + 2; j < splits.size() - 1; j++)
+        {
+            CubicBezier seg1 = BezierClipper::extractSubcurve(*this, splits[i], splits[i + 1]);
+            CubicBezier seg2 = BezierClipper::extractSubcurve(*this, splits[j], splits[j + 1]);
+            // Debug
+            std::cout << "checking seg[" << splits[i] << "," << splits[i + 1] << "]"
+                      << " vs seg[" << splits[j] << "," << splits[j + 1] << "]\n";
+            std::cout << "  boxes intersect: "
+                      << seg1.boundingBox().intersects(seg2.boundingBox()) << "\n";
+
+            auto intersections = BezierClipper::findIntersections(seg1, seg2);
+            std::cout << "  intersections found: " << intersections.size() << "\n";
+
+            if (!intersections.empty())
+            {
+                double t1 = splits[i] + intersections[0].t1 * (splits[i + 1] - splits[i]);
+                double t2 = splits[j] + intersections[0].t2 * (splits[j + 1] - splits[j]);
+                return std::make_pair(t1, t2);
+            }
+        }
+
+        if (inflections.size() == 2)
+        {
+            // The middle segment is splits[1] to splits[2]
+            CubicBezier seg = BezierClipper::extractSubcurve(*this, splits[1], splits[2]);
+            auto [left, right] = seg.splitAt(0.5);
+            auto intersections = BezierClipper::findIntersections(left, right);
+
+            if (!intersections.empty())
+            {
+                double localMid = (splits[1] + splits[2]) / 2.0;
+                double t1 = splits[1] + intersections[0].t1 * (localMid - splits[1]);
+                double t2 = localMid + intersections[0].t2 * (splits[2] - localMid);
+                return std::make_pair(t1, t2);
+            }
+        }
+    }
+
+    return std::nullopt;
+}
+
+ClosestPointResult CubicBezier::closestPoint(Vec2 target) const
+{
+    double bestT = 0;
+    double bestDistance = target.distanceTo(p0);
+
+    const int samples = 20;
+
+    for (int i = 0; i < samples; i++)
+    {
+        double t = static_cast<double>(i) / samples;
+        Vec2 p = evaluate(t);
+        double dist = target.distanceTo(p);
+        if (dist < bestDistance)
+        {
+            bestDistance = dist;
+            bestT = t;
+        }
+    }
+
+    for (int iter = 0; iter < 10; iter++)
+    {
+        Vec2 p = evaluate(bestT);
+        Vec2 d1 = derivative(bestT);
+        Vec2 d2 = secondDerivative(bestT);
+
+        Vec2 diff = p - target;
+
+        double fp = diff.dot(d1);
+
+        double fpp = d1.dot(d1) + diff.dot(d2);
+
+        if (std::abs(fpp) < 1e-10)
+            break;
+
+        double newT = bestT - fp / fpp;
+        newT = std::clamp(newT, 0.0, 1.0);
+        if (std::abs(newT - bestT) < 1e-8)
+            break;
+        bestT = newT;
+    }
+
+    Vec2 closest = evaluate(bestT);
+
+    return {bestT, closest, target.distanceTo(closest)};
 }

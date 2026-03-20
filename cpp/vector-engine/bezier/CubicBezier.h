@@ -1,6 +1,13 @@
 #pragma once
 #include "../math/vec2.h"
 #include "../math/Primitives.h"
+#include <optional>
+struct ClosestPointResult
+{
+    double t;
+    Vec2 point;
+    double distance;
+};
 class CubicBezier
 {
 
@@ -41,6 +48,13 @@ public:
     // Adaptive flattening — convert to polyline
     std::vector<Vec2> flatten(double tolerance = 0.5) const;
     std::vector<CubicBezier> subdivide(int n) const;
+    double arcLength() const;
+    double arcLengthBetween(double a, double b) const;
+    double arcLengthAt(double t) const;
+    double tAtLength(double targetLen) const;
+    std::vector<double> findInflectionPoints() const;
+    std::optional<std::pair<double, double>> selfIntersection() const;
+    ClosestPointResult closestPoint(Vec2 target) const;
 
 private:
     void flattenRecursive(std::vector<Vec2> &result, double tolerance) const;

@@ -56,7 +56,6 @@ double Segment::length() const
     {
         return start_->position.distanceTo(end_->position);
     }
-    // TODO
-    // return toCubicBezier().arcLength();
-    return 0.0;
+
+    return toCubicBezier().arcLength();
 }
