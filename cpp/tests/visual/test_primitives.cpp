@@ -10,6 +10,7 @@
 #include "../../vector-engine/path/PathIntersector.h"
 #include "../../vector-engine/bezier/ArcLengthTable.h"
 #include "../../vector-engine/bezier/BezierClipper.h"
+#include "../../vector-engine/ops/Transform.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1240,9 +1241,89 @@ void testPathIntersector()
     svg.save("visual/output/path-path-intersection.svg");
     std::cout << "Saved output/path-path-intersection.svg" << std::endl;
 }
+
+void testTransformations()
+{
+    SvgWriter svg({0, 0, 1000, 3000});
+
+    auto drawCurveWithTransformation = [&](CubicBezier c, Transform t, const std::string label)
+    {
+        svg.comment(label);
+        svg.cubicBezier(c.p0, c.p1, c.p2, c.p3, "grey");
+        svg.boundingBox(c.boundingBox(), "grey");
+        Vec2 center = c.boundingBox().center();
+
+        Transform newT = Transform::translate(center.x, center.y) * t * Transform::translate(-center.x, -center.y);
+        ;
+        CubicBezier transformedCurve = CubicBezier{newT.apply(c.p0), newT.apply(c.p1), newT.apply(c.p2), newT.apply(c.p3)};
+
+        svg.cubicBezier(transformedCurve.p0, transformedCurve.p1, transformedCurve.p2, transformedCurve.p3, "blue");
+        svg.boundingBox(transformedCurve.boundingBox(), "blue");
+        std::cout << "Original Points [(" << c.p0.x << "," << c.p0.y << "),("
+                  << c.p1.x << "," << c.p1.y << "),("
+                  << c.p2.x << "," << c.p2.y << "),("
+                  << c.p3.x << "," << c.p3.y << ")]"
+                  << std::endl;
+
+        std::cout << "Transformed Points [(" << transformedCurve.p0.x << "," << transformedCurve.p0.y << "),("
+                  << transformedCurve.p1.x << "," << transformedCurve.p1.y << "),("
+                  << transformedCurve.p2.x << "," << transformedCurve.p2.y << "),("
+                  << transformedCurve.p3.x << "," << transformedCurve.p3.y << ")]"
+                  << std::endl;
+        Rect box = c.boundingBox().united(transformedCurve.boundingBox());
+
+        svg.labeledPoint(Vec2{box.right() / 2, box.y - 10}, label);
+    };
+
+    // Test 1 Translate
+    auto firstCurve = CubicBezier{
+        Vec2{450, 150},
+        Vec2{450, 200},
+        Vec2{250, 200},
+        Vec2{150, 150},
+
+    };
+    drawCurveWithTransformation(firstCurve, Transform::translate(10, 10), "1. Translation");
+    // Test 2 Scale
+    Vec2 offset{0, 300};
+    auto secondCurve = CubicBezier{
+        Vec2{450, 150} + offset,
+        Vec2{450, 200} + offset,
+        Vec2{250, 200} + offset,
+        Vec2{150, 150} + offset,
+
+    };
+    drawCurveWithTransformation(secondCurve, Transform::scale(2, 2), "2. Scale");
+    // Test 3 rotation
+    offset = {0, 200};
+    auto thirdCurve = CubicBezier{
+        secondCurve.p0 + offset,
+        secondCurve.p1 + offset,
+        secondCurve.p2 + offset,
+        secondCurve.p3 + offset,
+
+    };
+    drawCurveWithTransformation(thirdCurve, Transform::rotate(1.57), "3. Rotation");
+    // Test 4 combined
+    offset = {0, 200};
+    auto fourthCurve = CubicBezier{
+        thirdCurve.p0 + offset,
+        thirdCurve.p1 + offset,
+        thirdCurve.p2 + offset,
+        thirdCurve.p3 + offset,
+
+    };
+    Transform t1 = Transform::translate(100, 0) * Transform::rotate(1.57);
+
+    Transform t2 = Transform::rotate(1.57) * Transform::translate(100, 0);
+    drawCurveWithTransformation(fourthCurve, t1, "4. Translate First");
+    drawCurveWithTransformation(fourthCurve, t2, "4. Rotate First");
+    svg.save("visual/output/transformation.svg");
+    std::cout << "Saved output/transformation.svg" << std::endl;
+};
 int main()
 {
 
-    testPathIntersector();
+    testTransformations();
     return 0;
 }

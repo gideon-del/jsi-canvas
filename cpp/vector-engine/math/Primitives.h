@@ -40,7 +40,7 @@ struct Rect
     double right() const { return x + width; }
     double top() const { return y; }
     double bottom() const { return y + height; }
-
+    Vec2 center() const { return {x + width / 2, y + height / 2}; };
     bool contains(const Vec2 &p) const
     {
         return p.x >= x && p.x <= x + width && p.y >= y && p.y <= y + height;

@@ -1,6 +1,6 @@
 #pragma once
 #include "Segment.h"
-
+#include "../ops/Transform.h"
 class Path
 {
     std::vector<PathPoint> points_;
@@ -31,4 +31,6 @@ public:
     Vec2 pointAtLength(double len) const;
     ClosestPointResult closestPoint(Vec2 target) const;
     std::vector<Vec2> flatten(double tolerance) const;
+    void transform(const Transform &t);
+    Path transformed(const Transform &t) const;
 };

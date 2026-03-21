@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 3000">
+<rect width="100%" height="100%" fill="white" />
+<!-- 1. Translation -->
+<path d="M450 150 C 450 200 250 200 150 150" stroke="grey" stroke-width="2" fill="none"/>
+<rect x="150" y="150" width="300" height="37.5" stroke="grey" fill="none" stroke-width="1" />
+<circle cx="150" cy="150" r="3" fill="grey"/> 
+<circle cx="450" cy="150" r="3" fill="grey"/> 
+<circle cx="150" cy="187.5" r="3" fill="grey"/> 
+<circle cx="450" cy="187.5" r="3" fill="grey"/> 
+<path d="M460 160 C 460 210 260 210 160 160" stroke="blue" stroke-width="2" fill="none"/>
+<rect x="160" y="160" width="300" height="37.5" stroke="blue" fill="none" stroke-width="1" />
+<circle cx="160" cy="160" r="3" fill="blue"/> 
+<circle cx="460" cy="160" r="3" fill="blue"/> 
+<circle cx="160" cy="197.5" r="3" fill="blue"/> 
+<circle cx="460" cy="197.5" r="3" fill="blue"/> 
+<circle cx="230" cy="140" r="5" fill="black"/> 
+<text x="238" y="132" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">1. Translation (230,140)</text> 
+<!-- 2. Scale -->
+<path d="M450 450 C 450 500 250 500 150 450" stroke="grey" stroke-width="2" fill="none"/>
+<rect x="150" y="450" width="300" height="37.5" stroke="grey" fill="none" stroke-width="1" />
+<circle cx="150" cy="450" r="3" fill="grey"/> 
+<circle cx="450" cy="450" r="3" fill="grey"/> 
+<circle cx="150" cy="487.5" r="3" fill="grey"/> 
+<circle cx="450" cy="487.5" r="3" fill="grey"/> 
+<path d="M600 431.25 C 600 531.25 200 531.25 0 431.25" stroke="blue" stroke-width="2" fill="none"/>
+<rect x="0" y="431.25" width="600" height="75" stroke="blue" fill="none" stroke-width="1" />
+<circle cx="0" cy="431.25" r="3" fill="blue"/> 
+<circle cx="600" cy="431.25" r="3" fill="blue"/> 
+<circle cx="0" cy="506.25" r="3" fill="blue"/> 
+<circle cx="600" cy="506.25" r="3" fill="blue"/> 
+<circle cx="300" cy="421.25" r="5" fill="black"/> 
+<text x="308" y="413.25" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">2. Scale (300,421)</text> 
+<!-- 3. Rotation -->
+<path d="M450 650 C 450 700 250 700 150 650" stroke="grey" stroke-width="2" fill="none"/>
+<rect x="150" y="650" width="300" height="37.5" stroke="grey" fill="none" stroke-width="1" />
+<circle cx="150" cy="650" r="3" fill="grey"/> 
+<circle cx="450" cy="650" r="3" fill="grey"/> 
+<circle cx="150" cy="687.5" r="3" fill="grey"/> 
+<circle cx="450" cy="687.5" r="3" fill="grey"/> 
+<path d="M318.869 818.735 C 268.869 818.775 268.71 618.775 318.631 518.735" stroke="blue" stroke-width="2" fill="none"/>
+<rect x="281.28" y="518.735" width="37.5897" height="300" stroke="blue" fill="none" stroke-width="1" />
+<circle cx="281.28" cy="518.735" r="3" fill="blue"/> 
+<circle cx="318.869" cy="518.735" r="3" fill="blue"/> 
+<circle cx="281.28" cy="818.735" r="3" fill="blue"/> 
+<circle cx="318.869" cy="818.735" r="3" fill="blue"/> 
+<circle cx="225" cy="508.735" r="5" fill="black"/> 
+<text x="233" y="500.735" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">3. Rotation (225,508)</text> 
+<!-- 4. Translate First -->
+<path d="M450 850 C 450 900 250 900 150 850" stroke="grey" stroke-width="2" fill="none"/>
+<rect x="150" y="850" width="300" height="37.5" stroke="grey" fill="none" stroke-width="1" />
+<circle cx="150" cy="850" r="3" fill="grey"/> 
+<circle cx="450" cy="850" r="3" fill="grey"/> 
+<circle cx="150" cy="887.5" r="3" fill="grey"/> 
+<circle cx="450" cy="887.5" r="3" fill="grey"/> 
+<path d="M418.869 1018.74 C 368.869 1018.77 368.71 818.775 418.631 718.735" stroke="blue" stroke-width="2" fill="none"/>
+<rect x="381.28" y="718.735" width="37.5897" height="300" stroke="blue" fill="none" stroke-width="1" />
+<circle cx="381.28" cy="718.735" r="3" fill="blue"/> 
+<circle cx="418.869" cy="718.735" r="3" fill="blue"/> 
+<circle cx="381.28" cy="1018.74" r="3" fill="blue"/> 
+<circle cx="418.869" cy="1018.74" r="3" fill="blue"/> 
+<circle cx="225" cy="708.735" r="5" fill="black"/> 
+<text x="233" y="700.735" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">4. Translate First (225,708)</text> 
+<!-- 4. Rotate First -->
+<path d="M450 850 C 450 900 250 900 150 850" stroke="grey" stroke-width="2" fill="none"/>
+<rect x="150" y="850" width="300" height="37.5" stroke="grey" fill="none" stroke-width="1" />
+<circle cx="150" cy="850" r="3" fill="grey"/> 
+<circle cx="450" cy="850" r="3" fill="grey"/> 
+<circle cx="150" cy="887.5" r="3" fill="grey"/> 
+<circle cx="450" cy="887.5" r="3" fill="grey"/> 
+<path d="M318.949 1118.73 C 268.949 1118.77 268.79 918.775 318.71 818.735" stroke="blue" stroke-width="2" fill="none"/>
+<rect x="281.359" y="818.735" width="37.5897" height="300" stroke="blue" fill="none" stroke-width="1" />
+<circle cx="281.359" cy="818.735" r="3" fill="blue"/> 
+<circle cx="318.949" cy="818.735" r="3" fill="blue"/> 
+<circle cx="281.359" cy="1118.73" r="3" fill="blue"/> 
+<circle cx="318.949" cy="1118.73" r="3" fill="blue"/> 
+<circle cx="225" cy="808.735" r="5" fill="black"/> 
+<text x="233" y="800.735" fill="black" font-size="10" font-family="Arial,sans-serif" text-anchor="start">4. Rotate First (225,808)</text> 
+</svg>
