@@ -142,3 +142,20 @@ ClosestPointResult Path::closestPoint(Vec2 target) const
     }
     return best;
 }
+
+void Path::transform(const Transform &t)
+{
+    for (auto &p : points_)
+    {
+        p.position = t.apply(p.position);
+        p.handleIn = t.applyToVector(p.handleIn);
+        p.handleOut = t.applyToVector(p.handleOut);
+    }
+}
+
+Path Path::transformed(const Transform &t) const
+{
+    Path result = *this;
+    result.transform(t);
+    return result;
+}
