@@ -11,6 +11,7 @@
 #include "../../vector-engine/bezier/ArcLengthTable.h"
 #include "../../vector-engine/bezier/BezierClipper.h"
 #include "../../vector-engine/ops/Transform.h"
+#include "../../vector-engine/ops/PathOffsetter.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1244,7 +1245,7 @@ void testPathIntersector()
 
 void testTransformations()
 {
-    SvgWriter svg({0, 0, 1000, 3000});
+    SvgWriter svg({0, 0, 700, 1000});
 
     auto drawCurveWithTransformation = [&](CubicBezier c, Transform t, const std::string label)
     {
@@ -1301,7 +1302,6 @@ void testTransformations()
         secondCurve.p1 + offset,
         secondCurve.p2 + offset,
         secondCurve.p3 + offset,
-
     };
     drawCurveWithTransformation(thirdCurve, Transform::rotate(1.57), "3. Rotation");
     // Test 4 combined
@@ -1321,9 +1321,150 @@ void testTransformations()
     svg.save("visual/output/transformation.svg");
     std::cout << "Saved output/transformation.svg" << std::endl;
 };
+
+void testPathOffseter()
+{
+    SvgWriter svg({0, 0, 1000, 2000});
+    auto drawPath = [&](Path &path, std::string color)
+    {
+        CompoundPath cp;
+        cp.addSubPath(path);
+        svg.path(SVGPathParser::toSVGString(cp), color);
+    };
+
+    auto drawCompound = [&](CompoundPath &cp, std::string color, std::string fill = "none")
+    {
+        svg.path(SVGPathParser::toSVGString(cp), color, fill);
+    };
+
+    auto makeCurve = [](Vec2 offset) -> Path
+    {
+        PathPoint a, b;
+        a.position = Vec2{100, 150} + offset;
+        a.setHandleOut({80, -80});
+        b.position = Vec2{400, 150} + offset;
+        b.setHandleIn({-80, -80});
+        Path p;
+        p.addPoint(a);
+        p.addPoint(b);
+        return p;
+    };
+
+    svg.text({20, 22}, "1. Offset — grey=original, blue=+30, red=-30", "#333", 11);
+    {
+        Path curve = makeCurve({0, 0});
+        Path outer = PathOffsetter::offset(curve, 30);
+        Path inner = PathOffsetter::offset(curve, -30);
+
+        drawPath(curve, "grey");
+        drawPath(outer, "blue");
+        drawPath(inner, "red");
+
+        std::cout << "1. outer points: " << outer.pointCount() << "\n";
+        std::cout << "1. inner points: " << inner.pointCount() << "\n";
+    }
+
+    svg.text({20, 272}, "2. Caps — Butt / Square / Round", "#333", 11);
+    {
+        std::cout << "Test case 2 " << "\n";
+        for (int i = 0; i < 3; i++)
+        {
+            Vec2 off{static_cast<double>(i) * 200, 300};
+            Path curve = makeCurve(off);
+            CapStyle cap = static_cast<CapStyle>(i);
+
+            CompoundPath stroked = PathOffsetter::stroke(curve, 30, JoinStyle::Miter, cap);
+
+            drawCompound(stroked, "blue", "rgba(33,150,243,0.15)");
+            drawPath(curve, "#ccc");
+
+            std::string label = i == 0 ? "Butt" : i == 1 ? "Square"
+                                                         : "Round";
+            svg.text(Vec2{100, 272} + off, label, "#333", 11);
+        }
+    }
+    svg.text({20, 722}, "3. Joins — Miter / Bevel / Round", "#333", 11);
+    {
+        std::cout << "Test case 3 " << "\n";
+        // Sharp corner path
+        auto makeCorner = [](Vec2 off) -> Path
+        {
+            Path p;
+            PathPoint a, b, c;
+            a.position = Vec2{100, 800} + off;
+            b.position = Vec2{250, 600} + off;
+            c.position = Vec2{400, 800} + off;
+            p.addPoint(a);
+            p.addPoint(b);
+            p.addPoint(c);
+            return p;
+        };
+
+        for (int i = 0; i < 1; i++)
+        {
+            Vec2 off{static_cast<double>(i) * 200, 0};
+            Path corner = makeCorner(off);
+            JoinStyle join = JoinStyle::Round;
+
+            CompoundPath stroked = PathOffsetter::stroke(corner, 60, join);
+
+            if (stroked.subpathCount() == 1)
+            {
+                Path combined = stroked.subpathAt(stroked.subpathCount() - 1);
+                for (size_t i = 0; i < combined.segmentCount(); i++)
+                {
+                    Segment seg = combined.getSegment(i);
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        double t = static_cast<double>(i) / 1;
+                        svg.point(seg.toCubicBezier().evaluate(t), "purple");
+                    }
+                }
+            }
+            drawCompound(stroked, "blue", "rgba(33,150,243,0.15)");
+            drawPath(corner, "#ccc");
+            svg.labeledPoint(Vec2{274, 618}, "o1", "cyan");
+            svg.labeledPoint(Vec2{226, 618}, "o2", "cyan");
+            svg.labeledPoint(Vec2{250, 600}, "p", "cyan");
+            std::string label = i == 0 ? "Miter" : i == 1 ? "Bevel"
+                                                          : "Round";
+            svg.text(Vec2{100, 722} + off, label, "#333", 11);
+        }
+    }
+
+    // ─── 4. Stroke closed path ───────────────────────────────────
+    svg.text({20, 1122}, "4. Closed path stroke — two subpaths", "#333", 11);
+    {
+        Path closed = makeCurve({0, 1000});
+        closed.close();
+
+        CompoundPath stroked = PathOffsetter::stroke(closed, 20);
+        drawCompound(stroked, "blue", "rgba(33,150,243,0.1)");
+
+        std::cout << "4. subpaths (expect 2): " << stroked.subpathCount() << "\n";
+    }
+
+    // ─── 5. Wide vs narrow stroke ─────────────────────────────────
+    svg.text({20, 1422}, "5. Wide (40) vs Narrow (10) stroke", "#333", 11);
+    {
+        Path wide = makeCurve({0, 1300});
+        Path narrow = makeCurve({0, 1500});
+
+        CompoundPath wideStroked = PathOffsetter::stroke(wide, 40, JoinStyle::Miter, CapStyle::Round);
+        CompoundPath narrowStroked = PathOffsetter::stroke(narrow, 10);
+
+        drawCompound(wideStroked, "blue", "rgba(33,150,243,0.15)");
+        drawCompound(narrowStroked, "red", "rgba(244,67,54,0.15)");
+        drawPath(wide, "#ccc");
+        drawPath(narrow, "#999");
+    }
+
+    svg.save("visual/output/path-offset.svg");
+    std::cout << "Saved output/path-offset.svg" << std::endl;
+}
 int main()
 {
 
-    testTransformations();
+    testPathOffseter();
     return 0;
 }

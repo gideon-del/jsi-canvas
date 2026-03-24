@@ -56,7 +56,10 @@ void Path::forEachSegment(Func &&fn) const
 
 void Path::reverse()
 {
+    std::cout << "reverse() called, pointCount=" << points_.size() << "\n";
+    std::cout << "before: first=" << points_.front().position.x << "\n";
     std::reverse(points_.begin(), points_.end());
+    std::cout << "after:  first=" << points_.front().position.x << "\n";
 
     for (auto &p : points_)
     {
