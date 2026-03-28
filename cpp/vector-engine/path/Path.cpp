@@ -162,3 +162,48 @@ Path Path::transformed(const Transform &t) const
     result.transform(t);
     return result;
 }
+
+double Path::signedArea()
+{
+    if (!closed_ || pointCount() < 3)
+    {
+        return 0;
+    }
+
+    double area = 0.0;
+    std::vector<Vec2> points = flatten(0.5);
+    for (size_t i = 0; i < points.size(); i++)
+    {
+        Vec2 curPoint = points[i];
+        Vec2 nextPoint = points[((i + 1) % points.size())];
+
+        area += curPoint.cross(nextPoint);
+    }
+
+    return area / 2;
+}
+
+double Path::area()
+{
+    return std::abs(signedArea());
+}
+
+bool Path::isClockwise()
+{
+    return signedArea() < 0;
+}
+
+void Path::ensureClockwise()
+{
+    if (!isClockwise())
+    {
+        reverse();
+    }
+}
+void Path::ensureCounterClockwise()
+{
+    if (isClockwise())
+    {
+        reverse();
+    }
+}

@@ -13,6 +13,7 @@
 #include "../../vector-engine/ops/Transform.h"
 #include "../../vector-engine/ops/PathOffsetter.h"
 #include "../../vector-engine/ops/PathDasher.h"
+#include "../../vector-engine/ops/PathSimplifier.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1521,9 +1522,104 @@ void testPathDash()
     std::cout << "Saved output/path-dash.svg" << std::endl;
 }
 
+void testPathSimplifier()
+{
+    SvgWriter svg({0, 0, 700, 900});
+    svg.grid(50, "#eee");
+
+    // ─── 1. Curve simplification — low vs high epsilon ───────────
+    svg.text({20, 22}, "1. Low epsilon (blue) vs High epsilon (red)", "#333", 11);
+
+    CubicBezier curve({60, 150}, {160, 50}, {400, 50}, {560, 150});
+    std::vector<Vec2> dense = curve.flatten(0.1);
+
+    std::vector<Vec2> lowEps = PathSimplifier::simplifyPolyline(dense, 2.0);
+    std::vector<Vec2> highEps = PathSimplifier::simplifyPolyline(dense, 20.0);
+
+    // Draw original dense points grey
+    for (auto &p : dense)
+        svg.point(p, "#ddd", 2);
+
+    // Draw simplified — low epsilon blue
+    for (size_t i = 0; i + 1 < lowEps.size(); i++)
+        svg.line(lowEps[i], lowEps[i + 1], "#2196F3", 1);
+    for (auto &p : lowEps)
+        svg.point(p, "#2196F3", 4);
+
+    // Draw simplified — high epsilon red
+    for (size_t i = 0; i + 1 < highEps.size(); i++)
+        svg.line(highEps[i], highEps[i + 1], "#F44336", 1);
+    for (auto &p : highEps)
+        svg.point(p, "#F44336", 4);
+
+    std::cout << "1. dense points:     " << dense.size() << "\n";
+    std::cout << "1. low eps (2.0):    " << lowEps.size() << " points\n";
+    std::cout << "1. high eps (20.0):  " << highEps.size() << " points\n";
+
+    // ─── 2. Noisy straight line ───────────────────────────────────
+    svg.text({20, 322}, "2. Noisy line — high epsilon collapses to 2 points", "#333", 11);
+
+    std::vector<Vec2> noisy = {
+        {60, 350}, {120, 353}, {180, 348}, {240, 352}, {300, 349}, {360, 351}, {420, 350}, {500, 350}};
+
+    std::vector<Vec2> noisySimplified = PathSimplifier::simplifyPolyline(noisy, 10.0);
+
+    for (size_t i = 0; i + 1 < noisy.size(); i++)
+        svg.line(noisy[i], noisy[i + 1], "#ccc", 1);
+    for (auto &p : noisy)
+        svg.point(p, "#ccc", 3);
+
+    for (size_t i = 0; i + 1 < noisySimplified.size(); i++)
+        svg.line(noisySimplified[i], noisySimplified[i + 1], "#4CAF50", 2);
+    for (auto &p : noisySimplified)
+        svg.point(p, "#4CAF50", 5);
+
+    std::cout << "2. noisy points:     " << noisy.size() << "\n";
+    std::cout << "2. simplified:       " << noisySimplified.size()
+              << " points (expect 2)\n";
+
+    // ─── 3. signedArea and isClockwise ───────────────────────────
+    svg.text({20, 572}, "3. signedArea — CW square (neg area) vs CCW square (pos area)", "#333", 11);
+
+    // Clockwise square (in SVG coords, y down, CW = negative area)
+    Path cwSquare;
+    cwSquare.addPoint({{0, 0}, {0, 0}, {100, 600}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {200, 600}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {200, 700}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {100, 700}});
+    cwSquare.close();
+
+    // Counter-clockwise square
+    Path ccwSquare;
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {300, 600}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {300, 700}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {400, 700}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {400, 600}});
+    ccwSquare.close();
+
+    CompoundPath cwCp, ccwCp;
+    cwCp.addSubPath(cwSquare);
+    ccwCp.addSubPath(ccwSquare);
+
+    svg.path(SVGPathParser::toSVGString(cwCp), "#9C27B0", "none");
+    svg.path(SVGPathParser::toSVGString(ccwCp), "#FF9800", "none");
+
+    svg.text({100, 720}, "CW (purple)", "#9C27B0", 10);
+    svg.text({300, 720}, "CCW (orange)", "#FF9800", 10);
+
+    std::cout << "3. CW  signedArea:   " << cwSquare.signedArea()
+              << " isClockwise=" << cwSquare.isClockwise() << "\n";
+    std::cout << "3. CCW signedArea:   " << ccwSquare.signedArea()
+              << " isClockwise=" << ccwSquare.isClockwise() << "\n";
+    std::cout << "3. CW  area (abs):   " << cwSquare.area() << " (expect 10000)\n";
+    std::cout << "3. CCW area (abs):   " << ccwSquare.area() << " (expect 10000)\n";
+
+    svg.save("visual/output/simplifier_tests.svg");
+    std::cout << "Saved output/simplifier_tests.svg" << std::endl;
+}
 int main()
 {
 
-    testPathDash();
+    testPathSimplifier();
     return 0;
 }

@@ -1,4 +1,5 @@
 {
   "C_Cpp.default.compilerPath": "/usr/bin/clang++",
-  "cSpell.words": ["Casteljau"]
+  "cSpell.words": ["Casteljau"],
+  "C_Cpp.errorSquiggles": "disabled"
 }
