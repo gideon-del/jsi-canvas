@@ -33,4 +33,10 @@ public:
     std::vector<Vec2> flatten(double tolerance) const;
     void transform(const Transform &t);
     Path transformed(const Transform &t) const;
+
+    double signedArea();
+    double area();
+    bool isClockwise();
+    void ensureClockwise();
+    void ensureCounterClockwise();
 };

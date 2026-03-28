@@ -11,6 +11,9 @@
 #include "../../vector-engine/bezier/ArcLengthTable.h"
 #include "../../vector-engine/bezier/BezierClipper.h"
 #include "../../vector-engine/ops/Transform.h"
+#include "../../vector-engine/ops/PathOffsetter.h"
+#include "../../vector-engine/ops/PathDasher.h"
+#include "../../vector-engine/ops/PathSimplifier.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1244,7 +1247,7 @@ void testPathIntersector()
 
 void testTransformations()
 {
-    SvgWriter svg({0, 0, 1000, 3000});
+    SvgWriter svg({0, 0, 700, 1000});
 
     auto drawCurveWithTransformation = [&](CubicBezier c, Transform t, const std::string label)
     {
@@ -1301,7 +1304,6 @@ void testTransformations()
         secondCurve.p1 + offset,
         secondCurve.p2 + offset,
         secondCurve.p3 + offset,
-
     };
     drawCurveWithTransformation(thirdCurve, Transform::rotate(1.57), "3. Rotation");
     // Test 4 combined
@@ -1321,9 +1323,303 @@ void testTransformations()
     svg.save("visual/output/transformation.svg");
     std::cout << "Saved output/transformation.svg" << std::endl;
 };
+
+void testPathOffseter()
+{
+    SvgWriter svg({0, 0, 1000, 2000});
+    auto drawPath = [&](Path &path, std::string color)
+    {
+        CompoundPath cp;
+        cp.addSubPath(path);
+        svg.path(SVGPathParser::toSVGString(cp), color);
+    };
+
+    auto drawCompound = [&](CompoundPath &cp, std::string color, std::string fill = "none")
+    {
+        svg.path(SVGPathParser::toSVGString(cp), color, fill);
+    };
+
+    auto makeCurve = [](Vec2 offset) -> Path
+    {
+        PathPoint a, b;
+        a.position = Vec2{100, 150} + offset;
+        a.setHandleOut({80, -80});
+        b.position = Vec2{400, 150} + offset;
+        b.setHandleIn({-80, -80});
+        Path p;
+        p.addPoint(a);
+        p.addPoint(b);
+        return p;
+    };
+
+    svg.text({20, 22}, "1. Offset — grey=original, blue=+30, red=-30", "#333", 11);
+    {
+        Path curve = makeCurve({0, 0});
+        Path outer = PathOffsetter::offset(curve, 30);
+        Path inner = PathOffsetter::offset(curve, -30);
+
+        drawPath(curve, "grey");
+        drawPath(outer, "blue");
+        drawPath(inner, "red");
+
+        std::cout << "1. outer points: " << outer.pointCount() << "\n";
+        std::cout << "1. inner points: " << inner.pointCount() << "\n";
+    }
+
+    svg.text({20, 272}, "2. Caps — Butt / Square / Round", "#333", 11);
+    {
+        std::cout << "Test case 2 " << "\n";
+        for (int i = 0; i < 3; i++)
+        {
+            Vec2 off{static_cast<double>(i) * 200, 300};
+            Path curve = makeCurve(off);
+            CapStyle cap = static_cast<CapStyle>(i);
+
+            CompoundPath stroked = PathOffsetter::stroke(curve, 30, JoinStyle::Miter, cap);
+
+            drawCompound(stroked, "blue", "rgba(33,150,243,0.15)");
+            drawPath(curve, "#ccc");
+
+            std::string label = i == 0 ? "Butt" : i == 1 ? "Square"
+                                                         : "Round";
+            svg.text(Vec2{100, 272} + off, label, "#333", 11);
+        }
+    }
+    svg.text({20, 722}, "3. Joins — Miter / Bevel / Round", "#333", 11);
+    {
+        std::cout << "Test case 3 " << "\n";
+        // Sharp corner path
+        auto makeCorner = [](Vec2 off) -> Path
+        {
+            Path p;
+            PathPoint a, b, c;
+            a.position = Vec2{100, 800} + off;
+            b.position = Vec2{250, 600} + off;
+            c.position = Vec2{400, 800} + off;
+            p.addPoint(a);
+            p.addPoint(b);
+            p.addPoint(c);
+            return p;
+        };
+
+        for (int i = 0; i < 1; i++)
+        {
+            Vec2 off{static_cast<double>(i) * 200, 0};
+            Path corner = makeCorner(off);
+            JoinStyle join = JoinStyle::Round;
+
+            CompoundPath stroked = PathOffsetter::stroke(corner, 60, join);
+
+            if (stroked.subpathCount() == 1)
+            {
+                Path combined = stroked.subpathAt(stroked.subpathCount() - 1);
+                for (size_t i = 0; i < combined.segmentCount(); i++)
+                {
+                    Segment seg = combined.getSegment(i);
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        double t = static_cast<double>(i) / 1;
+                        svg.point(seg.toCubicBezier().evaluate(t), "purple");
+                    }
+                }
+            }
+            drawCompound(stroked, "blue", "rgba(33,150,243,0.15)");
+            drawPath(corner, "#ccc");
+            svg.labeledPoint(Vec2{274, 618}, "o1", "cyan");
+            svg.labeledPoint(Vec2{226, 618}, "o2", "cyan");
+            svg.labeledPoint(Vec2{250, 600}, "p", "cyan");
+            std::string label = i == 0 ? "Miter" : i == 1 ? "Bevel"
+                                                          : "Round";
+            svg.text(Vec2{100, 722} + off, label, "#333", 11);
+        }
+    }
+
+    // ─── 4. Stroke closed path ───────────────────────────────────
+    svg.text({20, 1122}, "4. Closed path stroke — two subpaths", "#333", 11);
+    {
+        Path closed = makeCurve({0, 1000});
+        closed.close();
+
+        CompoundPath stroked = PathOffsetter::stroke(closed, 20);
+        drawCompound(stroked, "blue", "rgba(33,150,243,0.1)");
+
+        std::cout << "4. subpaths (expect 2): " << stroked.subpathCount() << "\n";
+    }
+
+    // ─── 5. Wide vs narrow stroke ─────────────────────────────────
+    svg.text({20, 1422}, "5. Wide (40) vs Narrow (10) stroke", "#333", 11);
+    {
+        Path wide = makeCurve({0, 1300});
+        Path narrow = makeCurve({0, 1500});
+
+        CompoundPath wideStroked = PathOffsetter::stroke(wide, 40, JoinStyle::Miter, CapStyle::Round);
+        CompoundPath narrowStroked = PathOffsetter::stroke(narrow, 10);
+
+        drawCompound(wideStroked, "blue", "rgba(33,150,243,0.15)");
+        drawCompound(narrowStroked, "red", "rgba(244,67,54,0.15)");
+        drawPath(wide, "#ccc");
+        drawPath(narrow, "#999");
+    }
+
+    svg.save("visual/output/path-offset.svg");
+    std::cout << "Saved output/path-offset.svg" << std::endl;
+}
+
+void testPathDash()
+{
+    SvgWriter svg({0, 0, 1000, 2000});
+
+    auto drawPathWithDashes = [&](CompoundPath path)
+    {
+        svg.path(SVGPathParser::toSVGString(path));
+    };
+
+    // Test 1 dash on straight line
+    Path firstPath;
+
+    firstPath.addPoint({{0, 0}, {0, 0}, {100, 100}});
+    firstPath.addPoint({{0, 0}, {0, 0}, {500, 100}});
+
+    svg.text(Vec2{250, 50}, "Straight line dash");
+    drawPathWithDashes(PathDasher::dash(firstPath, {20, 20}));
+    // Test 2 dash on a curve
+    Path secondPath;
+    secondPath.addPoint({{0, 0}, {-50, 100}, {100, 200}});
+    secondPath.addPoint({{50, 100}, {0, 0}, {500, 200}});
+    svg.text(Vec2{250, 250}, "Curve dash");
+    drawPathWithDashes(PathDasher::dash(secondPath, {20, 20}));
+    // Test 2 dash on a curve
+    Path thirdPath;
+    thirdPath.addPoint({{0, 0}, {-50, 100}, {100, 300}});
+    thirdPath.addPoint({{50, 100}, {0, 0}, {500, 300}});
+    svg.text(Vec2{250, 450}, "Curve dash with offset");
+    drawPathWithDashes(PathDasher::dash(thirdPath, {20, 10}, 20));
+
+    Path fourthPath;
+    fourthPath.addPoint({{0, 0}, {-50, 100}, {100, 500}});
+    fourthPath.addPoint({{50, 100}, {0, 0}, {500, 500}});
+    svg.text(Vec2{250, 650}, "Asymmetric pattern {30,5,10,5}");
+
+    CompoundPath dash4 = PathDasher::dash(fourthPath, {30, 5, 10, 5});
+    drawPathWithDashes(dash4);
+    std::cout << "4. subpaths (dashes): " << dash4.subpathCount() << "\n";
+    std::cout << "4. pattern length: 50\n";
+
+    // Test 5 — pattern longer than the path
+    Path fifthPath;
+    fifthPath.addPoint({{0, 0}, {0, 0}, {100, 700}});
+    fifthPath.addPoint({{0, 0}, {0, 0}, {130, 700}}); // very short — 30 units
+
+    svg.text(Vec2{250, 850}, "Pattern longer than path — expect 1 or 0 dashes");
+
+    CompoundPath dash5 = PathDasher::dash(fifthPath, {50, 20}); // pattern=70, path=30
+    drawPathWithDashes(dash5);
+    std::cout << "5. subpaths: " << dash5.subpathCount()
+              << " (expect 1 — partial dash)\n";
+    std::cout << "5. path length: ~30, pattern length: 70\n";
+
+    svg.save("visual/output/path-dash.svg");
+    std::cout << "Saved output/path-dash.svg" << std::endl;
+}
+
+void testPathSimplifier()
+{
+    SvgWriter svg({0, 0, 700, 900});
+    svg.grid(50, "#eee");
+
+    // ─── 1. Curve simplification — low vs high epsilon ───────────
+    svg.text({20, 22}, "1. Low epsilon (blue) vs High epsilon (red)", "#333", 11);
+
+    CubicBezier curve({60, 150}, {160, 50}, {400, 50}, {560, 150});
+    std::vector<Vec2> dense = curve.flatten(0.1);
+
+    std::vector<Vec2> lowEps = PathSimplifier::simplifyPolyline(dense, 2.0);
+    std::vector<Vec2> highEps = PathSimplifier::simplifyPolyline(dense, 20.0);
+
+    // Draw original dense points grey
+    for (auto &p : dense)
+        svg.point(p, "#ddd", 2);
+
+    // Draw simplified — low epsilon blue
+    for (size_t i = 0; i + 1 < lowEps.size(); i++)
+        svg.line(lowEps[i], lowEps[i + 1], "#2196F3", 1);
+    for (auto &p : lowEps)
+        svg.point(p, "#2196F3", 4);
+
+    // Draw simplified — high epsilon red
+    for (size_t i = 0; i + 1 < highEps.size(); i++)
+        svg.line(highEps[i], highEps[i + 1], "#F44336", 1);
+    for (auto &p : highEps)
+        svg.point(p, "#F44336", 4);
+
+    std::cout << "1. dense points:     " << dense.size() << "\n";
+    std::cout << "1. low eps (2.0):    " << lowEps.size() << " points\n";
+    std::cout << "1. high eps (20.0):  " << highEps.size() << " points\n";
+
+    // ─── 2. Noisy straight line ───────────────────────────────────
+    svg.text({20, 322}, "2. Noisy line — high epsilon collapses to 2 points", "#333", 11);
+
+    std::vector<Vec2> noisy = {
+        {60, 350}, {120, 353}, {180, 348}, {240, 352}, {300, 349}, {360, 351}, {420, 350}, {500, 350}};
+
+    std::vector<Vec2> noisySimplified = PathSimplifier::simplifyPolyline(noisy, 10.0);
+
+    for (size_t i = 0; i + 1 < noisy.size(); i++)
+        svg.line(noisy[i], noisy[i + 1], "#ccc", 1);
+    for (auto &p : noisy)
+        svg.point(p, "#ccc", 3);
+
+    for (size_t i = 0; i + 1 < noisySimplified.size(); i++)
+        svg.line(noisySimplified[i], noisySimplified[i + 1], "#4CAF50", 2);
+    for (auto &p : noisySimplified)
+        svg.point(p, "#4CAF50", 5);
+
+    std::cout << "2. noisy points:     " << noisy.size() << "\n";
+    std::cout << "2. simplified:       " << noisySimplified.size()
+              << " points (expect 2)\n";
+
+    // ─── 3. signedArea and isClockwise ───────────────────────────
+    svg.text({20, 572}, "3. signedArea — CW square (neg area) vs CCW square (pos area)", "#333", 11);
+
+    // Clockwise square (in SVG coords, y down, CW = negative area)
+    Path cwSquare;
+    cwSquare.addPoint({{0, 0}, {0, 0}, {100, 600}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {200, 600}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {200, 700}});
+    cwSquare.addPoint({{0, 0}, {0, 0}, {100, 700}});
+    cwSquare.close();
+
+    // Counter-clockwise square
+    Path ccwSquare;
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {300, 600}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {300, 700}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {400, 700}});
+    ccwSquare.addPoint({{0, 0}, {0, 0}, {400, 600}});
+    ccwSquare.close();
+
+    CompoundPath cwCp, ccwCp;
+    cwCp.addSubPath(cwSquare);
+    ccwCp.addSubPath(ccwSquare);
+
+    svg.path(SVGPathParser::toSVGString(cwCp), "#9C27B0", "none");
+    svg.path(SVGPathParser::toSVGString(ccwCp), "#FF9800", "none");
+
+    svg.text({100, 720}, "CW (purple)", "#9C27B0", 10);
+    svg.text({300, 720}, "CCW (orange)", "#FF9800", 10);
+
+    std::cout << "3. CW  signedArea:   " << cwSquare.signedArea()
+              << " isClockwise=" << cwSquare.isClockwise() << "\n";
+    std::cout << "3. CCW signedArea:   " << ccwSquare.signedArea()
+              << " isClockwise=" << ccwSquare.isClockwise() << "\n";
+    std::cout << "3. CW  area (abs):   " << cwSquare.area() << " (expect 10000)\n";
+    std::cout << "3. CCW area (abs):   " << ccwSquare.area() << " (expect 10000)\n";
+
+    svg.save("visual/output/simplifier_tests.svg");
+    std::cout << "Saved output/simplifier_tests.svg" << std::endl;
+}
 int main()
 {
 
-    testTransformations();
+    testPathSimplifier();
     return 0;
 }
