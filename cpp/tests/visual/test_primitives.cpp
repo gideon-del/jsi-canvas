@@ -12,6 +12,7 @@
 #include "../../vector-engine/bezier/BezierClipper.h"
 #include "../../vector-engine/ops/Transform.h"
 #include "../../vector-engine/ops/PathOffsetter.h"
+#include "../../vector-engine/ops/PathDasher.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1462,9 +1463,67 @@ void testPathOffseter()
     svg.save("visual/output/path-offset.svg");
     std::cout << "Saved output/path-offset.svg" << std::endl;
 }
+
+void testPathDash()
+{
+    SvgWriter svg({0, 0, 1000, 2000});
+
+    auto drawPathWithDashes = [&](CompoundPath path)
+    {
+        svg.path(SVGPathParser::toSVGString(path));
+    };
+
+    // Test 1 dash on straight line
+    Path firstPath;
+
+    firstPath.addPoint({{0, 0}, {0, 0}, {100, 100}});
+    firstPath.addPoint({{0, 0}, {0, 0}, {500, 100}});
+
+    svg.text(Vec2{250, 50}, "Straight line dash");
+    drawPathWithDashes(PathDasher::dash(firstPath, {20, 20}));
+    // Test 2 dash on a curve
+    Path secondPath;
+    secondPath.addPoint({{0, 0}, {-50, 100}, {100, 200}});
+    secondPath.addPoint({{50, 100}, {0, 0}, {500, 200}});
+    svg.text(Vec2{250, 250}, "Curve dash");
+    drawPathWithDashes(PathDasher::dash(secondPath, {20, 20}));
+    // Test 2 dash on a curve
+    Path thirdPath;
+    thirdPath.addPoint({{0, 0}, {-50, 100}, {100, 300}});
+    thirdPath.addPoint({{50, 100}, {0, 0}, {500, 300}});
+    svg.text(Vec2{250, 450}, "Curve dash with offset");
+    drawPathWithDashes(PathDasher::dash(thirdPath, {20, 10}, 20));
+
+    Path fourthPath;
+    fourthPath.addPoint({{0, 0}, {-50, 100}, {100, 500}});
+    fourthPath.addPoint({{50, 100}, {0, 0}, {500, 500}});
+    svg.text(Vec2{250, 650}, "Asymmetric pattern {30,5,10,5}");
+
+    CompoundPath dash4 = PathDasher::dash(fourthPath, {30, 5, 10, 5});
+    drawPathWithDashes(dash4);
+    std::cout << "4. subpaths (dashes): " << dash4.subpathCount() << "\n";
+    std::cout << "4. pattern length: 50\n";
+
+    // Test 5 — pattern longer than the path
+    Path fifthPath;
+    fifthPath.addPoint({{0, 0}, {0, 0}, {100, 700}});
+    fifthPath.addPoint({{0, 0}, {0, 0}, {130, 700}}); // very short — 30 units
+
+    svg.text(Vec2{250, 850}, "Pattern longer than path — expect 1 or 0 dashes");
+
+    CompoundPath dash5 = PathDasher::dash(fifthPath, {50, 20}); // pattern=70, path=30
+    drawPathWithDashes(dash5);
+    std::cout << "5. subpaths: " << dash5.subpathCount()
+              << " (expect 1 — partial dash)\n";
+    std::cout << "5. path length: ~30, pattern length: 70\n";
+
+    svg.save("visual/output/path-dash.svg");
+    std::cout << "Saved output/path-dash.svg" << std::endl;
+}
+
 int main()
 {
 
-    testPathOffseter();
+    testPathDash();
     return 0;
 }
