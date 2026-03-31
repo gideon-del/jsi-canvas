@@ -1,22 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1300">
 <rect width="100%" height="100%" fill="white" />
-<line x1="0" y1="0" x2="0" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="50" y1="0" x2="50" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="100" y1="0" x2="100" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="150" y1="0" x2="150" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="200" y1="0" x2="200" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="250" y1="0" x2="250" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="300" y1="0" x2="300" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="350" y1="0" x2="350" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="400" y1="0" x2="400" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="450" y1="0" x2="450" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="500" y1="0" x2="500" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="550" y1="0" x2="550" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="600" y1="0" x2="600" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="650" y1="0" x2="650" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="700" y1="0" x2="700" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="750" y1="0" x2="750" y2="1600" stroke="#eee" stroke-width="0.5" />
-<line x1="800" y1="0" x2="800" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="0" x2="0" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="650" y1="0" x2="650" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="700" y1="0" x2="700" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="750" y1="0" x2="750" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="800" y1="0" x2="800" y2="1300" stroke="#eee" stroke-width="0.5" />
 <line x1="0" y1="0" x2="800" y2="0" stroke="#eee" stroke-width="0.5" />
 <line x1="0" y1="50" x2="800" y2="50" stroke="#eee" stroke-width="0.5" />
 <line x1="0" y1="100" x2="800" y2="100" stroke="#eee" stroke-width="0.5" />
@@ -44,12 +44,6 @@
 <line x1="0" y1="1200" x2="800" y2="1200" stroke="#eee" stroke-width="0.5" />
 <line x1="0" y1="1250" x2="800" y2="1250" stroke="#eee" stroke-width="0.5" />
 <line x1="0" y1="1300" x2="800" y2="1300" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1350" x2="800" y2="1350" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1400" x2="800" y2="1400" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1450" x2="800" y2="1450" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1500" x2="800" y2="1500" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1550" x2="800" y2="1550" stroke="#eee" stroke-width="0.5" />
-<line x1="0" y1="1600" x2="800" y2="1600" stroke="#eee" stroke-width="0.5" />
 <path d="M 130 70 C 174.184 70 210 105.816 210 150 C 210 194.184 174.184 230 130 230 C 85.816 230 50 194.184 50 150 C 50 105.816 85.816 70 130 70 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
 <path d="M 220 70 C 264.184 70 300 105.816 300 150 C 300 194.184 264.184 230 220 230 C 175.816 230 140 194.184 140 150 C 140 105.816 175.816 70 220 70 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
 <path d="M 130 70 C 146.686 70 162.179 75.1082 175 83.8461 C 187.821 75.1082 203.314 70 220 70 C 264.184 70 300 105.816 300 150 C 300 194.184 264.184 230 220 230 C 203.314 230 187.821 224.892 175 216.154 C 162.179 224.892 146.686 230 130 230 C 85.816 230 50 194.184 50 150 C 50 105.816 85.816 70 130 70 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 1000">
+<rect width="100%" height="100%" fill="white" />
+<text x="150" y="150" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">UNION</text> 
+<path d="M 100 70 C 144.184 70 180 105.816 180 150 C 180 194.184 144.184 230 100 230 C 55.816 230 20 194.184 20 150 C 20 105.816 55.816 70 100 70 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 200 70 C 244.184 70 280 105.816 280 150 C 280 194.184 244.184 230 200 230 C 155.816 230 120 194.184 120 150 C 120 105.816 155.816 70 200 70 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M100 70 C 118.919 70 136.304 76.5668 150 87.5455" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M150 212.455 C 136.304 223.433 118.919 230 100 230" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M100 230 C 55.816 230 20 194.184 20 150" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M20 150 C 20 105.816 55.816 70 100 70" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M200 70 C 244.184 70 280 105.816 280 150" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M280 150 C 280 194.184 244.184 230 200 230" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M200 230 C 181.081 230 163.696 223.433 150 212.455" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M150 87.5455 C 163.696 76.5668 181.081 70 200 70" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<text x="175" y="350" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">INTERSECTION</text> 
+<path d="M 130 270 C 174.184 270 210 305.816 210 350 C 210 394.184 174.184 430 130 430 C 85.816 430 50 394.184 50 350 C 50 305.816 85.816 270 130 270 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 270 C 264.184 270 300 305.816 300 350 C 300 394.184 264.184 430 220 430 C 175.816 430 140 394.184 140 350 C 140 305.816 175.816 270 220 270 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M175 283.846 C 196.128 298.246 210 322.502 210 350" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M210 350 C 210 377.498 196.128 401.754 175 416.154" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M175 416.154 C 153.872 401.754 140 377.498 140 350" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M140 350 C 140 322.502 153.872 298.246 175 283.846" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<text x="175" y="550" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">DIFFERENCE</text> 
+<path d="M 130 470 C 174.184 470 210 505.816 210 550 C 210 594.184 174.184 630 130 630 C 85.816 630 50 594.184 50 550 C 50 505.816 85.816 470 130 470 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 470 C 264.184 470 300 505.816 300 550 C 300 594.184 264.184 630 220 630 C 175.816 630 140 594.184 140 550 C 140 505.816 175.816 470 220 470 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M130 470 C 146.686 470 162.179 475.108 175 483.846" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M175 616.154 C 162.179 624.892 146.686 630 130 630" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M130 630 C 85.816 630 50 594.184 50 550" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M50 550 C 50 505.816 85.816 470 130 470" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M140 550 C 140 577.498 153.872 601.754 175 616.154" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M175 483.846 C 153.872 498.246 140 522.502 140 550" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<text x="175" y="750" fill="black" font-size="12" font-family="Arial,sans-serif" text-anchor="start">XOR</text> 
+<path d="M 130 670 C 174.184 670 210 705.816 210 750 C 210 794.184 174.184 830 130 830 C 85.816 830 50 794.184 50 750 C 50 705.816 85.816 670 130 670 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 670 C 264.184 670 300 705.816 300 750 C 300 794.184 264.184 830 220 830 C 175.816 830 140 794.184 140 750 C 140 705.816 175.816 670 220 670 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M130 670 C 146.686 670 162.179 675.108 175 683.846" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M175 816.154 C 162.179 824.892 146.686 830 130 830" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M130 830 C 85.816 830 50 794.184 50 750" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M50 750 C 50 705.816 85.816 670 130 670" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M220 670 C 264.184 670 300 705.816 300 750" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M300 750 C 300 794.184 264.184 830 220 830" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M220 830 C 203.314 830 187.821 824.892 175 816.154" stroke="#4CAF50" stroke-width="2" fill="none"/>
+<path d="M175 683.846 C 187.821 675.108 203.314 670 220 670" stroke="#4CAF50" stroke-width="2" fill="none"/>
+</svg>

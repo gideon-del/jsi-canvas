@@ -1468,7 +1468,7 @@ void testPathOffseter()
 
 void testPathDash()
 {
-    SvgWriter svg({0, 0, 1000, 2000});
+    SvgWriter svg({0, 0, 1000, 1500});
 
     auto drawPathWithDashes = [&](CompoundPath path)
     {
@@ -1621,7 +1621,7 @@ void testPathSimplifier()
 
 void testBooleanOperations()
 {
-    SvgWriter svg({0, 0, 800, 1600});
+    SvgWriter svg({0, 0, 800, 1300});
     svg.grid(50, "#eee");
 
     // Helper to build a circle-ish closed path
