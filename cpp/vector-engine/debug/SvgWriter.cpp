@@ -62,10 +62,10 @@ void SvgWriter::cubicBezier(Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
              << "\" fill=\"none\"/>\n";
 }
 void SvgWriter::path(const std::string &d, std::string stroke,
-                     std::string fill, double width)
+                     std::string fill, double width, std::string fillRule)
 {
     content_ << "<path d=\"" << d << "\" stroke=\"" << stroke
-             << "\" stroke-width=\"" << width << "\" fill=\"" << fill << "\"/>\n";
+             << "\" stroke-width=\"" << width << "\" fill=\"" << fill << "\" fill-rule=\"" << fillRule << "\"/>\n";
 }
 
 void SvgWriter::bezierDebug(Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3, std::string color)

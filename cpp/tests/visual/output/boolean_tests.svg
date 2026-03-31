@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1600">
+<rect width="100%" height="100%" fill="white" />
+<line x1="0" y1="0" x2="0" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="50" y1="0" x2="50" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="100" y1="0" x2="100" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="150" y1="0" x2="150" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="200" y1="0" x2="200" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="250" y1="0" x2="250" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="300" y1="0" x2="300" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="350" y1="0" x2="350" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="400" y1="0" x2="400" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="450" y1="0" x2="450" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="500" y1="0" x2="500" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="550" y1="0" x2="550" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="600" y1="0" x2="600" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="650" y1="0" x2="650" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="700" y1="0" x2="700" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="750" y1="0" x2="750" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="800" y1="0" x2="800" y2="1600" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="0" x2="800" y2="0" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="50" x2="800" y2="50" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="100" x2="800" y2="100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="150" x2="800" y2="150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="200" x2="800" y2="200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="250" x2="800" y2="250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="300" x2="800" y2="300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="350" x2="800" y2="350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="400" x2="800" y2="400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="450" x2="800" y2="450" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="500" x2="800" y2="500" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="550" x2="800" y2="550" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="600" x2="800" y2="600" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="650" x2="800" y2="650" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="700" x2="800" y2="700" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="750" x2="800" y2="750" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="800" x2="800" y2="800" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="850" x2="800" y2="850" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="900" x2="800" y2="900" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="950" x2="800" y2="950" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1000" x2="800" y2="1000" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1050" x2="800" y2="1050" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1100" x2="800" y2="1100" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1150" x2="800" y2="1150" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1200" x2="800" y2="1200" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1250" x2="800" y2="1250" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1300" x2="800" y2="1300" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1350" x2="800" y2="1350" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1400" x2="800" y2="1400" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1450" x2="800" y2="1450" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1500" x2="800" y2="1500" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1550" x2="800" y2="1550" stroke="#eee" stroke-width="0.5" />
+<line x1="0" y1="1600" x2="800" y2="1600" stroke="#eee" stroke-width="0.5" />
+<path d="M 130 70 C 174.184 70 210 105.816 210 150 C 210 194.184 174.184 230 130 230 C 85.816 230 50 194.184 50 150 C 50 105.816 85.816 70 130 70 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 70 C 264.184 70 300 105.816 300 150 C 300 194.184 264.184 230 220 230 C 175.816 230 140 194.184 140 150 C 140 105.816 175.816 70 220 70 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 130 70 C 146.686 70 162.179 75.1082 175 83.8461 C 187.821 75.1082 203.314 70 220 70 C 264.184 70 300 105.816 300 150 C 300 194.184 264.184 230 220 230 C 203.314 230 187.821 224.892 175 216.154 C 162.179 224.892 146.686 230 130 230 C 85.816 230 50 194.184 50 150 C 50 105.816 85.816 70 130 70 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">1. Union — expect 1 subpath, combined outline</text> 
+<path d="M 130 270 C 174.184 270 210 305.816 210 350 C 210 394.184 174.184 430 130 430 C 85.816 430 50 394.184 50 350 C 50 305.816 85.816 270 130 270 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 270 C 264.184 270 300 305.816 300 350 C 300 394.184 264.184 430 220 430 C 175.816 430 140 394.184 140 350 C 140 305.816 175.816 270 220 270 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 175 283.846 C 196.128 298.246 210 322.502 210 350 C 210 377.498 196.128 401.754 175 416.154 C 153.872 401.754 140 377.498 140 350 C 140 322.502 153.872 298.246 175 283.846 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">2. Intersection — expect 1 subpath, overlap only</text> 
+<path d="M 130 470 C 174.184 470 210 505.816 210 550 C 210 594.184 174.184 630 130 630 C 85.816 630 50 594.184 50 550 C 50 505.816 85.816 470 130 470 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 470 C 264.184 470 300 505.816 300 550 C 300 594.184 264.184 630 220 630 C 175.816 630 140 594.184 140 550 C 140 505.816 175.816 470 220 470 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 130 470 C 146.686 470 162.179 475.108 175 483.846 C 153.872 498.246 140 522.502 140 550 C 140 577.498 153.872 601.754 175 616.154 C 162.179 624.892 146.686 630 130 630 C 85.816 630 50 594.184 50 550 C 50 505.816 85.816 470 130 470 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">3. Difference A-B — expect A with B cut out</text> 
+<path d="M 130 670 C 174.184 670 210 705.816 210 750 C 210 794.184 174.184 830 130 830 C 85.816 830 50 794.184 50 750 C 50 705.816 85.816 670 130 670 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 220 670 C 264.184 670 300 705.816 300 750 C 300 794.184 264.184 830 220 830 C 175.816 830 140 794.184 140 750 C 140 705.816 175.816 670 220 670 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 130 670 C 146.686 670 162.179 675.108 175 683.846 C 153.872 698.246 140 722.502 140 750 C 140 777.498 153.872 801.754 175 816.154 C 162.179 824.892 146.686 830 130 830 C 85.816 830 50 794.184 50 750 C 50 705.816 85.816 670 130 670 ZM 220 670 C 264.184 670 300 705.816 300 750 C 300 794.184 264.184 830 220 830 C 203.314 830 187.821 824.892 175 816.154 C 196.128 801.754 210 777.498 210 750 C 210 722.502 196.128 698.246 175 683.846 C 187.821 675.108 203.314 670 220 670 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="evenodd"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">4. XOR — expect 2 subpaths, non-overlapping regions</text> 
+<path d="M 100 890 C 133.138 890 160 916.862 160 950 C 160 983.138 133.138 1010 100 1010 C 66.862 1010 40 983.138 40 950 C 40 916.862 66.862 890 100 890 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 350 890 C 383.138 890 410 916.862 410 950 C 410 983.138 383.138 1010 350 1010 C 316.862 1010 290 983.138 290 950 C 290 916.862 316.862 890 350 890 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 100 890 C 133.138 890 160 916.862 160 950 C 160 983.138 133.138 1010 100 1010 C 66.862 1010 40 983.138 40 950 C 40 916.862 66.862 890 100 890 ZM 350 890 C 383.138 890 410 916.862 410 950 C 410 983.138 383.138 1010 350 1010 C 316.862 1010 290 983.138 290 950 C 290 916.862 316.862 890 350 890 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">5. No overlap Union — expect 2 separate subpaths</text> 
+<path d="M 175 1060 C 224.707 1060 265 1100.29 265 1150 C 265 1199.71 224.707 1240 175 1240 C 125.293 1240 85 1199.71 85 1150 C 85 1100.29 125.293 1060 175 1060 Z" stroke="#2196F3" stroke-width="2" fill="rgba(33,150,243,0.08)" fill-rule="none"/>
+<path d="M 140 1110 L 220 1110 L 220 1190 L 140 1190 L 140 1110 Z" stroke="#F44336" stroke-width="2" fill="rgba(244,67,54,0.08)" fill-rule="none"/>
+<path d="M 175 1060 C 224.707 1060 265 1100.29 265 1150 C 265 1199.71 224.707 1240 175 1240 C 125.293 1240 85 1199.71 85 1150 C 85 1100.29 125.293 1060 175 1060 ZM 220 1110 L 140 1110 L 140 1190 L 220 1190 L 220 1110 Z" stroke="#4CAF50" stroke-width="2" fill="rgba(76,175,80,0.3)" fill-rule="nonzero"/>
+<text x="200" y="-12" fill="#333" font-size="11" font-family="Arial,sans-serif" text-anchor="start">6. Circle minus square — mixed shape difference</text> 
+</svg>
