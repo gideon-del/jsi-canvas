@@ -26,8 +26,8 @@ public:
     Rect bounds() const;
     int windingNumber(Vec2 point) const;
     bool contains(Vec2 point) const;
+    static int pathWindingNumber(const Path &path, Vec2 point);
 
 private:
-    static int pathWindingNumber(const Path &path, Vec2 point);
     static double isLeft(Vec2 p1, Vec2 p2, Vec2 point);
 };

@@ -34,7 +34,7 @@ public:
     void cubicBezier(Vec2 p0, Vec2 p1, Vec2 p2, Vec2 p3,
                      std::string color = "black", double width = 2);
     void path(const std::string &d, std::string stroke = "black",
-              std::string fill = "none", double width = 2);
+              std::string fill = "none", double width = 2, std::string fillRule = "none");
 
     //----------------------------------------------------------
     // DEBUG HELPERS

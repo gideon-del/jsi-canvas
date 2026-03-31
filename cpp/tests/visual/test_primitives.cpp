@@ -14,6 +14,7 @@
 #include "../../vector-engine/ops/PathOffsetter.h"
 #include "../../vector-engine/ops/PathDasher.h"
 #include "../../vector-engine/ops/PathSimplifier.h"
+#include "../../vector-engine/ops/BooleanOperator.h"
 
 void drawPathPoint(SvgWriter &svg, const PathPoint &p, std::string label)
 {
@@ -1467,7 +1468,7 @@ void testPathOffseter()
 
 void testPathDash()
 {
-    SvgWriter svg({0, 0, 1000, 2000});
+    SvgWriter svg({0, 0, 1000, 1500});
 
     auto drawPathWithDashes = [&](CompoundPath path)
     {
@@ -1617,9 +1618,139 @@ void testPathSimplifier()
     svg.save("visual/output/simplifier_tests.svg");
     std::cout << "Saved output/simplifier_tests.svg" << std::endl;
 }
+
+void testBooleanOperations()
+{
+    SvgWriter svg({0, 0, 800, 1300});
+    svg.grid(50, "#eee");
+
+    // Helper to build a circle-ish closed path
+    auto makeCircle = [](Vec2 center, double r) -> Path
+    {
+        double k = 0.5523 * r;
+        Path p;
+        PathPoint top, right, bottom, left;
+
+        top.position = {center.x, center.y - r};
+        top.handleIn = {-k, 0};
+        top.handleOut = {k, 0};
+
+        right.position = {center.x + r, center.y};
+        right.handleIn = {0, -k};
+        right.handleOut = {0, k};
+
+        bottom.position = {center.x, center.y + r};
+        bottom.handleIn = {k, 0};
+        bottom.handleOut = {-k, 0};
+
+        left.position = {center.x - r, center.y};
+        left.handleIn = {0, k};
+        left.handleOut = {0, -k};
+
+        p.addPoint(top);
+        p.addPoint(right);
+        p.addPoint(bottom);
+        p.addPoint(left);
+        p.close();
+        return p;
+    };
+
+    // Helper to build a square path
+    auto makeSquare = [](Vec2 topLeft, double size) -> Path
+    {
+        Path p;
+        p.addPoint({{0, 0}, {0, 0}, topLeft});
+        p.addPoint({{0, 0}, {0, 0}, {topLeft.x + size, topLeft.y}});
+        p.addPoint({{0, 0}, {0, 0}, {topLeft.x + size, topLeft.y + size}});
+        p.addPoint({{0, 0}, {0, 0}, {topLeft.x, topLeft.y + size}});
+        p.close();
+        return p;
+    };
+
+    auto drawOp = [&](Path pathA, Path pathB,
+                      BooleanOp op, Vec2 offset,
+                      const std::string &label)
+    {
+        auto o = [&](Vec2 p)
+        { return p + offset; };
+
+        // Draw inputs faintly
+        CompoundPath cpA, cpB;
+        cpA.addSubPath(pathA);
+        cpB.addSubPath(pathB);
+        svg.path(SVGPathParser::toSVGString(cpA), "#2196F3", "rgba(33,150,243,0.08)");
+        svg.path(SVGPathParser::toSVGString(cpB), "#F44336", "rgba(244,67,54,0.08)");
+
+        // Execute operation
+        CompoundPath result = BooleanOperator::execute(pathA, pathB, op);
+
+        // Draw result
+        std::string fillRule = (op == BooleanOp::XOR) ? "evenodd" : "nonzero";
+        svg.path(SVGPathParser::toSVGString(result), "#4CAF50", "rgba(76,175,80,0.3)", 2, fillRule);
+
+        svg.text(offset + Vec2{0, -12}, label, "#333", 11);
+
+        std::cout << label << " — subpaths: " << result.subpathCount() << "\n";
+    };
+
+    // Two overlapping circles — the base shapes for all tests
+    Vec2 base{200, 0};
+
+    // ─── 1. Union ────────────────────────────────────────────────
+    {
+        Path A = makeCircle({130, 150}, 80);
+        Path B = makeCircle({220, 150}, 80);
+        drawOp(A, B, BooleanOp::UNION,
+               base, "1. Union — expect 1 subpath, combined outline");
+    }
+
+    // ─── 2. Intersection ─────────────────────────────────────────
+    {
+        Path A = makeCircle({130, 350}, 80);
+        Path B = makeCircle({220, 350}, 80);
+        drawOp(A, B, BooleanOp::INTERSECTION,
+               base, "2. Intersection — expect 1 subpath, overlap only");
+    }
+
+    // ─── 3. Difference A - B ─────────────────────────────────────
+    {
+        Path A = makeCircle({130, 550}, 80);
+        Path B = makeCircle({220, 550}, 80);
+        drawOp(A, B, BooleanOp::DIFFERENCE,
+               base, "3. Difference A-B — expect A with B cut out");
+    }
+
+    // ─── 4. XOR ──────────────────────────────────────────────────
+    {
+        Path A = makeCircle({130, 750}, 80);
+        Path B = makeCircle({220, 750}, 80);
+        drawOp(A, B, BooleanOp::XOR,
+               base, "4. XOR — expect 2 subpaths, non-overlapping regions");
+    }
+
+    // ─── 5. Non-overlapping — Union ──────────────────────────────
+    {
+        Path A = makeCircle({100, 950}, 60);
+        Path B = makeCircle({350, 950}, 60);
+        drawOp(A, B, BooleanOp::UNION,
+               base, "5. No overlap Union — expect 2 separate subpaths");
+    }
+
+    // ─── 6. Circle minus square ──────────────────────────────────
+    {
+        Path A = makeCircle({175, 1150}, 90);
+        Path B = makeSquare({140, 1110}, 80);
+        drawOp(A, B, BooleanOp::DIFFERENCE,
+               base, "6. Circle minus square — mixed shape difference");
+    }
+
+    svg.save("visual/output/boolean_tests.svg");
+    std::cout << "Saved output/boolean_tests.svg" << std::endl;
+}
+
 int main()
 {
 
-    testPathSimplifier();
+    testBooleanOperations();
     return 0;
 }
